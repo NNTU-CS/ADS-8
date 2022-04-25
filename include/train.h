@@ -3,24 +3,24 @@
 #define INCLUDE_TRAIN_H_
 
 class Train {
-private:
- struct Cage {
+ private:
+  struct Cage {
     bool light;
     Cage *next;
     Cage *prev;
+  };
+  Train::Cage* create(bool _light);
+
+  Cage *first;
+  Cage *last;
+
+  int countOp = 0;
+
+ public:
+  Train() : first(nullptr), last(nullptr) { }
+  void addCage(bool _light);
+  int getLength();
+  int getOpCount();
  };
- Train::Cage* create (bool _light);
-
- Cage *first;
- Cage *last;
-
- int countOp = 0;
-
-public:
- Train() : first(nullptr), last(nullptr) { }
- void addCage(bool _light);
- int getLength();
- int getOpCount();
-};
 
 #endif  // INCLUDE_TRAIN_H_
