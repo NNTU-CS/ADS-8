@@ -28,21 +28,23 @@ int Train::getLength() {
   bool current;
   int steps_count = 0;
 
-  current = temp->light;
-  
+  if (!(temp->light)) {
+    temp->light = !(temp->light);
+  }
+  current = (temp->light);
   while (temp) {
     temp = temp -> next;
     ++steps_count;
+    ++countOp;
     if (temp->light == current) {
       temp->light = !current;
       break;
     }
   }
 
-  countOp += ((steps_count - 1) * 2);
-
   for (int i = 0; i < steps_count; ++i) {
     temp = temp->prev;
+    countOp++;
   }
 
   if (temp->light != current) {
