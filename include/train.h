@@ -21,6 +21,7 @@ class Train {
   void addCage(bool _light);
   int getLength();
   int getOpCount();
+  ~Train();
 };
 
 #endif  // INCLUDE_TRAIN_H_
