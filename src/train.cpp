@@ -61,7 +61,7 @@ int Train::getOpCount() {
 Train::~Train() {
   int length = (*this).getLength();
   for (int i = 0; i < length; ++i) {
-    Cage *temp = new Cage;
+    Cage *temp = first;
     first = first->next;
     delete temp;
   }
