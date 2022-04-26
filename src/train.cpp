@@ -44,7 +44,7 @@ int Train::getLength() {
 
   for (int i = 0; i < steps_count; ++i) {
     temp = temp->prev;
-    countOp++;
+    ++countOp;
   }
 
   if (temp->light != current) {
@@ -56,4 +56,13 @@ int Train::getLength() {
 
 int Train::getOpCount() {
   return countOp;
+}
+
+Train::~Train() {
+  int length = (*this).getLength();
+  for(int i = 0; i < length; ++i) {
+    Cage *temp = new Cage;
+    first = first->next;
+    delete temp;
+  }
 }
