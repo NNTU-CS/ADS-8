@@ -13,7 +13,6 @@ class Train {
   Cage *first; // точка входа в поезд (первый вагон)
   Cage *last;
  public:
-  Train();
   Train() :countOp(0), first(nullptr), last(nullptr), {}
   void addCage(bool light); // добавить вагон с начальным состоянием лампочки
   int getLength();          // вычислить длину поезда
