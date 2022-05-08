@@ -27,7 +27,7 @@ void Train::addCage(bool light) {
 }
 
 int Train::getLength() {
-    int len_buff, len= 0;
+    int len_buff, len = 0;
     first->light = true;
     Cage* temp = first;
     while (1337) {
@@ -43,8 +43,7 @@ int Train::getLength() {
             }
             if (!temp->light) {
                 return len;
-            }
-            else {
+            } else {
                 len = len_buff;
             }
         }
