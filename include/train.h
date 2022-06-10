@@ -5,15 +5,15 @@
 class Train {
  private:
   struct Cage {
-    bool light; // состояние лампочки
+    bool gl; // состояние лампочки
     Cage *next;
     Cage *prev;
   };
   int countOp; // счетчик шагов (число переходов из вагона в вагон)
-  Cage *first; // точка входа в поезд (первый вагон)
+  Cage *one; // точка входа в поезд (первый вагон)
  public:
   Train();
-  void addCage(bool light); // добавить вагон с начальным состоянием лампочки
+  void addCage(bool gl); // добавить вагон с начальным состоянием лампочки
   int getLength();          // вычислить длину поезда
   int getOpCount();         // вернуть число переходов (из вагона в вагон)
 };
