@@ -8,8 +8,9 @@ class Train {
     bool light; // состояние лампочки
     Cage *next;
     Cage *prev;
+    Cage(bool light, Cage* prev) :light(light), prev(prev) {}
   };
-  int countOp; // счетчик шагов (число переходов из вагона в вагон)
+  int countOp = 0; // счетчик шагов (число переходов из вагона в вагон)
   Cage *first; // точка входа в поезд (первый вагон)
  public:
   Train();
