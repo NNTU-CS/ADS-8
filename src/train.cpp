@@ -47,8 +47,6 @@ int Train::getLength()
 		    if (curr->light == false)
 			    return maxLen;
 	   }
-    
-	return 0;
     }
 }
 
