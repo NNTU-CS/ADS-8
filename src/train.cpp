@@ -37,11 +37,12 @@ int Train::getLength()
 			curr->light = false;
 			int maxLen = len;
 			len = 0;
-		}
-		for (int i = 0; i < maxLen; i++) {
-			curr = curr->prev;
-			countOp++;
-		}
+		    for (int i = 0; i < maxLen; i++) {
+			    curr = curr->prev;
+			    countOp++;
+		    }
+        }
+
 		if (curr->light == false) {
 			return maxLen;
 		}
