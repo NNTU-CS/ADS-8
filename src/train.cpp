@@ -14,13 +14,16 @@ void Train::addCage(bool light)
 	if (first == nullptr) {
 		first = newCage;
 		newCage->prev = nullptr;
+        first->next = first;
 	} else {
 		Cage* curr = first;
-		while (curr->next != nullptr) {
+		while (curr->next != first) {
 			curr = curr->next;
 		}
 		curr->next = newCage;
 		newCage->prev = curr;
+        newCage->next = first;
+        first->prev = newCage;
 	}
 }
 
@@ -44,7 +47,7 @@ int Train::getLength()
 		    if (curr->light == false)
 			    return maxLen;
 	   }
-	
+    
 	return 0;
     }
 }
