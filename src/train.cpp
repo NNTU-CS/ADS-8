@@ -27,7 +27,6 @@ void Train::addCage(bool light)
 int Train::getLength()
 {
 	int len = 0; 
-	int maxLen = 0;
 	Cage *curr = first;
 	curr->light = true;
 	while (true) {
@@ -36,7 +35,7 @@ int Train::getLength()
 		countOp++;
 		if (curr->light == true) {
 			curr->light = false;
-			maxLen = len;
+			int maxLen = len;
 			len = 0;
 		}
 		for (int i = 0; i < maxLen; i++) {
