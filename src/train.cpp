@@ -41,12 +41,10 @@ int Train::getLength()
 			    curr = curr->prev;
 			    countOp++;
 		    }
-        }
-
-		if (curr->light == false) {
-			return maxLen;
+		    if (curr->light == false) {
+			    return maxLen;
 		}
-	}
+	   }
 	
 	return 0;
 }
