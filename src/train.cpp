@@ -21,21 +21,29 @@ void Train::addCage(bool light) {
 }
 
 int Train::getLength() {
-    Cage light;
-    int length = 0;
+    int temp = 0;
+    Cage* current = first;
+    current->light = true;
 
-    if (first != nullptr) {
-        length = 1;
-        Cage* current = first->next;
+    while (true) {
+        current = current->next;
+        countOp++;
+        temp++;
 
-        while (current != first) {
-            length++;
-			countOp++;
-            current = current->next;
+        if (current->light) {
+            current->light = false;
+            int length = temp;
+
+            for (int i = 0; i < length; i++) {
+                current = current->prev;
+                countOp++;
+                temp--;
+            }
+
+            if (!current->light)
+                return length;
         }
     }
-
-    return length;
 }
 
 int Train::getOpCount() {
