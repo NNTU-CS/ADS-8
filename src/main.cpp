@@ -4,7 +4,7 @@
 
 int main() {
   Train train;
-  int count = 60; // кол-во вагонов
+  int count = 60;
 
   while (count--)
     train.addCage(false);
