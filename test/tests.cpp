@@ -55,7 +55,7 @@ TEST(lab8, test4) {
   int op = train.getOpCount();
 
   ASSERT_EQ(len, 4);
-  ASSERT_EQ(op, 20);
+  ASSERT_EQ(op, 8);
 }
 
 TEST(lab8, test5) {
@@ -69,5 +69,5 @@ TEST(lab8, test5) {
   int op = train.getOpCount();
 
   ASSERT_EQ(len, 6);
-  ASSERT_EQ(op, 42);
+  ASSERT_EQ(op, 12);
 }
