@@ -2,19 +2,20 @@
 #ifndef INCLUDE_TRAIN_H_
 #define INCLUDE_TRAIN_H_
 
-class Train {
+class NewTrain {
  private:
-  struct Cage {
-    bool light; // состояние лампочки
-    Cage *next;
-    Cage *prev;
+  struct Compartment {
+    bool light; 
+    Compartment *next;
+    Compartment *prev;
   };
-  int countOp; // счетчик шагов (число переходов из вагона в вагон)
-  Cage *first; // точка входа в поезд (первый вагон)
+  int moveCount; 
+  Compartment *start; 
+
  public:
-  Train();
-  void addCage(bool light); // добавить вагон с начальным состоянием лампочки
-  int getLength();          // вычислить длину поезда
-  int getOpCount();         // вернуть число переходов (из вагона в вагон)
+  NewTrain();
+  void addCompartment(bool light); 
+  int getLength();          
+  int getMoveCount();       
 };
 #endif  // INCLUDE_TRAIN_H_
