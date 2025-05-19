@@ -20,7 +20,7 @@ bool isValidLetter(char c) {
 }
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-    std::ifstream file("war_peace.txt");
+    std::ifstream file(filename);
     if (!file) {
         std::cerr << "File error!" << std::endl;
         return;
