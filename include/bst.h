@@ -55,7 +55,7 @@ template <typename T> class BST {
   BST() : root(nullptr) {}
   ~BST() { free(root); }
   void add(const T &word) { add(root, word); }
-  int depth() const { return treeHeight(root); }
+  int depth() const { return treeHeight(root)-1; }
   int search(const T &word) const { return search(root, word); }
 };
 
