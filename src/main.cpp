@@ -1,6 +1,4 @@
-// Copyright 2021 NNTU-CS
-#include "bst.h"
+// // Copyright 2021 NNTU-CS
+#include "../include/bst.h"
+int main() { return 0; }
 
-int main() {
-    return 0;
-}
