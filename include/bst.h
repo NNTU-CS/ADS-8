@@ -8,7 +8,7 @@
 template<typename T>
 class BST {
  public:
-   struct Node {
+  struct Node {
      T value;
      int count;
      Node* left;
