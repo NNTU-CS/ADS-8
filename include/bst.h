@@ -1,3 +1,4 @@
+// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
@@ -9,7 +10,7 @@ template <typename T> class BST {
     Node *right;
     int count;
     T word;
-    Node(const T &word) : word(word), left(nullptr), right(nullptr), count(1) {}
+    explicit Node(const T &word) : word(word), left(nullptr), right(nullptr), count(1) {}
   };
   Node *root;
   void add(Node *&node, const T &word) {
@@ -50,7 +51,7 @@ template <typename T> class BST {
     delete node;
   }
 
-public:
+ public:
   BST() : root(nullptr) {}
   ~BST() { free(root); }
   void add(const T &word) { add(root, word); }
