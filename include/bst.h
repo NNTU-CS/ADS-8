@@ -16,6 +16,7 @@ class BST {
      Node* right;
      explicit Node(T val) : value(val), count(1), left(nullptr), right(nullptr) {}
   };
+
  private:
   Node* root;
   Node* addNode(Node*, T);
@@ -29,7 +30,7 @@ class BST {
 
  public:
   BST();
- ~BST();
+  ~BST();
   void add(T);
   void print();
   int depth();
