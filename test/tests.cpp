@@ -6,7 +6,7 @@
 void makeTree(BST<std::string>& tree, const char* filename);
 
 TEST(lab8, test1_1) {
-    const char* filename = "/home/runner/work/ADS-8/ADS-8/build/src/war_peace.txt";
+    const char* filename = "/home/runner/work/ADS-8/build/src/war_peace.txt";
     BST<std::string> tree;
     makeTree(tree, filename);
     int depth = tree.depth();
