@@ -5,6 +5,8 @@
 #include  <algorithm>
 #include  <locale>
 #include  <cstdlib>
+#include <utility>
+#include <vector>
 #include  "bst.h"
 
 std::string toLower(const std::string& str) {
@@ -27,18 +29,16 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     }
     std::string word;
     std::string currentWord;
-    while (file.get(word[0])) { 
+    while (file.get(word[0])) {
         char ch = word[0];
         if (std::isalpha(ch)) {
             currentWord += ch;
-        }
-        else {
+        } else {
             if (!currentWord.empty()) {
                 tree.add(toLower(currentWord));
                 currentWord.clear();
             }
         }
-
     }
     if (!currentWord.empty()) {
         tree.add(toLower(currentWord));
