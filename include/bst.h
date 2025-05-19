@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <utility>
 
 template<typename T>
 class BST {
@@ -14,7 +15,7 @@ class BST {
      Node* left;
      Node* right;
      explicit Node(T val) : value(val), count(1), left(nullptr), right(nullptr) {}
-   };
+  };
  private:
   Node* root;
   Node* addNode(Node*, T);
@@ -146,9 +147,9 @@ int BST<T>::search(T value) {
 
 template<typename T>
 void  BST<T>::delTree(Node* root) {
-  if (root == nullptr)
+  if (root == nullptr) {
     return;
-  else {
+  } else {
     delTree(root->left);
     delTree(root->right);
     delete root;
@@ -166,19 +167,19 @@ void BST<T>::clear() {
 template<typename T>
 typename BST<T>::Node* BST<T>::delNode(typename BST<T>::Node* root, int value) {
   Node* p, * v;
-  if (root == nullptr)
+  if (root == nullptr) {
     return root;
-  else if (value < root->value)
+  } else if (value < root->value) {
     root->left = delNode(root->left, value);
-  else if (value > root->value)
+  } else if (value > root->value) {
     root->right = delNode(root->right, value);
-  else {
+  } else {
     p = root;
-    if (root->right == nullptr)
+    if (root->right == nullptr) {
       root = root->left;
-    else if (root->left == nullptr)
+    } else if (root->left == nullptr) {
       root = root->right;
-    else {
+    } else {
       v = root->left;
     if (v->right) {
       while (v->right->right)
@@ -193,8 +194,8 @@ typename BST<T>::Node* BST<T>::delNode(typename BST<T>::Node* root, int value) {
        p = v;
        root->left = root->left->left;
      }
-   }
-   delete p;
+  }
+  delete p;
   }
   return root;
 }
