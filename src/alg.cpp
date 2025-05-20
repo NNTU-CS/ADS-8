@@ -5,8 +5,8 @@
 #include <cctype>
 #include <vector>
 #include <utility>
-#include "bst.h"
 #include <string>
+#include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
