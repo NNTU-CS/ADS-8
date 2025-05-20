@@ -59,7 +59,8 @@ void printFreq(BST<std::string>& tree) {
               return a.count > b.count;
             });
 
-  system("mkdir -p result");
+  int res = system("mkdir -p result");
+  (void)res;
   std::ofstream fout("result/freq.txt");
 
   for (const auto& wf : words) {
