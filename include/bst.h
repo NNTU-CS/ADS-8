@@ -32,12 +32,12 @@ private:
       node->count++;
   }
 
-  int depth(Node* node) const {
-    if (!node) return 0;
-    int l = depth(node->left);
-    int r = depth(node->right);
-    return std::max(l, r) + 1;
-  }
+int depth(Node* node) const {
+  if (!node) return -1;
+  int l = depth(node->left);
+  int r = depth(node->right);
+  return std::max(l, r) + 1;
+}
 
   int search(Node* node, const T& val) const {
     if (!node) return 0;
