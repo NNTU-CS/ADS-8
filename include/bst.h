@@ -10,13 +10,13 @@
 template <typename T>
 class BST {
    private:
-    struct Node {
-      T value;
-      int count;
-      Node* left;
-      Node* right;
+     struct Node {
+       T value;
+       int count;
+       Node* left;
+       Node* right;
 
-      explicit Node(const T& val) : value(val), count(1), left(nullptr), right(nullptr) {}
+       explicit Node(const T& val) : value(val), count(1), left(nullptr), right(nullptr) {}
     };
 
   Node* root;
@@ -57,14 +57,14 @@ int depth(Node* node) const {
   }
 
    public:
-    BST() : root(nullptr) {}
-    ~BST() { destroy(root); }
+     BST() : root(nullptr) {}
+     ~BST() { destroy(root); }
 
-    void insert(const T& val) { insert(root, val); }
+     void insert(const T& val) { insert(root, val); }
 
-    int search(const T& val) const { return search(root, val); }
+     int search(const T& val) const { return search(root, val); }
 
-    int depth() const { return depth(root); }
+     int depth() const { return depth(root); }
 };
 
 #endif  // INCLUDE_BST_H_
