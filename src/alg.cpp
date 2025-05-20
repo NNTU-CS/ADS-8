@@ -3,6 +3,11 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <filesystem>
+#include <iomanip>
 #include  "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
