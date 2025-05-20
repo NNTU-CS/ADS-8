@@ -4,11 +4,14 @@
 #include  <locale>
 #include  <cstdlib>
 #include <cctype>
-#include <algorithm>
 #include <vector>
-#include <filesystem>
-#include <iomanip>
 #include  "bst.h"
+
+#include <iostream>
+#include <fstream>
+#include <cctype>
+#include <string>
+#include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
@@ -19,7 +22,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
   std::string word;
   char ch;
-
   while (file.get(ch)) {
     unsigned char uch = static_cast<unsigned char>(ch);
     if (std::isalpha(uch)) {
@@ -38,22 +40,4 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   }
 
   file.close();
-}
-
-void printFreq(BST<std::string>& tree) {
-  auto vec = tree.toVector();
-
-  std::sort(vec.begin(), vec.end(), [](const auto& a, const auto& b) {
-    return a.second > b.second;
-  });
-
-  std::filesystem::create_directories("result");
-  std::ofstream out("result/freq.txt");
-
-  for (const auto& pair : vec) {
-    std::cout << std::setw(5) << pair.second << " - " << pair.first << "\n";
-    out << pair.second << " - " << pair.first << "\n";
-  }
-
-  out.close();
 }
