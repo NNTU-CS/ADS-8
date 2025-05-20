@@ -9,15 +9,16 @@
 
 template <typename T>
 class BST {
-   private:
-     struct Node {
-       T value;
-       int count;
-       Node* left;
-       Node* right;
+ private:
+  struct Node {
+    T value;
+    int count;
+    Node* left;
+    Node* right;
 
-       explicit Node(const T& val) : value(val), count(1), left(nullptr), right(nullptr) {}
-    };
+    explicit Node(const T& val)
+      : value(val), count(1), left(nullptr), right(nullptr) {}
+  };
 
   Node* root;
 
@@ -32,12 +33,12 @@ class BST {
       node->count++;
   }
 
-int depth(Node* node) const {
-  if (!node) return -1;
-  int l = depth(node->left);
-  int r = depth(node->right);
-  return std::max(l, r) + 1;
-}
+  int depth(Node* node) const {
+    if (!node) return -1;  // глубина в рёбрах
+    int l = depth(node->left);
+    int r = depth(node->right);
+    return std::max(l, r) + 1;
+  }
 
   int search(Node* node, const T& val) const {
     if (!node) return 0;
@@ -56,15 +57,15 @@ int depth(Node* node) const {
     delete node;
   }
 
-   public:
-     BST() : root(nullptr) {}
-     ~BST() { destroy(root); }
+ public:
+  BST() : root(nullptr) {}
+  ~BST() { destroy(root); }
 
-     void insert(const T& val) { insert(root, val); }
+  void insert(const T& val) { insert(root, val); }
 
-     int search(const T& val) const { return search(root, val); }
+  int search(const T& val) const { return search(root, val); }
 
-     int depth() const { return depth(root); }
+  int depth() const { return depth(root); }
 };
 
 #endif  // INCLUDE_BST_H_
