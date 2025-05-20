@@ -5,9 +5,8 @@
 #include <vector>
 #include <utility>
 
-template <typename T>
-class BST {
-   private:
+template <typename T> class BST {
+ private:
     struct Node {
       T key;
       int count;
@@ -63,7 +62,7 @@ class BST {
       collect(node->right, v);
     }
 
-   public:
+ public:
     BST() : root(nullptr) {}
     ~BST() { destroy(root); }
 
