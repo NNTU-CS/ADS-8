@@ -6,7 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <iomanip>
-#include <filesystem>
+#include <cstdlib>
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
@@ -59,7 +59,7 @@ void printFreq(BST<std::string>& tree) {
               return a.count > b.count;
             });
 
-  std::filesystem::create_directories("result");
+  system("mkdir -p result");
   std::ofstream fout("result/freq.txt");
 
   for (const auto& wf : words) {
