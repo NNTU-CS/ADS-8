@@ -7,7 +7,7 @@
 
 template <typename T>
 class BST {
-  private:
+   private:
     struct Node {
       T key;
       int count;
@@ -63,7 +63,7 @@ class BST {
       collect(node->right, v);
     }
 
-  public:
+   public:
     BST() : root(nullptr) {}
     ~BST() { destroy(root); }
 
