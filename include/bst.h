@@ -34,7 +34,7 @@ class BST {
   }
 
   int depth(Node* node) const {
-    if (!node) return -1;  // глубина в рёбрах
+    if (!node) return -1;
     int l = depth(node->left);
     int r = depth(node->right);
     return std::max(l, r) + 1;
@@ -48,6 +48,14 @@ class BST {
       return search(node->right, val);
     else
       return node->count;
+  }
+
+  template <typename Func>
+  void inorder(Node* node, Func func) const {
+    if (!node) return;
+    inorder(node->left, func);
+    func(node->value, node->count);
+    inorder(node->right, func);
   }
 
   void destroy(Node* node) {
@@ -64,6 +72,11 @@ class BST {
   void insert(const T& val) { insert(root, val); }
 
   int search(const T& val) const { return search(root, val); }
+
+  template <typename Func>
+  void inorder(Func func) const {
+  inorder(root, func);
+  }
 
   int depth() const { return depth(root); }
 };
