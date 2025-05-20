@@ -9,7 +9,7 @@
 
 template <typename T>
 class BST {
-private:
+ private:
   struct Node {
     T value;
     int count;
@@ -56,7 +56,7 @@ int depth(Node* node) const {
     delete node;
   }
 
-public:
+ public:
   BST() : root(nullptr) {}
   ~BST() { destroy(root); }
 
