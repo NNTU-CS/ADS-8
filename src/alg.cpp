@@ -5,11 +5,6 @@
 #include  <cstdlib>
 #include <cctype>
 #include <vector>
-#include  "bst.h"
-
-#include <iostream>
-#include <fstream>
-#include <cctype>
 #include <string>
 #include "bst.h"
 
