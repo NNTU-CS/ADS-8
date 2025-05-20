@@ -51,7 +51,7 @@ private:
 
     
     int depth(Node* node) const {
-        if (!node) return 0;
+        if (!node) return -1;
         int dl = depth(node->left);
         int dr = depth(node->right);
         return 1 + (dl > dr ? dl : dr);
