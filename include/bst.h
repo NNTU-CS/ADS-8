@@ -3,6 +3,7 @@
 #define INCLUDE_BST_H_
 #include <iostream>
 #include <string>
+#include <vector> 
 
 template <typename T>
 class BST {
