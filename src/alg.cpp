@@ -6,6 +6,7 @@
 #include  <algorithm>
 #include  <locale>
 #include  <cstdlib>
+#include  <utility>
 #include  "../include/bst.h"
 
 
@@ -20,8 +21,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   std::string word = "";
   int ch;
 
-  while ((ch = file.get()) != EOF)
-  {
+  while ((ch = file.get()) != EOF) {
     if (ch >= 'A' && ch <= 'Z') {
       ch += 'a' - 'A';
     }
