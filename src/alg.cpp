@@ -7,4 +7,5 @@
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   // поместите сюда свой код
+  efete trt rtv
 }
