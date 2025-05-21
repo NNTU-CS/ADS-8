@@ -6,11 +6,12 @@
 #include <iostream>
 #include <vector>
 #include <utility>
+#include <algorithm> 
 
 
 template<typename T>
 class BST {
-private:
+ private:
   struct Node {
     T data;
     int count;
@@ -73,7 +74,7 @@ private:
 
       delete temp1;
     }
-    
+  
     return root;
   }
 
@@ -84,7 +85,7 @@ private:
 
     delTree(root->left);
     delTree(root->right);
-    
+  
     delete root;
     root = nullptr;
   }
@@ -124,7 +125,7 @@ private:
     if (root->left == nullptr && root->right == nullptr) {
       return 0;
     }
-    
+  
     int left = getDepth(root->left);
     int right = getDepth(root->right);
     return std::max(left, right) + 1;
@@ -138,7 +139,8 @@ private:
     frequencies.push_back(std::make_pair(root->data, root->count));
     getFrequencies(root->right, frequencies);
   }
-public:
+
+ public:
   BST() : root(nullptr) {}
 
   ~BST() {
