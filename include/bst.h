@@ -98,7 +98,7 @@ private:
       return root->count;
     } else if (value > root->data) {
       return searchNode(root->right, value);
-    } else if (value < root->data) {
+    } else (value < root->data) {
       return searchNode(root->left, value);
     }
   }
