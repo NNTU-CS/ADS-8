@@ -1,6 +1,7 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
+
 template<typename T>
 struct Node {
     T key;
@@ -15,6 +16,7 @@ template<typename T>
 class BST {
  private:
     Node<T>* root;
+
     void insert(Node<T>*& node, const T& key) {
         if (!node) {
             node = new Node<T>(key);
@@ -31,12 +33,14 @@ class BST {
         if (!node) return 0;
         int left = depth(node->left);
         int right = depth(node->right);
-        return (left > right ? left : right) + 1;
+        int maxDepth = (left > right) ? left : right;
+        return maxDepth + 1;
     }
 
     Node<T>* search(Node<T>* node, const T& key) const {
         if (!node || node->key == key) return node;
-        return key < node->key ? search(node->left, key) : search(node->right, key);
+        Node* nextNode = (key < node->key) ? node->left : node->right;
+        return search(nextNode, key);
     }
 
     void inorder(Node<T>* node, void(*process)(const T&, int)) const {
@@ -56,12 +60,13 @@ class BST {
  public:
     BST() : root(nullptr) {}
     ~BST() { destroy(root); }
+
     void insert(const T& key) { insert(root, key); }
     int depth() const { return depth(root); }
     bool search(const T& key) const { return search(root, key) != nullptr; }
 
-    void traverse(void(*process)(const T&, int)) const {
-        inorder(root, process);
+    void traverse(void(*p)(const T&, int)) const {
+        inorder(root, p);
     }
 };
 
