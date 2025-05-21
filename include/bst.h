@@ -58,6 +58,7 @@ class BST {
       inOrder_func(node->right_pointer);
     }
   }
+
  public:
   BST() : first(nullptr) {}
   void insert(T word) {
