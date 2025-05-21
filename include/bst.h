@@ -15,7 +15,7 @@ class BST {
     int count;
     Node* left;
     Node* right;
-    Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
   Node* root;
 
@@ -41,7 +41,7 @@ class BST {
   }
 
   int Depth(Node* node) const {
-    if (!node) return 0;
+    if (!node) return -1;
     int dl = Depth(node->left);
     int dr = Depth(node->right);
     return 1 + (dl > dr ? dl : dr);
