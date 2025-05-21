@@ -120,6 +120,10 @@ private:
     if (root == nullptr) {
       return 0;
     }
+
+    if (root->left == nullptr && root->right == nullptr) {
+      return 0;
+    }
     
     int left = getDepth(root->left);
     int right = getDepth(root->right);
