@@ -4,20 +4,21 @@
 
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 template<typename T>
 class Node {
-public:
+ public:
   T word;
   int quantity;
   Node* left_pointer;
   Node* right_pointer;
-  Node(T value) : word(value), quantity(1), left_pointer(nullptr), right_pointer(nullptr) {}
+  explicit Node(T value) : word(value), quantity(1), left_pointer(nullptr), right_pointer(nullptr) {}
 };
 
 template<typename T>
 class BST {
-private:
+ private:
   Node<T>* first;
   void insert_func(Node<T>*& node, T word) {
     if (node == nullptr) {
@@ -57,7 +58,7 @@ private:
       inOrder_func(node->right_pointer);
     }
   }
-public:
+ public:
   BST() : first(nullptr) {}
   void insert(T word) {
     insert_func(first, word);
