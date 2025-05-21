@@ -7,11 +7,13 @@ struct Node {
     int count;
     Node* left;
     Node* right;
+
     Node(const T& key) : key(key), count(1), left(nullptr), right(nullptr) {}
 };
+
 template<typename T>
 class BST {
-private:
+ private:
     Node<T>* root;
     void insert(Node<T>*& node, const T& key) {
         if (!node) {
@@ -24,22 +26,26 @@ private:
             node->count++;
         }
     }
+
     int depth(Node<T>* node) const {
         if (!node) return 0;
         int left = depth(node->left);
         int right = depth(node->right);
         return (left > right ? left : right) + 1;
     }
+
     Node<T>* search(Node<T>* node, const T& key) const {
         if (!node || node->key == key) return node;
         return key < node->key ? search(node->left, key) : search(node->right, key);
     }
+
     void inorder(Node<T>* node, void(*process)(const T&, int)) const {
         if (!node) return;
         inorder(node->left, process);
         process(node->key, node->count);
         inorder(node->right, process);
     }
+
     void destroy(Node<T>* node) {
         if (!node) return;
         destroy(node->left);
@@ -47,10 +53,9 @@ private:
         delete node;
     }
 
-public:
+ public:
     BST() : root(nullptr) {}
     ~BST() { destroy(root); }
-
     void insert(const T& key) { insert(root, key); }
     int depth() const { return depth(root); }
     bool search(const T& key) const { return search(root, key) != nullptr; }
@@ -59,4 +64,5 @@ public:
         inorder(root, process);
     }
 };
+
 #endif  // INCLUDE_BST_H_
