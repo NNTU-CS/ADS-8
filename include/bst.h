@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <utility>
-#include <algorithm> 
+#include <algorithm>
 
 
 template<typename T>
@@ -74,7 +74,7 @@ class BST {
 
       delete temp1;
     }
-  
+
     return root;
   }
 
@@ -85,7 +85,7 @@ class BST {
 
     delTree(root->left);
     delTree(root->right);
-  
+
     delete root;
     root = nullptr;
   }
@@ -125,7 +125,7 @@ class BST {
     if (root->left == nullptr && root->right == nullptr) {
       return 0;
     }
-  
+
     int left = getDepth(root->left);
     int right = getDepth(root->right);
     return std::max(left, right) + 1;
