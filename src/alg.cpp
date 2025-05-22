@@ -15,13 +15,13 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
   std::string word = "";
   int character;
-  while ((ch = file.get()) != EOF) {
-    if (ch >= 'A' && ch <= 'Z') {
-      ch += 'a' - 'A';
+  while ((character = file.get()) != EOF) {
+    if (character >= 'A' && character <= 'Z') {
+      character += 'a' - 'A';
     }
 
-    if (ch >= 'a' && ch <= 'z') {
-      word += ch;
+    if (character >= 'a' && character <= 'z') {
+      word += character;
     } else {
       if (!word.empty()) {
         tree.add(word);
