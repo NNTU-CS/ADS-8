@@ -33,7 +33,7 @@ class BST {
 
   Node* rmNode(Node* root, T value) {
     if (root == nullptr) return nullptr;
-    Node* buff,buff2;
+    Node* buff, buff2;
     if (value > root->data) {
       root->right = rmNode(root->right, value);
     } else if (value < root->data) {
@@ -100,7 +100,7 @@ class BST {
   int getDepth(Node* root) {
     if (root == nullptr) return 0;
     if (root->left == nullptr && root->right == nullptr) return 0;
-    
+
     int left = getDepth(root->left);
     int right = getDepth(root->right);
     return std::max(left, right) + 1;
@@ -108,7 +108,7 @@ class BST {
 
   void getFreqs(Node* root, std::vector<std::pair<T, int>>& freqs) const {
     if (root == nullptr) return;
-   
+
     getFreqs(root->left, freqs);
     freqs.push_back(std::make_pair(root->data, root->count));
     getFreqs(root->right, freqs);
