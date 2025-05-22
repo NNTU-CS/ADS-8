@@ -84,8 +84,4 @@ class BST {
   }
 };
 
-void makeTree(BST<std::string>& tree, const char* filename);
-void printFreq(BST<std::string>& tree);
-
-
 #endif  // INCLUDE_BST_H_
