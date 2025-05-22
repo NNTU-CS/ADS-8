@@ -106,10 +106,10 @@ class BST {
     return std::max(left, right) + 1;
   }
 
-  void getFreqs(Node* root, std::vector<std::pair<T, int>& freqs>) const {
+  void getFreqs(Node* root, std::vector<std::pair<T, int>>& freqs) const {
     if (root == nullptr) return;
-
-    getFreqs(root->left, freqs);
+   
+    getFreqs(root->left, frequs);
     freqs.push_back(std::make_pair(root->data, root->count));
     getFreqs(root->right, freqs);
   }
@@ -148,7 +148,7 @@ class BST {
     return root;
   }
 
-  std::vetor<std::pair<T, int>> getFreqs() const {
+  std::vector<std::pair<T, int>> getFreqs() const {
     std::vector<std::pair<T, int>> freqs;
     getFreqs(root, freqs);
     return freqs;
