@@ -42,7 +42,7 @@ bool compareFrequencies(const std::pair<std::string, int>& a, const std::pair<st
 }
 
 void printFreq(BST<std::string>& tree) {
-  std::vector<std::pair<std::string, int>> frequencies = tree.getFrequencies();
+  std::vector<std::pair<std::string, int>> frequencies = tree.getFreqs();
   std::sort(frequencies.begin(), frequencies.end(), compareFrequencies);
   std::ofstream outputFile("result/freq.txt");
   if (!outputFile.is_open()) return;
