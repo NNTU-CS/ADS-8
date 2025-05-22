@@ -46,7 +46,7 @@ void printFreq(BST<std::string>& tree) {
   std::sort(frequencies.begin(), frequencies.end(), compareFrequencies);
   std::ofstream outputFile("result/freq.txt");
   if (!outputFile.is_open()) return;
-  
+
   for (const auto& pair : frequencies) {
     std::cout << pair.first << " - " << pair.second << std::endl;
     outputFile << pair.first << " - " << pair.second << std::endl;
