@@ -109,7 +109,7 @@ class BST {
   void getFreqs(Node* root, std::vector<std::pair<T, int>>& freqs) const {
     if (root == nullptr) return;
    
-    getFreqs(root->left, frequs);
+    getFreqs(root->left, freqs);
     freqs.push_back(std::make_pair(root->data, root->count));
     getFreqs(root->right, freqs);
   }
