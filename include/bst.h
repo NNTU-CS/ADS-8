@@ -2,10 +2,10 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include<iostream>
-#include<vector>
-#include<utility>
-#include<algorithm>
+#include <iostream>
+#include <vector>
+#include <utility>
+#include <algorithm>
 
 template<typename T>
 class BST {
