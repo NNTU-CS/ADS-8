@@ -3,6 +3,7 @@
 #include "alg.h"
 
 #include <iostream>
+#include <string>
 
 int main() {
   BST<std::string> tree;
