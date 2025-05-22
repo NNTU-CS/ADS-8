@@ -2,6 +2,7 @@
 #ifndef INCLUDE_ALG_H_
 #define INCLUDE_ALG_H_
 
+#include <string>
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename);
