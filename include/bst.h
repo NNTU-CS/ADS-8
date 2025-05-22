@@ -43,7 +43,9 @@ class BST {
 
   int depth(Node* node) const {
     if (!node) return 0;
-    return 1 + std::max(depth(node->left), depth(node->right));
+    int left_depth = depth(node->left);
+    int right_depth = depth(node->right);
+    return 1 + (left_depth > right_depth ? left_depth : right_depth);
   }
 
   void inOrder(Node* node, std::vector<std::pair<T, int>>& result) const {
