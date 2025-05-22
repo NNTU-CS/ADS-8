@@ -1,11 +1,13 @@
 // Copyright 2021 NNTU-CS
-#include  <iostream>
-#include  <fstream>
-#include  <locale>
-#include  <cstdlib>
-#include <vector>
+#include "bst.h"
+
 #include <algorithm>
-#include  "bst.h"
+#include <cctype>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <utility>
+#include <vector>
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
@@ -13,6 +15,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     std::cout << "File error!" << std::endl;
     return;
   }
+
   std::string currentWord;
   while (!file.eof()) {
     char ch = file.get();
@@ -25,24 +28,25 @@ void makeTree(BST<std::string>& tree, const char* filename) {
       }
     }
   }
+
   if (!currentWord.empty()) {
     tree.insert(currentWord);
   }
+
   file.close();
 }
 
-
 void printFreq(BST<std::string>& tree) {
   auto words = tree.inOrder();
-  std::sort(words.begin(), words.end(), 
+  std::sort(words.begin(), words.end(),
     [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
       return a.second > b.second;
     });
-  
+
   for (const auto& pair : words) {
     std::cout << pair.first << " " << pair.second << std::endl;
   }
-  
+
   std::ofstream out("result/freq.txt");
   for (const auto& pair : words) {
     out << pair.first << " " << pair.second << std::endl;
