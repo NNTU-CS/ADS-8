@@ -16,7 +16,7 @@ class BST {
         Node* left;
         Node* right;
 
-        Node(const T& data) : data(data), count(1), left(nullptr), right(nullptr) {}
+        explict Node(const T& data) : data(data), count(1), left(nullptr), right(nullptr) {}
     };
 
     Node* root;
@@ -98,7 +98,8 @@ template <typename T>
 typename BST<T>::Node* BST<T>::search(Node* node, const T& value) {
     if (node == nullptr) {
         return nullptr;
-    } if (value == node->data) {
+    }
+    if (value == node->data) {
         return node;
     } else if (value < node->data) {
         return search(node->left, value);
