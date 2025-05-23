@@ -16,7 +16,6 @@ template<typename T>
 class BST {
  private:
     Node<T>* root;
-
     void insert(Node<T>*& node, const T& key) {
         if (!node) {
             node = new Node<T>(key);
@@ -39,7 +38,7 @@ class BST {
 
     Node<T>* search(Node<T>* node, const T& key) const {
         if (!node || node->key == key) return node;
-        Node* nextNode = (key < node->key) ? node->left : node->right;
+        Node<T>* nextNode = (key < node->key) ? node->left : node->right; // Исправлено: добавлен тип Node<T>*
         return search(nextNode, key);
     }
 
@@ -69,5 +68,4 @@ class BST {
         inorder(root, p);
     }
 };
-
 #endif  // INCLUDE_BST_H_
