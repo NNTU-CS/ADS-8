@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <stdexcept>
-#include "bst.h"
+
 void makeTree(BST<std::string>&, const char*);
 void printFreq(BST<std::string>&);
 int main() {
