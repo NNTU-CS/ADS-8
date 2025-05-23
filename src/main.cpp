@@ -1,5 +1,6 @@
 // Copyright 2021 NNTU-CS
 #include <iostream>
+#include <string>
 #include "bst.h"
 
 void build_word_tree(BinarySearchTree<std::string>&, const char*);
