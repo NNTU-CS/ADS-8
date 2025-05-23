@@ -2,7 +2,7 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <аlgorithm>
+#include <algorithm>
 #include <vector>
 #include <string>
 #include <utility>
