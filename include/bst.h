@@ -1,6 +1,6 @@
 // Copyright 2021 NNTU-CS
-#ifndef BINARY_SEARCH_TREE_H
-#define BINARY_SEARCH_TREE_H
+#ifndef INCLUDE_BST_H_ 
+#define INCLUDE_BST_H_ 
 
 #include <vector>
 #include <utility>
@@ -13,8 +13,7 @@ class BinarySearchTree {
         int frequency;
         TreeNode* left_child;
         TreeNode* right_child;
-        
-        explicit TreeNode(const T& val) : data(val), frequency(1), 
+        explicit TreeNode(const T& val) : data(val), frequency(1),
                                         left_child(nullptr), right_child(nullptr) {}
     };
 
@@ -61,14 +60,13 @@ class BinarySearchTree {
         delete node;
     }
 
-public:
+ public:
     BinarySearchTree() : root_node(nullptr) {}
     ~BinarySearchTree() { delete_tree(root_node); }
 
     void insert(const T& value) { add_node(root_node, value); }
     int search(const T& value) const { return find_count(root_node, value); }
     int depth() const { return calculate_depth(root_node); }
-    
     std::vector<std::pair<T, int>> get_all_elements() const {
         std::vector<std::pair<T, int>> elements;
         traverse_inorder(root_node, elements);
@@ -76,4 +74,4 @@ public:
     }
 };
 
-#endif // BINARY_SEARCH_TREE_H
+#endif //INCLUDE_BST_H_ 
