@@ -1,14 +1,13 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
 #include <string>
 #include "bst.h"
-
-void makeTree(BinarySearchTree<std::string>&, const char*);
-void display_frequencies(const BinarySearchTree<std::string>&);
+void makeTree(BST<std::string>&, const char*);
+void printFreq(BST<std::string>& tree);
 
 int main() {
-    BinarySearchTree<std::string> word_storage;
-    makeTree(word_storage, "war_peace.txt");
-    display_frequencies(word_storage);
-    return 0;
+  const char* file = "D:/Study/С++/ADS-8/ADS-8/war_peace.txt";
+  BST<std::string> tree;
+  makeTree(tree, file);
+  printFreq(tree);
+  return 0;
 }
