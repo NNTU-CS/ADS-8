@@ -2,13 +2,14 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
+#include <algorithm>
 #include <vector>
 #include <string>
 #include <utility>
 
 template <typename T>
 class BST {
-private:
+ private:
     struct Node {
         T key;
         int count;
@@ -33,12 +34,12 @@ private:
         }
     }
     int Search(Node* node, const T& key) const {
-        return !node ? 0 : 
-               key == node->key ? node->count : 
+        return !node ? 0 :
+               key == node->key ? node->count :
                Search(key < node->key ? node->left : node->right, key);
     }
     int Depth(Node* node) const {
-        return !node ? -1 : 
+        return !node ? -1 :
                1 + std::max(Depth(node->left), Depth(node->right));
     }
     void inorder(Node* node, std::vector<std::pair<T, int>>& vec) const {
@@ -48,7 +49,7 @@ private:
         inorder(node->right, vec);
     }
 
-public:
+ public:
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
     void insert(const T& key) { insert(root, key); }
