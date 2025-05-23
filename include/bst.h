@@ -82,7 +82,7 @@ class BST {
   }
   void printInOrder() {
     inOrder_func(first);
-   sortAndPrint();
+    sortAndPrint();
   }
 };
 
