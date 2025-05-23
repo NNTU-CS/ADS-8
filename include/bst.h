@@ -2,70 +2,146 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-template<typename T>
-struct Node {
-    T key;
-    int count;
-    Node* left;
-    Node* right;
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <vector>
 
-    Node(const T& key) : key(key), count(1), left(nullptr), right(nullptr) {}
-};
-
-template<typename T>
+template <typename T>
 class BST {
  private:
-    Node<T>* root;
-    void insert(Node<T>*& node, const T& key) {
-        if (!node) {
-            node = new Node<T>(key);
-        } else if (key < node->key) {
-            insert(node->left, key);
-        } else if (key > node->key) {
-            insert(node->right, key);
-        } else {
-            node->count++;
-        }
-    }
+    struct Node {
+        T data;
+        int count;
+        Node* left;
+        Node* right;
 
-    int depth(Node<T>* node) const {
-        if (!node) return 0;
-        int left = depth(node->left);
-        int right = depth(node->right);
-        int maxDepth = (left > right) ? left : right;
-        return maxDepth + 1;
-    }
+        Node(const T& data) : data(data), count(1), left(nullptr), right(nullptr) {}
+    };
 
-    Node<T>* search(Node<T>* node, const T& key) const {
-        if (!node || node->key == key) return node;
-        Node<T>* nextNode = (key < node->key) ? node->left : node->right; // Исправлено: добавлен тип Node<T>*
-        return search(nextNode, key);
-    }
+    Node* root;
 
-    void inorder(Node<T>* node, void(*process)(const T&, int)) const {
-        if (!node) return;
-        inorder(node->left, process);
-        process(node->key, node->count);
-        inorder(node->right, process);
-    }
-
-    void destroy(Node<T>* node) {
-        if (!node) return;
-        destroy(node->left);
-        destroy(node->right);
-        delete node;
-    }
+    // Helper functions
+    void insert(Node*& node, const T& data);
+    int depth(Node* node) const;
+    Node* search(Node* node, const T& value);
+    void printInOrder(Node* node) const;
+    void collectFrequencies(Node* node, std::vector<std::pair<T, int>>& frequencies) const;
+    void freeMemory(Node* node);
 
  public:
     BST() : root(nullptr) {}
-    ~BST() { destroy(root); }
+    ~BST();
 
-    void insert(const T& key) { insert(root, key); }
-    int depth() const { return depth(root); }
-    bool search(const T& key) const { return search(root, key) != nullptr; }
+    void insert(const T& data);
+    int depth() const;
+    bool search(const T& value);
+    void printInOrder() const;
 
-    void traverse(void(*p)(const T&, int)) const {
-        inorder(root, p);
-    }
+    // Collect word frequencies into a vector for sorting
+    std::vector<std::pair<T, int>> getFrequencies() const;
 };
+
+template <typename T>
+BST<T>::~BST() {
+    freeMemory(root);
+}
+
+template <typename T>
+void BST<T>::freeMemory(Node* node) {
+    if (node) {
+        freeMemory(node->left);
+        freeMemory(node->right);
+        delete node;
+    }
+}
+
+template <typename T>
+void BST<T>::insert(const T& data) {
+    insert(root, data);
+}
+
+template <typename T>
+void BST<T>::insert(Node*& node, const T& data) {
+    if (node == nullptr) {
+        node = new Node(data);
+    }
+    else if (data < node->data) {
+        insert(node->left, data);
+    }
+    else if (data > node->data) {
+        insert(node->right, data);
+    }
+    else {
+        node->count++;
+    }
+}
+
+
+template <typename T>
+int BST<T>::depth() const {
+    return depth(root);
+}
+
+template <typename T>
+int BST<T>::depth(Node* node) const {
+    if (node == nullptr) {
+        return 0;
+    }
+    else {
+        int leftDepth = depth(node->left);
+        int rightDepth = depth(node->right);
+        return std::max(leftDepth, rightDepth) + 1;
+    }
+}
+
+template <typename T>
+bool BST<T>::search(const T& value) {
+    return search(root, value) != nullptr;
+}
+
+template <typename T>
+typename BST<T>::Node* BST<T>::search(Node* node, const T& value) {
+    if (node == nullptr) {
+        return nullptr;
+    }
+    if (value == node->data) {
+        return node;
+    } else if (value < node->data) {
+        return search(node->left, value);
+    } else {
+        return search(node->right, value);
+    }
+}
+
+template <typename T>
+void BST<T>::printInOrder() const {
+    printInOrder(root);
+}
+
+template <typename T>
+void BST<T>::printInOrder(Node* node) const {
+    if (node != nullptr) {
+        printInOrder(node->left);
+        std::cout << node->data << " (" << node->count << ")" << std::endl;
+        printInOrder(node->right);
+    }
+}
+
+template <typename T>
+std::vector<std::pair<T, int>> BST<T>::getFrequencies() const {
+    std::vector<std::pair<T, int>> frequencies;
+    collectFrequencies(root, frequencies);
+    return frequencies;
+}
+
+template <typename T>
+void BST<T>::collectFrequencies(Node* node, std::vector<std::pair<T, int>>& frequencies) const {
+    if (node != nullptr) {
+        collectFrequencies(node->left, frequencies);
+        frequencies.push_back({ node->data, node->count });
+        collectFrequencies(node->right, frequencies);
+    }
+}
+
 #endif  // INCLUDE_BST_H_
