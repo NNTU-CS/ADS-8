@@ -1,42 +1,39 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
-#include <fstream>
-#include <locale>
-#include <cstdlib>
-#include <cctype>
-#include <string>
 #include <algorithm>
+#include <fstream>
+#include <cctype>
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream fin(filename);
-  if (!fin.is_open()) {
-    std::cerr << "Cannot open file: " << filename << "\n";
-    return;
-  }
+  if (!fin.is_open()) return;
+
   std::string word;
   char c;
 
   while (fin.get(c)) {
     if (isalpha(static_cast<unsigned char>(c))) {
       word.clear();
-      while (fin && isalpha(static_cast<unsigned char>(c))) {
+      do {
         word += std::tolower(static_cast<unsigned char>(c));
-        fin.get(c);
-      }
+      } while (fin.get(c) && isalpha(static_cast<unsigned char>(c)));
       tree.insert(word);
     }
   }
   fin.close();
 }
+
 void printFreq(BST<std::string>& tree) {
   auto words = tree.getAll();
+  std::sort(words.begin(), words.end(), 
+    [](const auto& a, const auto& b) {
+      return a.second != b.second ? a.second > b.second : a.first < b.first;
+    });
 
-  std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
-    if (a.second != b.second) return a.second > b.second;
-    return a.first < b.first;
-  });
-
+  for (const auto& p : words) {
+    std::cout << p.first << " " << p.second << "\n";
+  }
+}
   for (const auto& p : words) {
     std::cout << p.first << " " << p.second << "\n";
   }
