@@ -3,7 +3,7 @@
 #include <string>
 #include "bst.h"
 
-void build_word_tree(BinarySearchTree<std::string>&, const char*);
+void makeTree(BinarySearchTree<std::string>&, const char*);
 void display_frequencies(const BinarySearchTree<std::string>&);
 
 int main() {
