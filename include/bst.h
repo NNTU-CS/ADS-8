@@ -34,7 +34,7 @@ class BST {
 
     void insert(const T& data);
     int depth() const;
-    bool search(const T& value);
+    int search(const T& value);
     void printInOrder() const;
 
     std::vector<std::pair<T, int>> getFrequencies() const;
@@ -63,47 +63,42 @@ template <typename T>
 void BST<T>::insert(Node*& node, const T& data) {
     if (node == nullptr) {
         node = new Node(data);
-    }
-    else if (data < node->data) {
+    } else if (data < node->data) {
         insert(node->left, data);
-    }
-    else if (data > node->data) {
+    } else if (data > node->data) {
         insert(node->right, data);
-    }
-    else {
+    } else {
         node->count++;
     }
 }
 
-
 template <typename T>
 int BST<T>::depth() const {
-    return depth(root);
+    return depth(root)-1;
 }
 
 template <typename T>
 int BST<T>::depth(Node* node) const {
     if (node == nullptr) {
         return 0;
-    }
-    else {
+    } else {
         int leftDepth = depth(node->left);
         int rightDepth = depth(node->right);
-        return std::max(leftDepth, rightDepth) + 1;
+        return std::max(leftDepth, rightDepth)+1;
     }
 }
 
 template <typename T>
-bool BST<T>::search(const T& value) {
-    return search(root, value) != nullptr;
+int BST<T>::search(const T& value) {
+    Node* result = search(root, value);
+    return result ? result->count : 0;
 }
 
 template <typename T>
 typename BST<T>::Node* BST<T>::search(Node* node, const T& value) {
     if (node == nullptr) {
         return nullptr;
-    }
-    if (value == node->data) {
+    } if (value == node->data) {
         return node;
     } else if (value < node->data) {
         return search(node->left, value);
