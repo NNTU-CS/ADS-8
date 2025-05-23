@@ -49,26 +49,21 @@ void BST<T>::insert(const T& word) {
     auto* newNode = new Node<T>(word);
     if (root == nullptr) {
         root = newNode;
-    }
-    else {
+    } else {
         Node<T>* current = root;
         while (true) {
             if (word == current->key) {
                 ++current->freq;
                 break;
-            }
-            else if (word < current->key && current->left == nullptr) {
+            } else if (word < current->key && current->left == nullptr) {
                 current->left = newNode;
                 break;
-            }
-            else if (word > current->key && current->right == nullptr) {
+            } else if (word > current->key && current->right == nullptr) {
                 current->right = newNode;
                 break;
-            }
-            else if (word < current->key) {
+            } else if (word < current->key) {
                 current = current->left;
-            }
-            else {
+            } else {
                 current = current->right;
             }
         }
@@ -81,11 +76,9 @@ bool BST<T>::search(const T& word) {
     while (current != nullptr) {
         if (word == current->key) {
             return true;
-        }
-        else if (word < current->key) {
+        } else if (word < current->key) {
             current = current->left;
-        }
-        else {
+        } else {
             current = current->right;
         }
     }
