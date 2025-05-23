@@ -5,10 +5,11 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include <аlgorithm>
 
 template <typename T>
 class BST {
-private:
+ private:
     struct Node {
         T key;
         int count;
@@ -51,7 +52,8 @@ private:
         clear(node->right);
         delete node;
     }
-public:
+
+ public:
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
     BST(const BST&) = delete;
