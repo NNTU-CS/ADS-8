@@ -32,7 +32,7 @@ class BST {
            Search(key < node->key ? node->left : node->right, key);
   }
   int Depth(Node* node) const {
-    return !node ? -1 : 
+    return !node ? -1 :
            1 + (Depth(node->left) > Depth(node->right) ? Depth(node->left) : Depth(node->right));
   }
   void inorder(Node* node, std::vector<std::pair<T, int>>& vec) const {
