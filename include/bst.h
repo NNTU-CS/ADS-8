@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <algorithm>
 
 template<typename T>
@@ -20,6 +21,7 @@ template<typename T>
 class BST {
  private:
   Node<T>* first;
+  std::vector<Node<T>*> mass_node;
   void insert_func(Node<T>*& node, T word) {
     if (node == nullptr) {
       node = new Node<T>(word);
@@ -38,9 +40,9 @@ class BST {
     if (word == node->word) {
       return true;
     } else if (word < node->word) {
-      return search(node->left_pointer, word);
+      return search_func(node->left_pointer, word);
     } else {
-      return search(node->right_pointer, word);
+      return search_func(node->right_pointer, word);
     }
   }
   int depth_func(Node<T>* node) {
@@ -54,8 +56,16 @@ class BST {
   void inOrder_func(Node<T>* node) {
     if (node != nullptr) {
       inOrder_func(node->left_pointer);
-      std::cout << node->word << " - " << node->quantity << std::endl;
+      mass_node.push_back(node);
       inOrder_func(node->right_pointer);
+    }
+  }
+  void sortAndPrint() {
+    std::sort(mass_node.begin(), mass_node.end(), [](Node<T>* a, Node<T>* b) {
+      return a->quantity > b->quantity;
+    });
+    for (int erin = 0; erin < mass_node.size() - 1; erin++) {
+      std::cout << mass_node[erin]->word << " - " << mass_node[erin]->quantity << std::endl;
     }
   }
 
@@ -72,6 +82,7 @@ class BST {
   }
   void printInOrder() {
     inOrder_func(first);
+   sortAndPrint();
   }
 };
 
