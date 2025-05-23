@@ -2,76 +2,79 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <vector>
-#include <utility>
+#include <algorithm>
+#include <iostream>
 #include <string>
+#include <vector>
 
 template <typename T>
-class BinarySearchTree {
-    struct TreeNode {
-        T data;
-        int frequency;
-        TreeNode* left_child;
-        TreeNode* right_child;
-        explicit TreeNode(const T& val) : data(val), frequency(1),
-                                        left_child(nullptr), right_child(nullptr) {}
-    };
+class BST {
+ private:
+  struct Node {
+    T key;
+    int count;
+    Node* left;
+    Node* right;
+    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+  };
+  Node* root;
 
-    TreeNode* root_node;
-
-    void add_node(TreeNode*& node, const T& value) {
-        if (!node) {
-            node = new TreeNode(value);
-            return;
-        }
-        if (value == node->data) {
-            node->frequency++;
-        } else if (value < node->data) {
-            add_node(node->left_child, value);
-        } else {
-            add_node(node->right_child, value);
-        }
+  void insert(Node*& node, const T& key) {
+    if (!node) {
+      node = new Node(key);
+      return;
     }
-
-    int find_count(TreeNode* node, const T& value) const {
-        if (!node) return 0;
-        if (value == node->data) return node->frequency;
-        return find_count(value < node->data ? node->left_child : node->right_child, value);
+    if (key == node->key) {
+      node->count++;
+    } else if (key < node->key) {
+      insert(node->left, key);
+    } else {
+      insert(node->right, key);
     }
+  }
 
-    int calculate_depth(TreeNode* node) const {
-        if (!node) return 0;
-        int left_depth = calculate_depth(node->left_child);
-        int right_depth = calculate_depth(node->right_child);
-        return 1 + (left_depth > right_depth ? left_depth : right_depth);
-    }
+  int Search(Node* node, const T& key) const {
+    if (!node) return 0;
+    if (key == node->key) return node->count;
+    if (key < node->key) return Search(node->left, key);
+    return Search(node->right, key);
+  }
 
-    void traverse_inorder(TreeNode* node, std::vector<std::pair<T, int>>& result) const {
-        if (!node) return;
-        traverse_inorder(node->left_child, result);
-        result.emplace_back(node->data, node->frequency);
-        traverse_inorder(node->right_child, result);
-    }
+  int Depth(Node* node) const {
+    if (!node) return -1;
+    int dl = Depth(node->left);
+    int dr = Depth(node->right);
+    return 1 + (dl > dr ? dl : dr);
+  }
+  void inorder(Node* node, std::vector<std::pair<T, int>>& vec) const {
+    if (!node) return;
+    inorder(node->left, vec);
+    vec.push_back({node->key, node->count});
+    inorder(node->right, vec);
+  }
 
-    void delete_tree(TreeNode* node) {
-        if (!node) return;
-        delete_tree(node->left_child);
-        delete_tree(node->right_child);
-        delete node;
-    }
+  void clear(Node* node) {
+    if (!node) return;
+    clear(node->left);
+    clear(node->right);
+    delete node;
+  }
 
  public:
-    BinarySearchTree() : root_node(nullptr) {}
-    ~BinarySearchTree() { delete_tree(root_node); }
+  BST() : root(nullptr) {}
+  ~BST() { clear(root); }
 
-    void insert(const T& value) { add_node(root_node, value); }
-    int search(const T& value) const { return find_count(root_node, value); }
-    int depth() const { return calculate_depth(root_node); }
-    std::vector<std::pair<T, int>> get_all_elements() const {
-        std::vector<std::pair<T, int>> elements;
-        traverse_inorder(root_node, elements);
-        return elements;
-    }
+  void insert(const T& key) { insert(root, key); }
+
+  int search(const T& key) const { return Search(root, key); }
+
+  int depth() const { return Depth(root); }
+
+  std::vector<std::pair<T, int>> getAll() const {
+    std::vector<std::pair<T, int>> vec;
+    inorder(root, vec);
+    return vec;
+  }
 };
 
-#endif //INCLUDE_BST_H_
+#endif  // INCLUDE_BST_H_
