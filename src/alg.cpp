@@ -1,7 +1,4 @@
 // Copyright 2021 NNTU-CS
-
-#include  "bst.h"
-
 #include <iostream>
 #include <fstream>
 #include <locale>
@@ -10,7 +7,7 @@
 #include <cctype>
 #include <vector>
 #include <algorithm>
-
+#include  "bst.h"
 std::string toLower(const std::string& str) {
     std::string result = "";
     for (char c : str) {
@@ -32,7 +29,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
     std::string word;
     char ch;
-    
     while (file.get(ch)) {
         if (isLetter(ch)) {
             word += std::tolower(ch);
