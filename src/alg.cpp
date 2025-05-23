@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <utility>
 #include <vector>
 #include "bst.h"
 
@@ -29,7 +30,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   }
 
   input_stream.close();
-  std::cout << "глубина дерева: " << tree.depth() << std::endl;
+  std::cout << "Глубина дерева: " << tree.depth() << std::endl;
 }
 
 bool compare_by_freq(const std::pair<std::string, int>& a,

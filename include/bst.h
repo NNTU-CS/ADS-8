@@ -15,7 +15,7 @@ class BST {
     int frequency;
     WordNode* left_branch;
     WordNode* right_branch;
-    WordNode(T val)
+    explicit WordNode(T val)
         : word(val), frequency(1), left_branch(nullptr), right_branch(nullptr) {}
   };
   WordNode* tree_root;
@@ -44,7 +44,8 @@ class BST {
         temp = node->right_branch;
         delete node;
         return temp;
-      } else if (!node->right_branch) {
+      }
+      if (!node->right_branch) {
         temp = node->left_branch;
         delete node;
         return temp;
@@ -91,18 +92,13 @@ class BST {
   ~BST() { clear_tree(tree_root); }
 
   void add(T val) { tree_root = insert_word(tree_root, val); }
-
   void del(T val) { tree_root = delete_word(tree_root, val); }
-
   void clear() {
     clear_tree(tree_root);
     tree_root = nullptr;
   }
-
   int search(T val) const { return find_word(tree_root, val); }
-
   int depth() const { return calc_depth(tree_root); }
-
   std::vector<std::pair<T, int>> getFreqs() const {
     std::vector<std::pair<T, int>> stats;
     collect_stats(tree_root, stats);
