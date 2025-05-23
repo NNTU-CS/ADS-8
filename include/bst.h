@@ -22,13 +22,13 @@ class BST {
     node ? (clear(node->left), clear(node->right), delete node) : void();
   }
   void insert(Node*& node, const T& key) {
-    !node ? node = new Node(key) : 
-    (key == node->key ? node->count++ : 
+    !node ? node = new Node(key) :
+    (key == node->key ? node->count++ :
      (key < node->key ? insert(node->left, key) : insert(node->right, key)));
   }
   int Search(Node* node, const T& key) const {
-    return !node ? 0 : 
-           key == node->key ? node->count : 
+    return !node ? 0 :
+           key == node->key ? node->count :
            Search(key < node->key ? node->left : node->right, key);
   }
   int Depth(Node* node) const {
