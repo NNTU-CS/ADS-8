@@ -1,21 +1,10 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
-#include <stdexcept>
-#include <string>
 #include "bst.h"
 
 void makeTree(BST<std::string>&, const char*);
-void printFreq(BST<std::string>&);
+
 int main() {
-    try {
-        const char* filename = "src/war_peace.txt";
-        BST<std::string> wordTree;
-        makeTree(wordTree, filename);
-        printFreq(wordTree);
-        std::cout << "Tree depth: " << wordTree.depth() << std::endl;
-        return 0;
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
-    }
+    BST<std::string> tree;
+    makeTree(tree, "war_peace.txt");
+    return 0;
 }
