@@ -1,43 +1,41 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
 #include <fstream>
-#include <locale>
-#include <cstdlib>
 #include <cctype>
-#include <string>
 #include <algorithm>
 #include "bst.h"
 
-void makeTree(BST<std::string>& tree, const char* filename) {
-  std::ifstream fin(filename);
-  if (!fin.is_open()) {
-    std::cerr << "Cannot open file: " << filename << "\n";
-    return;
-  }
-  std::string word;
-  char c;
-
-  while (fin.get(c)) {
-    if (isalpha(static_cast<unsigned char>(c))) {
-      word.clear();
-      while (fin && isalpha(static_cast<unsigned char>(c))) {
-        word += std::tolower(static_cast<unsigned char>(c));
-        fin.get(c);
-      }
-      tree.insert(word);
+void build_word_tree(BinarySearchTree<std::string>& word_tree, const char* file_path) {
+    std::ifstream input_file(file_path);
+    if (!input_file) return;
+    
+    std::string current_word;
+    char current_char;
+    
+    while (input_file.get(current_char)) {
+        if (std::isalpha(static_cast<unsigned char>(current_char))) {
+            current_word += std::tolower(static_cast<unsigned char>(current_char));
+        } else if (!current_word.empty()) {
+            word_tree.insert(current_word);
+            current_word.clear();
+        }
     }
-  }
-  fin.close();
+    
+    if (!current_word.empty()) {
+        word_tree.insert(current_word);
+    }
 }
-void printFreq(BST<std::string>& tree) {
-  auto words = tree.getAll();
 
-  std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
-    if (a.second != b.second) return a.second > b.second;
-    return a.first < b.first;
-  });
-
-  for (const auto& p : words) {
-    std::cout << p.first << " " << p.second << "\n";
-  }
+void display_frequencies(const BinarySearchTree<std::string>& word_tree) {
+    auto word_list = word_tree.get_all_elements();
+    
+    std::sort(word_list.begin(), word_list.end(),
+        [](const auto& item1, const auto& item2) {
+            return item1.second != item2.second ? 
+                   item1.second > item2.second : 
+                   item1.first < item2.first;
+        });
+    
+    for (const auto& [word, count] : word_list) {
+        std::cout << word << " " << count << "\n";
+    }
 }
