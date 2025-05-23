@@ -3,6 +3,7 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
+#include <string>
 #include  "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* namefile) {
@@ -14,10 +15,10 @@ void makeTree(BST<std::string>& tree, const char* namefile) {
   std::string words2 = "";
   char symbol;
   while (LevTolstoyFile.get(symbol)) {
-    if(isalpha(symbol)){
+    if (isalpha(symbol)) {
       words2 += std::tolower(symbol);
     } else {
-      if(!words2.empty()){
+      if (!words2.empty()) {
       tree.insert(words2);
       }
       words2 = "";
