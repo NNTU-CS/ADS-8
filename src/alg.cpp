@@ -1,70 +1,81 @@
 // Copyright 2021 NNTU-CS
-#include  <iostream>
-#include  <fstream>
-#include  <locale>
-#include  <cstdlib>
-#include <string>
+//#include  <iostream>
+//#include  <fstream>
+//#include  <locale>
+//#include  <cstdlib>
+//#include <string>
 #include  "bst.h"
 
+#include <iostream>
+#include <fstream>
+#include <locale>
+#include <cstdlib>
+#include <string>
+#include <cctype>
+#include <vector>
+#include <algorithm>
+
+std::string toLower(const std::string& str) {
+    std::string result = "";
+    for (char c : str) {
+        result += std::tolower(c);
+    }
+    return result;
+}
+
+bool isLetter(char c) {
+    return (c >= 'a' && c <= 'z');
+}
+
 void makeTree(BST<std::string>& tree, const char* filename) {
-  std::ifstream file(filename);
-  if (!file) {
-    return;
-  }
-  std::string word;
-  while (!file.eof()) {
-    char ch = file.get();
-    if (file.eof()) break;
-    if (std::isalpha(static_cast<unsigned char>(ch))) {
-      word += std::tolower(ch);
-    } else if (!word.empty()) {
-      tree.insert(word);
-      word.clear();
+    std::ifstream file(filename);
+
+    if (!file) {
+        std::cerr << "File error!" << std::endl;
+        return;
     }
-  }
-  if (!word.empty()) {
-    tree.insert(word);
-  }
-  file.close();
-}
 
-#define MAX_WORDS 10000
-
-struct WordFreq {
     std::string word;
-    int count;
-};
+    std::string currentWord;
+    char ch;
 
-WordFreq frequencies[MAX_WORDS];
-int freqSize = 0;
-
-void collect(const std::string& word, int count) {
-  if (freqSize < MAX_WORDS) {
-    frequencies[freqSize].word = word;
-    frequencies[freqSize].count = count;
-    freqSize++;
-  }
-}
-
-void sortFrequencies() {
-  for (int i = 0; i < freqSize - 1; ++i) {
-    for (int j = 0; j < freqSize - i - 1; ++j) {
-      if (frequencies[j].count < frequencies[j + 1].count) {
-        WordFreq temp = frequencies[j];
-        frequencies[j] = frequencies[j + 1];
-        frequencies[j + 1] = temp;
-      }
+    while (file.get(ch)) {
+        if (std::isalpha(ch)) { 
+            currentWord += ch;
+        }
+        else {
+            if (!currentWord.empty()) {
+                tree.insert(toLower(currentWord));
+                currentWord = "";
+            }
+        }
     }
-  }
+
+    if (!currentWord.empty()) {
+        tree.insert(toLower(currentWord));
+    }
+
+    file.close();
 }
+
+
 void printFreq(BST<std::string>& tree) {
-  freqSize = 0;
-  tree.traverse(collect);
-  sortFrequencies();
-  std::ofstream fout("freq.txt");
-  for (int i = 0; i < freqSize; ++i) {
-    std::cout << frequencies[i].word << ": " << frequencies[i].count << std::endl;
-    fout << frequencies[i].word << ": " << frequencies[i].count << std::endl;
-  }
-  fout.close();
+    std::vector<std::pair<std::string, int>> frequencies = tree.getFrequencies();
+
+    std::sort(frequencies.begin(), frequencies.end(), [](const auto& a, const auto& b) {
+        return a.second > b.second;
+        });
+
+    std::ofstream outputFile("freq.txt");
+    if (!outputFile) {
+        std::cerr << "Error opening result file!" << std::endl;
+        return;
+    }
+
+    for (const auto& pair : frequencies) {
+        std::cout << pair.first << " " << pair.second << std::endl;
+        outputFile << pair.first << " " << pair.second << std::endl;
+    }
+
+    outputFile.close();
 }
