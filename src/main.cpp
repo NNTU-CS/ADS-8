@@ -8,7 +8,7 @@ void display_frequencies(const BinarySearchTree<std::string>&);
 
 int main() {
     BinarySearchTree<std::string> word_storage;
-    build_word_tree(word_storage, "war_peace.txt");
+    makeTree(word_storage, "war_peace.txt");
     display_frequencies(word_storage);
     return 0;
 }
