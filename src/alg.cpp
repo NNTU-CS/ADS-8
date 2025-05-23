@@ -6,7 +6,7 @@
 #include <algorithm>
 #include "bst.h"
 
-void build_word_tree(BinarySearchTree<std::string>& word_tree, const char* file_path) {
+void makeTree(BinarySearchTree<std::string>& word_tree, const char* file_path) {
     std::ifstream input_file(file_path);
     if (!input_file) return;
     std::string current_word;
