@@ -21,7 +21,6 @@ class BST {
 
     Node* root;
 
-    // Helper functions
     void insert(Node*& node, const T& data);
     int depth(Node* node) const;
     Node* search(Node* node, const T& value);
@@ -38,7 +37,6 @@ class BST {
     bool search(const T& value);
     void printInOrder() const;
 
-    // Collect word frequencies into a vector for sorting
     std::vector<std::pair<T, int>> getFrequencies() const;
 };
 
