@@ -1,23 +1,25 @@
 // Copyright 2021 NNTU-CS
-#ifndef INCLUDE_BST_H_
-#define INCLUDE_BST_H_
+#ifndef BST_H
+#define BST_H
 
-#include <algorithm>
-#include <vector>
 #include <string>
+#include <vector>
 #include <utility>
 
 template <typename T>
 class BST {
- private:
+private:
     struct Node {
         T key;
         int count;
         Node* left;
         Node* right;
+        
         explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
     };
+
     Node* root;
+
     void insert(Node*& node, const T& key) {
         if (!node) {
             node = new Node(key);
@@ -31,21 +33,20 @@ class BST {
             insert(node->right, key);
         }
     }
-    const Node* search(const Node* node, const T& key) const {
-        if (!node) return nullptr;
-        if (key == node->key) return node;
+
+    int search(Node* node, const T& key) const {
+        if (!node) return 0;
+        if (key == node->key) return node->count;
         return search(key < node->key ? node->left : node->right, key);
     }
-    int depth(const Node* node) const {
+
+    int depth(Node* node) const {
         if (!node) return 0;
-        return 1 + std::max(depth(node->left), depth(node->right));
+        int left = depth(node->left);
+        int right = depth(node->right);
+        return 1 + (left > right ? left : right);
     }
-    void inOrder(const Node* node, std::vector<std::pair<T, int>>& result) const {
-        if (!node) return;
-        inOrder(node->left, result);
-        result.emplace_back(node->key, node->count);
-        inOrder(node->right, result);
-    }
+
     void clear(Node* node) {
         if (!node) return;
         clear(node->left);
@@ -53,23 +54,13 @@ class BST {
         delete node;
     }
 
- public:
+public:
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
-    BST(const BST&) = delete;
-    BST& operator=(const BST&) = delete;
+
     void insert(const T& key) { insert(root, key); }
-    bool search(const T& key) const { return search(root, key) != nullptr; }
-    int getCount(const T& key) const {
-        const Node* node = search(root, key);
-        return node ? node->count : 0;
-    }
+    int search(const T& key) const { return search(root, key); }
     int depth() const { return depth(root); }
-    std::vector<std::pair<T, int>> getAll() const {
-        std::vector<std::pair<T, int>> result;
-        result.reserve(10000);
-        inOrder(root, result);
-        return result;
-    }
 };
-#endif  // INCLUDE_BST_H_
+
+#endif // BST_H
