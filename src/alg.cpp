@@ -9,7 +9,7 @@
 #include "../include/bst.h"
 
 void collectWords(BST<std::string>& tree, std::vector<WordFrequencyPair>& words) {
-    BST<std::string>::Helper::traverse(tree.root, words);
+    BST<std::string>::Helper::traverse(tree.getRoot(), words);
 }
 
 void printFreq(BST<std::string>& tree) {
@@ -29,4 +29,3 @@ void printFreq(BST<std::string>& tree) {
         out.close();
     }
 }
-
