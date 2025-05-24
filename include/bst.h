@@ -16,13 +16,13 @@ struct Node {
 
 template<typename T>
 class BST {
-private:
+ private:
     Node<T>* root;  // Приватный член класса
 
     // Разрешаем доступ классу Helper ко всему, что доступно внутри BST
     friend class Helper;
 
-public:
+ public:
     BST() : root(nullptr) {}  // Конструктор
     ~BST() { clear(root); }   // Деструктор
 
@@ -32,7 +32,7 @@ public:
     void inorderTraversal(Node<T>* node);
     void clear(Node<T>* node);
 
-private:
+ private:
     void clear(Node<T>* node) {
         if (node != nullptr) {
             clear(node->left);
