@@ -52,6 +52,7 @@ class BST {
             traverse(node->right, list);
         }
     };
+    friend class Helper;
 
  private:
     void clear(Node<T>* node) {
