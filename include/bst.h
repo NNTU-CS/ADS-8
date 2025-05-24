@@ -2,9 +2,9 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <algorithm>
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 template<typename T>
 struct Node {
