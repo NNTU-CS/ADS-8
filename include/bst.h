@@ -2,12 +2,11 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <string>
 #include <vector>
-#include <utility>
+#include <string>
 #include <algorithm>
 
-template<typename T>
+template <typename T>
 class BST {
  private:
   struct Node {
@@ -18,37 +17,31 @@ class BST {
     explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
 
-  Node* root = nullptr;
+  Node* root;
 
-  void clear(Node* node) {
-    if (!node) return;
-    clear(node->left);
-    clear(node->right);
-    delete node;
-  }
-
-  Node* insert(Node* node, const T& value) {
-    if (!node) return new Node(value);
-    if (value < node->key) {
-      node->left = insert(node->left, value);
+  void insert(Node*& node, const T& value) {
+    if (!node) {
+      node = new Node(value);
+    } else if (value < node->key) {
+      insert(node->left, value);
     } else if (value > node->key) {
-      node->right = insert(node->right, value);
+      insert(node->right, value);
     } else {
       node->count++;
     }
-    return node;
   }
 
   Node* find(Node* node, const T& value) const {
-    if (!node) return nullptr;
+    if (!node || node->key == value) return node;
     if (value < node->key) return find(node->left, value);
-    if (value > node->key) return find(node->right, value);
-    return node;
+    return find(node->right, value);
   }
 
   int depth(Node* node) const {
     if (!node) return 0;
-    return 1 + std::max(depth(node->left), depth(node->right));
+    int leftDepth = depth(node->left);
+    int rightDepth = depth(node->right);
+    return 1 + std::max(leftDepth, rightDepth);
   }
 
   void inorder(Node* node, std::vector<std::pair<T, int>>& out) const {
@@ -58,21 +51,27 @@ class BST {
     inorder(node->right, out);
   }
 
- public:
-  BST() = default;
-  ~BST() {
-    clear(root);
+  void clear(Node* node) {
+    if (!node) return;
+    clear(node->left);
+    clear(node->right);
+    delete node;
   }
+
+ public:
+  BST() : root(nullptr) {}
+  ~BST() { clear(root); }
 
   void insert(const T& value) {
-    root = insert(root, value);
+    insert(root, value);
   }
 
-  Node* search(const T& value) const {
-    return find(root, value);
+  int findCount(const T& value) const {
+    Node* found = find(root, value);
+    return found ? found->count : 0;
   }
 
-  int getDepth() const {
+  int depth() const {
     return depth(root);
   }
 
@@ -84,4 +83,3 @@ class BST {
 };
 
 #endif  // INCLUDE_BST_H_
-
