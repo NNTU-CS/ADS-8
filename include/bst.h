@@ -4,6 +4,12 @@
 
 #include <algorithm>
 
+#ifndef BST_H_
+#define BST_H_
+
+#include <iostream>
+#include <string>
+
 template<typename T>
 struct Node {
     T key;
@@ -17,16 +23,17 @@ struct Node {
 template<typename T>
 class BST {
  private:
-    Node<T>* root;
-    friend class Helper;
+    Node<T>* root;а
 
-    void clear(Node<T>* node) {
-        if (node != nullptr) {
-            clear(node->left);
-            clear(node->right);
-            delete node;
+    class Helper {
+     public:
+        static void traverse(Node<T>* node, std::vector<WordFrequencyPair>& list) {
+            if (node == nullptr) return;
+            traverse(node->left, list);
+            list.emplace_back(node->key, node->freq);
+            traverse(node->right, list);
         }
-    }
+    };
 
  public:
     BST() : root(nullptr) {}
@@ -36,6 +43,15 @@ class BST {
     void insert(const T&);
     int depth(Node<T>* node);
     void inorderTraversal(Node<T>* node);
+
+ private:
+    void clear(Node<T>* node) {
+        if (node != nullptr) {
+            clear(node->left);
+            clear(node->right);
+            delete node;
+        }
+    }
 };
 
 #endif  // INCLUDE_BST_H_
