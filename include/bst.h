@@ -42,6 +42,8 @@ class BST {
     void insert(const T&);
     int depth(Node<T>* node);
     void inorderTraversal(Node<T>* node);
+    void clear(Node<T>* node);
+    Node<T>* getRoot() const { return root; }
 
     class Helper {
      public:
@@ -52,7 +54,6 @@ class BST {
             traverse(node->right, list);
         }
     };
-    friend class Helper;
 
  private:
     void clear(Node<T>* node) {
