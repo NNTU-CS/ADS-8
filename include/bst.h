@@ -7,33 +7,8 @@
 #include <algorithm>
 #include <vector>
 
-struct WordFrequencyPair {
-    std::string word;
-    int frequency;
-
-    WordFrequencyPair(const std::string &w, int f) : word(w), frequency(f) {}
-
-    bool operator<(const WordFrequencyPair &other) const {
-        return this->frequency > other.frequency ||
-               (this->frequency == other.frequency && this->word < other.word);
-    }
-};
-
-template<typename T>
-struct Node {
-    T key;
-    int freq;
-    Node<T>* left;
-    Node<T>* right;
-
-    explicit Node(const T& k) : key(k), freq(1), left(nullptr), right(nullptr) {}
-};
-
 template<typename T>
 class BST {
- private:
-    Node<T>* root;
-
  public:
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
@@ -42,6 +17,7 @@ class BST {
     void insert(const T&);
     int depth(Node<T>* node);
     void inorderTraversal(Node<T>* node);
+
     Node<T>* getRoot() const { return root; }
 
     class Helper {
@@ -53,7 +29,11 @@ class BST {
             traverse(node->right, list);
         }
     };
+
  private:
+
+    Node<T>* root;
+
     void clear(Node<T>* node) {
         if (node != nullptr) {
             clear(node->left);
@@ -62,4 +42,5 @@ class BST {
         }
     }
 };
+
 #endif  // INCLUDE_BST_H_
