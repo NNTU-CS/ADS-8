@@ -14,7 +14,9 @@ class BST {
     int count;
     Node* left;
     Node* right;
-    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+
+    explicit Node(const T& k)
+        : key(k), count(1), left(nullptr), right(nullptr) {}
   };
 
   Node* root;
@@ -69,6 +71,11 @@ class BST {
   int findCount(const T& value) const {
     Node* found = find(root, value);
     return found ? found->count : 0;
+  }
+
+  // Для совместимости с тестами
+  int search(const T& value) const {
+    return findCount(value);
   }
 
   int depth() const {
