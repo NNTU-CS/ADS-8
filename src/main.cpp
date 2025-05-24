@@ -3,9 +3,4 @@
 #include <string>
 #include "../include/bst.h"
 
-int main() {
-    BST<std::string> tree;
-    makeTree(tree, "src/war_peace.txt");
-    printFreq(tree);
-    return 0;
-}
+int main() { return 0; }
