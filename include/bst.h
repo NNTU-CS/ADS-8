@@ -49,6 +49,9 @@ class BST {
     if (node == nullptr) {
       return 0;
     }
+    if (node->left_pointer == 0 && node ->right_pointer == 0) {
+      return 0;
+    }
     int leftDepth = depth_func(node->left_pointer);
     int rightDepth = depth_func(node->right_pointer);
     return std::max(leftDepth, rightDepth) + 1;
