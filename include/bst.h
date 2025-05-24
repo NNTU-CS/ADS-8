@@ -34,6 +34,15 @@ class BST {
  private:
     Node<T>* root;
 
+ public:
+    BST() : root(nullptr) {}
+    ~BST() { clear(root); }
+
+    bool search(const T&);
+    void insert(const T&);
+    int depth(Node<T>* node);
+    void inorderTraversal(Node<T>* node);
+
     class Helper {
      public:
         static void traverse(Node<T>* node, std::vector<WordFrequencyPair>& list) {
@@ -43,15 +52,6 @@ class BST {
             traverse(node->right, list);
         }
     };
-
- public:
-    BST() : root(nullptr) {}
-    ~BST() { clear(root); }
-
-    bool search(const T&);
-    void insert(const T&);
-    int depth(Node<T>* node);
-    void inorderTraversal(Node<T>* node);
 
  private:
     void clear(Node<T>* node) {
