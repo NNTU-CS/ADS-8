@@ -31,7 +31,10 @@ class BST {
     };
 
  private:
- 
+
+    //
+
+    //
     Node<T>* root;
 
     void clear(Node<T>* node) {
