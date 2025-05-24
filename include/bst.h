@@ -40,7 +40,7 @@ class BST {
   }
 
   int depth(Node* node) const {
-    if (!node) return 0;
+    if (!node) return -1;  
     int leftDepth = depth(node->left);
     int rightDepth = depth(node->right);
     return 1 + std::max(leftDepth, rightDepth);
@@ -73,7 +73,6 @@ class BST {
     return found ? found->count : 0;
   }
 
-  // Для совместимости с тестами
   int search(const T& value) const {
     return findCount(value);
   }
