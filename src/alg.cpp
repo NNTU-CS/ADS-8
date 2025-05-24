@@ -6,7 +6,7 @@
 #include  <cstdlib>
 #include  <vector>
 #include <algorithm>
-#include  "include/bst.h"
+#include "../include/bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
