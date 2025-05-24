@@ -4,40 +4,17 @@
 
 #include <string>
 #include <vector>
-#include <algorithm>  
+#include <algorithm>
 
 template <typename T>
 class BST {
- public:
-  BST() : root(nullptr) {}
-  ~BST() { destroy(root); }
-
-  void insert(const T& value) {
-    insert(root, value);
-  }
-
-  int depth() const {
-    return depth(root);
-  }
-
-  bool search(const T& value) const {
-    return search(root, value) != nullptr;
-  }
-
-  std::vector<std::pair<T, int>> getAllElements() const {
-    std::vector<std::pair<T, int>> result;
-    inorder(root, result);
-    return result;
-  }
-
  private:
   struct Node {
     T key;
     int count;
     Node* left;
     Node* right;
-
-    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+    Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
 
   Node* root;
@@ -54,27 +31,22 @@ class BST {
     }
   }
 
-  int depth(Node* node) const {
+  int getDepth(Node* node) const {
     if (!node) return 0;
-    int leftDepth = depth(node->left);
-    int rightDepth = depth(node->right);
-    return std::max(leftDepth, rightDepth) + 1;
+    return 1 + std::max(getDepth(node->left), getDepth(node->right));
   }
 
-  Node* search(Node* node, const T& value) const {
-    if (!node) return nullptr;
-    if (value < node->key)
-      return search(node->left, value);
-    else if (value > node->key)
-      return search(node->right, value);
-    else
-      return node;
+  int find(Node* node, const T& value) const {
+    if (!node) return 0;
+    if (value < node->key) return find(node->left, value);
+    if (value > node->key) return find(node->right, value);
+    return node->count;
   }
 
   void inorder(Node* node, std::vector<std::pair<T, int>>& out) const {
     if (!node) return;
     inorder(node->left, out);
-    out.emplace_back(node->key, node->count);
+    out.push_back({node->key, node->count});
     inorder(node->right, out);
   }
 
@@ -84,6 +56,21 @@ class BST {
     destroy(node->right);
     delete node;
   }
+
+ public:
+  BST() : root(nullptr) {}
+  ~BST() { destroy(root); }
+
+  void insert(const T& value) { insert(root, value); }
+  int getDepth() const { return getDepth(root); }
+  int find(const T& value) const { return find(root, value); }
+  std::vector<std::pair<T, int>> getAllElements() const {
+    std::vector<std::pair<T, int>> result;
+    inorder(root, result);
+    return result;
+  }
 };
+
+#endif  // INCLUDE_BST_H_
 
 #endif  // INCLUDE_BST_H_
