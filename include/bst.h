@@ -51,7 +51,7 @@ class BST {
     }
     int leftDepth = depth_func(node->left_pointer);
     int rightDepth = depth_func(node->right_pointer);
-    return std::max(leftDepth, rightDepth);
+    return std::max(leftDepth, rightDepth) + 1;
   }
   void inOrder_func(Node<T>* node) {
     if (node != nullptr) {
@@ -64,7 +64,7 @@ class BST {
     std::sort(mass_node.begin(), mass_node.end(), [](Node<T>* a, Node<T>* b) {
       return a->quantity > b->quantity;
     });
-    for (int erin = 0; erin < mass_node.size() - 1; erin++) {
+    for (int erin = 0; erin < mass_node.size(); erin++) {
       std::cout << mass_node[erin]->word << " - " << mass_node[erin]->quantity << std::endl;
     }
   }
