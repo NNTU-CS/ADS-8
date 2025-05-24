@@ -74,7 +74,7 @@ class BST {
   void insert(T word) {
     insert_func(first, word);
   }
-  bool search(T word) {
+  int search(T word) {
     return search_func(first, word);
   }
   int depth() {
