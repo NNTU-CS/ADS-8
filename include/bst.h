@@ -3,12 +3,7 @@
 #define INCLUDE_BST_H_
 
 #include <algorithm>
-
-#ifndef BST_H_
-#define BST_H_
-
-#include <iostream>
-#include <string>
+#include <vector>
 
 template<typename T>
 struct Node {
