@@ -51,7 +51,7 @@ class BST {
     }
     int leftDepth = depth_func(node->left_pointer);
     int rightDepth = depth_func(node->right_pointer);
-    return std::max(leftDepth, rightDepth) + 1;
+    return std::max(leftDepth, rightDepth);
   }
   void inOrder_func(Node<T>* node) {
     if (node != nullptr) {
