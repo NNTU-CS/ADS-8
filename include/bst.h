@@ -2,8 +2,22 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
+#include <iostream>
+#include <string>
 #include <algorithm>
 #include <vector>
+
+struct WordFrequencyPair {
+    std::string word;
+    int frequency;
+
+    WordFrequencyPair(const std::string &w, int f) : word(w), frequency(f) {}
+
+    bool operator<(const WordFrequencyPair &other) const {
+        return this->frequency > other.frequency ||
+               (this->frequency == other.frequency && this->word < other.word);
+    }
+};
 
 template<typename T>
 struct Node {
