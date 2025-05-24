@@ -16,19 +16,30 @@ struct Node {
 
 template<typename T>
 class BST {
- private:
-    Node<T>* root;
+private:
+    Node<T>* root;  // Приватный член класса
 
- public:
-    BST();
-    ~BST();
+    // Разрешаем доступ классу Helper ко всему, что доступно внутри BST
+    friend class Helper;
+
+public:
+    BST() : root(nullptr) {}  // Конструктор
+    ~BST() { clear(root); }   // Деструктор
+
     bool search(const T&);
     void insert(const T&);
     int depth(Node<T>* node);
     void inorderTraversal(Node<T>* node);
     void clear(Node<T>* node);
 
-    friend class FrequencyAnalyzer;
+private:
+    void clear(Node<T>* node) {
+        if (node != nullptr) {
+            clear(node->left);
+            clear(node->right);
+            delete node;
+        }
+    }
 };
 
 template<typename T>
