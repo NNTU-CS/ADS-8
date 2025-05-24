@@ -16,7 +16,7 @@ struct Node {
 
 template<typename T>
 class BST {
-private:
+ private:
     Node<T>* root;
     friend class Helper;
 
@@ -28,7 +28,7 @@ private:
         }
     }
 
-public:
+ public:
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
 
