@@ -18,7 +18,7 @@ struct Node {
 template<typename T>
 class BST {
  private:
-    Node<T>* root;а
+    Node<T>* root;
 
     class Helper {
      public:
