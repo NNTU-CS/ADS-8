@@ -33,12 +33,12 @@ class BST {
       insert_func(node->right_pointer, word);
     }
   }
-  bool search_func(Node<T>* node, T word) {
+  int search_func(Node<T>* node, T word) {
     if (node == nullptr) {
       return false;
     }
     if (word == node->word) {
-      return true;
+      return node->quantity;
     } else if (word < node->word) {
       return search_func(node->left_pointer, word);
     } else {
