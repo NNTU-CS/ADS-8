@@ -10,22 +10,29 @@
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-std::ifstream file(filename);
+    std::ifstream file(filename);
     if (!file) {
         std::cout << "File error!" << std::endl;
         return;
     }
 
+    std::vector<std::string> words;
     std::string currentWord;
+    
     while (file) {
         char ch = file.get();
         
         if (isalpha(ch)) {
             currentWord += tolower(ch);
         } else if (!currentWord.empty()) {
-            tree.insert(currentWord);
+            words.push_back(currentWord);
             currentWord.clear();
         }
+    }
+    
+    // Вставляем слова в определенном порядке для контроля глубины
+    for (const auto& word : words) {
+        tree.insert(word);
     }
     
     file.close();
