@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <vector>
 #include <utility>
+#include <cmath>
 
 template <typename T>
 class BST {
@@ -35,7 +36,6 @@ class BST {
     }
     return 1 + std::max(depth(node->left), depth(node->right));
   }
-
   Node* search(Node* node, const T& value) const {
     if (!node) {
       return nullptr;
@@ -92,10 +92,13 @@ class BST {
   int depth() const {
     return depth(root);
   }
-
-  bool search(const T& value) const {
-    return search(root, value) != nullptr;
-  }
+    int search(const T& value) const {
+        Node* node = search(root, value);
+        if(node) {
+            return node->frequency;
+        }
+        return 0;
+    }
 
   void insert(const T& value) {
     root = insert(root, value);
