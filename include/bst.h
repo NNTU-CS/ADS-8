@@ -57,6 +57,7 @@ class BST {
 
     if (value == node->data) {
       node->frequency++;
+      return node; // Важно! Возвращаем текущий узел
     } else if (value < node->data) {
       node->left = insert(node->left, value);
     } else {
@@ -77,7 +78,7 @@ class BST {
 
 
 
- public:
+  public:
   BST() : root(nullptr) {}
 
   ~BST() {
