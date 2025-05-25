@@ -29,7 +29,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {std::ifstream file(
         std::string word;
         while (ss >> word) {
             word.erase(std::remove_if(word.begin(), word.end(), [](unsigned char c){
-                return !std::isalpha(c);
+                return !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
             }), word.end());
 
             if (!word.empty()) {
