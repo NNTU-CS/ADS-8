@@ -9,7 +9,7 @@
 
 template <typename T>
 class BST {
- private:
+  private:
   struct Node {
     T data;
     int frequency;
@@ -57,7 +57,7 @@ class BST {
 
     if (value == node->data) {
       node->frequency++;
-      return node; // Важно! Возвращаем текущий узел
+      return node;
     } else if (value < node->data) {
       node->left = insert(node->left, value);
     } else {
@@ -67,7 +67,6 @@ class BST {
     return node;
   }
 
-
   void inorderTraversal(Node* node, std::vector<std::pair<T, int>>& data) {
     if (node) {
       inorderTraversal(node->left, data);
@@ -76,7 +75,12 @@ class BST {
     }
   }
 
-
+  int size(Node* node) const {
+    if (!node) {
+      return 0;
+    }
+    return 1 + size(node->left) + size(node->right);
+  }
 
   public:
   BST() : root(nullptr) {}
@@ -97,11 +101,14 @@ class BST {
     root = insert(root, value);
   }
 
-
   std::vector<std::pair<T, int>> getFrequencies() {
     std::vector<std::pair<T, int>> frequencies;
     inorderTraversal(root, frequencies);
     return frequencies;
+  }
+
+  int size() const {
+    return size(root);
   }
 };
 
