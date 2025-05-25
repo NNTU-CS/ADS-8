@@ -21,8 +21,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     while (file.get(ch)) {
         if (std::isalpha(static_cast<unsigned char>(ch))) {
             word += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
-        }
-        else {
+        } else {
             if (!word.empty()) {
                 tree.insert(word);
                 word.clear();
