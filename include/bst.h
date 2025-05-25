@@ -3,105 +3,103 @@
 #define INCLUDE_BST_H_
 #include <iostream>
 #include <string>
-#include <fstream>
 #include <algorithm>
-#include <vector>
 
 template <typename T>
 class BST {
- private:
-    struct Node {
-        T data;
-        int count;
-        Node* left;
-        Node* right;
+private:
+  struct Node {
+    T data;
+    int frequency;
+    Node* left;
+    Node* right;
 
-        Node(const T& data) : data(data), count(1), left(nullptr), right(nullptr) {}
-    };
+    Node(const T& d) : data(d), frequency(1), left(nullptr), right(nullptr) {}
+  };
 
-    Node* root;
+  Node* root;
 
-    void insert(Node*& node, const T& data) {
-        if (node == nullptr) {
-            node = new Node(data);
-        } else if (data < node->data) {
-            insert(node->left, data);
-        } else if (data > node->data) {
-            insert(node->right, data);
-        } else {
-            node->count++;
-        }
+  void destroyTree(Node* node) {
+    if (node) {
+      destroyTree(node->left);
+      destroyTree(node->right);
+      delete node;
+    }
+  }
+
+  int depth(Node* node) const {
+    if (!node) {
+      return 0;
+    }
+    return 1 + std::max(depth(node->left), depth(node->right));
+  }
+
+  Node* search(Node* node, const T& value) const {
+    if (!node) {
+      return nullptr;
     }
 
-    int depth(Node* node) const {
-     if (node == nullptr) {
-            return 0;
-        }
-        return 1 + std::max(depth(node->left), depth(node->right));
+    if (value == node->data) {
+      return node;
+    } else if (value < node->data) {
+      return search(node->left, value);
+    } else {
+      return search(node->right, value);
+    }
+  }
+
+  Node* insert(Node* node, const T& value) {
+    if (!node) {
+      return new Node(value);
     }
 
-    Node* search(Node* node, const T& value) const {
-        if (node == nullptr) {
-            return nullptr;
-        }
-
-        if (value == node->data) {
-            return node;
-        } else if (value < node->data) {
-            return search(node->left, value);
-        } else {
-            return search(node->right, value);
-        }
+    if (value == node->data) {
+      node->frequency++;
+    } else if (value < node->data) {
+      node->left = insert(node->left, value);
+    } else {
+      node->right = insert(node->right, value);
     }
 
-    void inorderTraversal(Node* node, std::vector<std::pair<T, int>>& result) const {
-        if (node != nullptr) {
-            inorderTraversal(node->left, result);
-            result.push_back(std::make_pair(node->data, node->count));
-            inorderTraversal(node->right, result);
-        }
-    }
+    return node;
+  }
 
-    void freeTree(Node* node) {
-        if (node) {
-            freeTree(node->left);
-            freeTree(node->right);
-            delete node;
-        }
-    }
 
- public:
-    BST() : root(nullptr) {}
-
-    ~BST() {
-        freeTree(root);
+  void inorderTraversal(Node* node, std::vector<std::pair<T, int>>& data) {
+    if (node) {
+      inorderTraversal(node->left, data);
+      data.push_back(std::make_pair(node->data, node->frequency));
+      inorderTraversal(node->right, data);
     }
+  }
 
-    void insert(const T& data) {
-        insert(root, data);
-    }
 
-    int depth() const {
-        return depth(root);
-    }
 
-    bool search(const T& value) const {
-        return search(root, value) != nullptr;
-    }
+public:
+  BST() : root(nullptr) {}
 
-    int getCount(const T& value) const {
-        Node* node = search(root, value);
-        if (node) {
-            return node->count;
-        } else {
-            return 0;
-        }
-    }
+  ~BST() {
+    destroyTree(root);
+  }
 
-    std::vector<std::pair<T, int>> getWordFrequencies() const {
-        std::vector<std::pair<T, int>> result;
-        inorderTraversal(root, result);
-        return result;
-    }
+  int depth() const {
+    return depth(root);
+  }
+
+  bool search(const T& value) const {
+    return search(root, value) != nullptr;
+  }
+
+  void insert(const T& value) {
+    root = insert(root, value);
+  }
+
+
+  std::vector<std::pair<T, int>> getFrequencies() {
+    std::vector<std::pair<T, int>> frequencies;
+    inorderTraversal(root, frequencies);
+    return frequencies;
+  }
 };
+
 #endif  // INCLUDE_BST_H_
