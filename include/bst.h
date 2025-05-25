@@ -22,20 +22,18 @@ public:
 private:
     Node* root;
 
-    Node* insert(Node* node, T value, bool& inserted) {
-        if (!node) {
-            inserted = true;
-            return new Node(value);
-        }
+    Node* insert(Node* node, T value, bool updateDepth = true) {
+        if (!node) return new Node(value);
         
         if (value == node->key) {
             node->count++;
-            inserted = false;
             return node;
-        } else if (value < node->key) {
-            node->left = insert(node->left, value, inserted);
+        }
+        
+        if (value < node->key) {
+            node->left = insert(node->left, value, updateDepth);
         } else {
-            node->right = insert(node->right, value, inserted);
+            node->right = insert(node->right, value, updateDepth);
         }
         return node;
     }
@@ -52,9 +50,11 @@ private:
         }
     }
 
-    int depth(const Node* node) const {
+    int calculateDepth(const Node* node) const {
         if (!node) return 0;
-        return 1 + std::max(depth(node->left), depth(node->right));
+        int leftDepth = calculateDepth(node->left);
+        int rightDepth = calculateDepth(node->right);
+        return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
     }
 
     void inOrder(const Node* node, std::function<void(const Node*)> visit) const {
@@ -76,8 +76,7 @@ public:
     ~BST() { clear(root); }
 
     void insert(T value) {
-        bool inserted = false;
-        root = insert(root, value, inserted);
+        root = insert(root, value);
     }
 
     int search(T value) const {
@@ -86,7 +85,7 @@ public:
     }
 
     int depth() const {
-        return depth(root);
+        return calculateDepth(root);
     }
 
     void inOrder(std::function<void(const Node*)> visit) const {
