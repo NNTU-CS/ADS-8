@@ -40,10 +40,6 @@ class BST {
         return 1 + std::max(depth(node->left), depth(node->right));
     }
 
-    int depth() const {
-        return depth(root);
-    }
-
     Node* search(Node* node, const T& value) const {
         if (node == nullptr) {
             return nullptr;
