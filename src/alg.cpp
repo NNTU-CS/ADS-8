@@ -8,6 +8,7 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
+#include <utility>
 #include  "bst.h"
 
 std::string toLower(const std::string& str) {
