@@ -4,17 +4,19 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <vector>
+#include <utility>
 
 template <typename T>
 class BST {
-private:
+ private:
   struct Node {
     T data;
     int frequency;
     Node* left;
     Node* right;
 
-    Node(const T& d) : data(d), frequency(1), left(nullptr), right(nullptr) {}
+    explicit Node(const T& d) : data(d), frequency(1), left(nullptr), right(nullptr) {}
   };
 
   Node* root;
@@ -75,7 +77,7 @@ private:
 
 
 
-public:
+ public:
   BST() : root(nullptr) {}
 
   ~BST() {
