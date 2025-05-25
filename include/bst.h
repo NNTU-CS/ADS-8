@@ -22,16 +22,20 @@ public:
 private:
     Node* root;
 
-    Node* insert(Node* node, T value) {
-        if (!node) return new Node(value);
+    Node* insert(Node* node, T value, bool& inserted) {
+        if (!node) {
+            inserted = true;
+            return new Node(value);
+        }
         
         if (value == node->key) {
             node->count++;
+            inserted = false;
             return node;
         } else if (value < node->key) {
-            node->left = insert(node->left, value);
+            node->left = insert(node->left, value, inserted);
         } else {
-            node->right = insert(node->right, value);
+            node->right = insert(node->right, value, inserted);
         }
         return node;
     }
@@ -72,7 +76,8 @@ public:
     ~BST() { clear(root); }
 
     void insert(T value) {
-        root = insert(root, value);
+        bool inserted = false;
+        root = insert(root, value, inserted);
     }
 
     int search(T value) const {
