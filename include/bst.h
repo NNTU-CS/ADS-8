@@ -5,23 +5,22 @@
 #include <algorithm>
 #include <vector>
 #include <utility>
-
+#pragma once
 
 template<typename T>
 class BST {
 private:
     struct Node {
-        T               key;
-        int             count;
+        T    key;
+        int  count;
         Node* left;
         Node* right;
         explicit Node(const T& k)
             : key(k), count(1), left(nullptr), right(nullptr) {
         }
     };
-    Node* root_;
+    Node* root_{ nullptr };
 
-    
     void clear(Node* node) {
         if (!node) return;
         clear(node->left);
@@ -29,7 +28,6 @@ private:
         delete node;
     }
 
-    
     void insert(Node*& node, const T& key) {
         if (!node) {
             node = new Node(key);
@@ -66,19 +64,21 @@ private:
     }
 
 public:
-    BST() : root_(nullptr) {}
+    BST() = default;
     ~BST() { clear(root_); }
 
     void insert(const T& key) {
         insert(root_, key);
     }
 
-    bool search(const T& key) const {
-        return searchNode(root_, key) != nullptr;
+    int search(const T& key) const {
+        Node* n = searchNode(root_, key);
+        return n ? n->count : 0;
     }
 
     int depth() const {
-        return depth(root_);
+        int nodes = depth(root_);
+        return nodes > 0 ? nodes - 1 : 0;
     }
 
     std::vector<std::pair<T, int>> toVector() const {
@@ -87,5 +87,4 @@ public:
         return v;
     }
 };
-
 #endif  // INCLUDE_BST_H_
