@@ -1,4 +1,4 @@
-// Copyright 2021 NNTU-CS\
+// Copyright 2021 NNTU-CS
 #include <utility>
 #include <sstream>
 #include  <iostream>
