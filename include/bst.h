@@ -27,6 +27,7 @@ private:
         
         if (value == node->key) {
             node->count++;
+            return node;
         } else if (value < node->key) {
             node->left = insert(node->left, value);
         } else {
@@ -35,7 +36,7 @@ private:
         return node;
     }
 
-    Node* searchNode(Node* node, T value) const {
+    const Node* searchNode(const Node* node, T value) const {
         if (!node) return nullptr;
         
         if (value == node->key) {
@@ -47,12 +48,12 @@ private:
         }
     }
 
-    int depth(Node* node) const {
+    int depth(const Node* node) const {
         if (!node) return 0;
         return 1 + std::max(depth(node->left), depth(node->right));
     }
 
-    void inOrder(Node* node, std::function<void(Node*)> visit) const {
+    void inOrder(const Node* node, std::function<void(const Node*)> visit) const {
         if (!node) return;
         inOrder(node->left, visit);
         visit(node);
@@ -74,12 +75,8 @@ public:
         root = insert(root, value);
     }
 
-    bool search(T value) const {
-        return searchNode(root, value) != nullptr;
-    }
-
-    int getCount(T value) const {
-        Node* node = searchNode(root, value);
+    int search(T value) const {
+        const Node* node = searchNode(root, value);
         return node ? node->count : 0;
     }
 
@@ -87,7 +84,7 @@ public:
         return depth(root);
     }
 
-    void inOrder(std::function<void(Node*)> visit) const {
+    void inOrder(std::function<void(const Node*)> visit) const {
         inOrder(root, visit);
     }
 };
