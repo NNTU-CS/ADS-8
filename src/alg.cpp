@@ -16,23 +16,20 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         return;
     }
 
-    std::vector<std::string> words;
     std::string currentWord;
-    
     while (file) {
         char ch = file.get();
         
         if (isalpha(ch)) {
             currentWord += tolower(ch);
         } else if (!currentWord.empty()) {
-            words.push_back(currentWord);
+            tree.insert(currentWord);
             currentWord.clear();
         }
     }
     
-    // Вставляем слова в определенном порядке для контроля глубины
-    for (const auto& word : words) {
-        tree.insert(word);
+    if (!currentWord.empty()) {
+        tree.insert(currentWord);
     }
     
     file.close();
@@ -55,10 +52,6 @@ void printFreq(BST<std::string>& tree) {
     tree.inOrder(collectWords);
     
     std::sort(words.begin(), words.end(), compareNodes);
-    
-    for (const auto& pair : words) {
-        std::cout << pair.first << ": " << pair.second << std::endl;
-    }
     
     std::ofstream out("result/freq.txt");
     for (const auto& pair : words) {
