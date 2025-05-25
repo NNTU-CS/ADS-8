@@ -4,10 +4,12 @@
 
 #include <iostream>
 #include <string>
+#include <algorithm>
+#include <functional>
 
 template <typename T>
 class BST {
-private:
+public:
     struct Node {
         T key;
         int count;
@@ -17,6 +19,7 @@ private:
         Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
     };
 
+private:
     Node* root;
 
     Node* insert(Node* node, T value) {
@@ -32,15 +35,15 @@ private:
         return node;
     }
 
-    Node* search(Node* node, T value) const {
+    Node* searchNode(Node* node, T value) const {
         if (!node) return nullptr;
         
         if (value == node->key) {
             return node;
         } else if (value < node->key) {
-            return search(node->left, value);
+            return searchNode(node->left, value);
         } else {
-            return search(node->right, value);
+            return searchNode(node->right, value);
         }
     }
 
@@ -49,7 +52,7 @@ private:
         return 1 + std::max(depth(node->left), depth(node->right));
     }
 
-    void inOrder(Node* node, void (*visit)(Node*)) const {
+    void inOrder(Node* node, std::function<void(Node*)> visit) const {
         if (!node) return;
         inOrder(node->left, visit);
         visit(node);
@@ -72,11 +75,11 @@ public:
     }
 
     bool search(T value) const {
-        return search(root, value) != nullptr;
+        return searchNode(root, value) != nullptr;
     }
 
     int getCount(T value) const {
-        Node* node = search(root, value);
+        Node* node = searchNode(root, value);
         return node ? node->count : 0;
     }
 
@@ -84,7 +87,7 @@ public:
         return depth(root);
     }
 
-    void inOrder(void (*visit)(Node*)) const {
+    void inOrder(std::function<void(Node*)> visit) const {
         inOrder(root, visit);
     }
 };
