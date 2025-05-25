@@ -18,10 +18,8 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         std::stringstream ss(line);
         std::string word;
         while (ss >> word) {
-            // Преобразование к нижнему регистру
             std::transform(word.begin(), word.end(), word.begin(), ::tolower);
 
-            // Очистка от нелатинских символов
             word.erase(std::remove_if(word.begin(), word.end(), [](char c) {
                 return !std::isalpha(c);
             }), word.end());
@@ -38,7 +36,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 void printFreq(BST<std::string>& tree) {
     std::vector<std::pair<std::string, int>> frequencies = tree.getWordFrequencies();
 
-    // Сортировка по убыванию частоты
     std::sort(frequencies.begin(), frequencies.end(), [](const auto& a, const auto& b) {
         return a.second > b.second;
     });
