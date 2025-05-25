@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <cctype>
+#include <cstdlib>
 #include  "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
