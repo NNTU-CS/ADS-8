@@ -10,7 +10,7 @@
 
 template <typename T>
 class BST {
-  private:
+   private:
   struct Node {
     T data;
     int frequency;
@@ -82,7 +82,7 @@ class BST {
     return 1 + size(node->left) + size(node->right);
   }
 
-  public:
+   public:
   BST() : root(nullptr) {}
 
   ~BST() {
