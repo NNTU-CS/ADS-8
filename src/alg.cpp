@@ -12,7 +12,7 @@
 
 void makeTree(BST<std::string>& tree, const char* filename) {
    std::ifstream file(filename);
-    std::string line;
+      std::string line;
 
     if (!file.is_open()) {
         std::cerr << "Error opening file: " << filename << std::endl;
