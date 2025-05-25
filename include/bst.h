@@ -9,7 +9,7 @@
 
 template<typename T>
 class BST {
-private:
+ private:
     struct Node {
         T    key;
         int  count;
@@ -31,14 +31,11 @@ private:
     void insert(Node*& node, const T& key) {
         if (!node) {
             node = new Node(key);
-        }
-        else if (key == node->key) {
+        } else if (key == node->key) {
             node->count++;
-        }
-        else if (key < node->key) {
+        } else if (key < node->key) {
             insert(node->left, key);
-        }
-        else {
+        } else {
             insert(node->right, key);
         }
     }
@@ -63,7 +60,7 @@ private:
         inorderCollect(node->right, out);
     }
 
-public:
+ public:
     BST() = default;
     ~BST() { clear(root_); }
 
