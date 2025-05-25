@@ -5,6 +5,7 @@
 #include  <cstdlib>
 #include <cctype>
 #include <vector>
+#include <functional>
 #include <algorithm>
 #include "bst.h"
 
@@ -28,7 +29,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
             }
         }
     }
-    
+
     if (!currentWord.empty()) {
         tree.insert(currentWord);
     }
@@ -37,6 +38,9 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 }
 
 bool compareNodes(const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
+    if (a.second == b.second) {
+        return a.first < b.first;
+    }
     return a.second > b.second;
 }
 
@@ -60,5 +64,4 @@ void printFreq(BST<std::string>& tree) {
         out << pair.first << ": " << pair.second << std::endl;
     }
     out.close();
-}
 }
