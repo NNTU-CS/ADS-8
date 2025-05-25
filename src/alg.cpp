@@ -23,14 +23,15 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         std::stringstream ss(line);
         std::string word;
         while (ss >> word) {
-            std::transform(word.begin(), word.end(), word.begin(), ::tolower);
+            std::string processedWord = "";
+            for (char c : word) {
+                if (std::isalpha(c)) {
+                    processedWord += std::tolower(c);
+                }
+            }
 
-            word.erase(std::remove_if(word.begin(), word.end(), [](char c) {
-                return !std::isalpha(c);
-            }), word.end());
-
-            if (!word.empty()) {
-                tree.insert(word);
+            if (!processedWord.empty()) {
+                tree.insert(processedWord);
             }
         }
     }
