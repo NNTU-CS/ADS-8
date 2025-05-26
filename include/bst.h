@@ -15,7 +15,7 @@ class BST {
     Node* left;
     Node* right;
 
-   explicit Node(const T& val)
+    explicit Node(const T& val)
       : value(val), count(1), left(nullptr), right(nullptr) {}
   };
 
