@@ -4,15 +4,12 @@
 #include <string>
 #include "bst.h"
 
-void makeTree(BST<std::string>& tree, const char* filename);
-void printFreq(BST<std::string>& tree);
+void makeTree(BST<std::string>&, const char*);
+void printFreq(BST<std::string>&);
 
 int main() {
     BST<std::string> tree;
-    const char* fname = "../src/war_peace.txt";
-
-    makeTree(tree, fname);
-
+    makeTree(tree, "src/war_peace.txt");
     std::cout << "\nTree depth: " << tree.depth() << "\n\n";
     printFreq(tree);
     return 0;

@@ -3,7 +3,6 @@
 #define INCLUDE_BST_H_
 
 #include <string>
-#include <iostream>
 #include <vector>
 #include <algorithm>
 
@@ -13,76 +12,53 @@ struct Node {
     int count;
     Node* left;
     Node* right;
-    explicit Node(const T& value)
-        : key(value), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(const T& v) : key(v), count(1), left(nullptr), right(nullptr) {}
 };
 
 template<typename T>
 class BST {
  private:
-    Node<T>* root;
+    Node<T>* root = nullptr;
 
-    void insert(Node<T>*& node, const T& value) {
-        if (!node) {
-            node = new Node<T>(value);
-        } else if (value < node->key) {
-            insert(node->left, value);
-        } else if (value > node->key) {
-            insert(node->right, value);
-        } else {
-            node->count++;
-        }
+    void insert(Node<T>*& n, const T& v) {
+        if (!n) n = new Node<T>(v);
+        else if (v < n->key) insert(n->left, v);
+        else if (v > n->key) insert(n->right, v);
+        else n->count++;
     }
 
-    int height(Node<T>* node) const {
-        if (!node) return 0;
-        return 1 + std::max(height(node->left), height(node->right));
+    int height(Node<T>* n) const {
+        if (!n) return 0;
+        return 1 + std::max(height(n->left), height(n->right));
     }
 
-    bool search(Node<T>* node, const T& value) const {
-        if (!node) return false;
-        if (node->key == value) return true;
-        return value < node->key
-            ? search(node->left, value)
-            : search(node->right, value);
+    bool search(Node<T>* n, const T& v) const {
+        if (!n) return false;
+        if (n->key == v) return true;
+        return v < n->key ? search(n->left, v) : search(n->right, v);
     }
 
-    void collect(Node<T>* node, std::vector<Node<T>*>& out) const {
-        if (!node) return;
-        collect(node->left, out);
-        out.push_back(node);
-        collect(node->right, out);
+    void collect(Node<T>* n, std::vector<Node<T>*>& out) const {
+        if (!n) return;
+        collect(n->left, out);
+        out.push_back(n);
+        collect(n->right, out);
     }
 
  public:
-    BST() : root(nullptr) {}
-
-    void insert(const T& value) {
-        insert(root, value);
-    }
+    void insert(const T& v) { insert(root, v); }
 
     int depth() const {
         int h = height(root);
         return h > 0 ? h - 1 : 0;
     }
 
-    bool search(const T& value) const {
-        return search(root, value);
-    }
+    bool search(const T& v) const { return search(root, v); }
 
     std::vector<Node<T>*> getNodes() const {
         std::vector<Node<T>*> v;
         collect(root, v);
         return v;
-    }
-
-    void print(std::ostream& out = std::cout) const {
-        auto v = getNodes();
-        std::sort(v.begin(), v.end(),
-                  [](Node<T>* a, Node<T>* b){ return a->key < b->key; });
-        for (auto n : v) {
-            out << n->key << " : " << n->count << "\n";
-        }
     }
 };
 

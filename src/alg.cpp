@@ -4,33 +4,22 @@
 #include <string>
 #include <cctype>
 #include <algorithm>
-#include <vector>
 #include "bst.h"
 
-static bool isLatinLetter(char c) {
+static bool isLatin(char c) {
     return std::isalpha(static_cast<unsigned char>(c)) && (c & 0x80) == 0;
 }
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-    std::ifstream file(filename);
-    if (!file) {
-        std::cout << "File error!\n";
-        return;
-    }
-    std::string word;
+    std::ifstream f(filename);
+    if (!f) { std::cout << "File error!\n"; return; }
+    std::string w;
     char ch;
-    while (file.get(ch)) {
-        if (isLatinLetter(ch)) {
-            word += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
-        } else if (!word.empty()) {
-            tree.insert(word);
-            word.clear();
-        }
+    while (f.get(ch)) {
+        if (isLatin(ch)) w += char(std::tolower((unsigned char)ch));
+        else if (!w.empty()) { tree.insert(w); w.clear(); }
     }
-    if (!word.empty()) {
-        tree.insert(word);
-    }
-    file.close();
+    if (!w.empty()) tree.insert(w);
 }
 
 void printFreq(BST<std::string>& tree) {
