@@ -1,12 +1,13 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
-#include <fstream>
-#include <locale>
-#include <cstdlib>
 #include <algorithm>
 #include <cctype>
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+#include <locale>
 #include <string>
 #include <vector>
+
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
@@ -40,7 +41,7 @@ void printFreq(BST<std::string>& tree) {
     return a.first < b.first;
   });
 
-  std::ofstream fout("freq.txt");
+  std::ofstream fout("result/freq.txt");
   for (const auto& [word, freq] : words) {
     std::cout << word << " " << freq << std::endl;
     if (fout) fout << word << " " << freq << std::endl;
