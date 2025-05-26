@@ -1,4 +1,5 @@
 // Copyright 2021 NNTU-CS
+#include <string>
 #include <iostream>
 #include <fstream>
 #include <locale>
@@ -19,7 +20,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
   while (file.get(ch)) {
     if (std::isalpha(static_cast<unsigned char>(ch)) && ch < 128) {
-      word += std::tolower(ch);
+      word += std::tolower(static_cast<unsigned char>(ch));
     } else if (!word.empty()) {
       tree.insert(word);
       word.clear();
@@ -27,7 +28,9 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   }
 
   if (!word.empty()) {
+    std::cout << "[" << word << "]" << std::endl;
     tree.insert(word);
+    word.clear();
   }
 
   file.close();
