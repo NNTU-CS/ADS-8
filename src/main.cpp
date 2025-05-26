@@ -1,8 +1,8 @@
 // Copyright 2021 NNTU-CS
+#include <string>
 #include <iostream>
 #include "bst.h"
 
-// Прототипы функций из alg.cpp
 void makeTree(BST<std::string>& tree, const char* filename);
 void printFreq(BST<std::string>& tree);
 
