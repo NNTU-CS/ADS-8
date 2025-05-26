@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <cctype>
+#include <string>
 #include <algorithm>
 #include <vector>
 #include "bst.h"

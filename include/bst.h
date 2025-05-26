@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 template<typename T>
 struct Node {
@@ -12,7 +13,7 @@ struct Node {
     int count;
     Node* left;
     Node* right;
-    Node(const T& value) : key(value), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(const T& value) : key(value), count(1), left(nullptr), right(nullptr) {}
 };
 
 template<typename T>
