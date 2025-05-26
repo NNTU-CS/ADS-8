@@ -34,9 +34,9 @@ class BST {
     if (!node) return nullptr;
     if (value == node->value) return node;
     if (value < node->value)
-      return search(node->left, value);
+      return searchNode(node->left, value);
     else
-      return search(node->right, value);
+      return searchNode(node->right, value);
   }
 
   void insert(Node*& node, const T& value) {
