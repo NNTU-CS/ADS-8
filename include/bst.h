@@ -2,63 +2,88 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <string>
-#include <vector>
 #include <algorithm>
+#include <iostream>
 
-template<typename T>
-struct Node {
+template <typename T>
+struct BSTNode {
     T key;
     int count;
-    Node* left;
-    Node* right;
-    explicit Node(const T& v) : key(v), count(1), left(nullptr), right(nullptr) {}
+    BSTNode* left;
+    BSTNode* right;
+
+    explicit BSTNode(const T& k)
+        : key(k), count(1), left(nullptr), right(nullptr) {}
 };
 
-template<typename T>
+template <typename T>
 class BST {
- private:
-    Node<T>* root = nullptr;
-
-    void insert(Node<T>*& n, const T& v) {
-        if (!n) n = new Node<T>(v);
-        else if (v < n->key) insert(n->left, v);
-        else if (v > n->key) insert(n->right, v);
-        else n->count++;
-    }
-
-    int height(Node<T>* n) const {
-        if (!n) return 0;
-        return 1 + std::max(height(n->left), height(n->right));
-    }
-
-    bool search(Node<T>* n, const T& v) const {
-        if (!n) return false;
-        if (n->key == v) return true;
-        return v < n->key ? search(n->left, v) : search(n->right, v);
-    }
-
-    void collect(Node<T>* n, std::vector<Node<T>*>& out) const {
-        if (!n) return;
-        collect(n->left, out);
-        out.push_back(n);
-        collect(n->right, out);
-    }
-
  public:
-    void insert(const T& v) { insert(root, v); }
+    BST() : root(nullptr) {}
+    ~BST() { clear(root); }
+
+    void insert(const T& value) {
+        root = insert(root, value);
+    }
+
+    int search(const T& value) const {
+        BSTNode<T>* cur = root;
+        while (cur) {
+            if (value < cur->key) {
+                cur = cur->left;
+            } else if (cur->key < value) {
+                cur = cur->right;
+            } else {
+                return cur->count;
+            }
+        }
+        return 0;
+    }
 
     int depth() const {
-        int h = height(root);
-        return h > 0 ? h - 1 : 0;
+        return depth(root);
     }
 
-    bool search(const T& v) const { return search(root, v); }
+    template <typename Func>
+    void inorder(Func func) const {
+        inorder(root, func);
+    }
 
-    std::vector<Node<T>*> getNodes() const {
-        std::vector<Node<T>*> v;
-        collect(root, v);
-        return v;
+ private:
+    BSTNode<T>* root;
+
+    BSTNode<T>* insert(BSTNode<T>* node, const T& value) {
+        if (!node) {
+            return new BSTNode<T>(value);
+        }
+        if (value < node->key) {
+            node->left = insert(node->left, value);
+        } else if (node->key < value) {
+            node->right = insert(node->right, value);
+        } else {
+            ++node->count;
+        }
+        return node;
+    }
+
+    int depth(BSTNode<T>* node) const {
+        if (!node) return 0;
+        return 1 + std::max(depth(node->left), depth(node->right));
+    }
+
+    template <typename Func>
+    void inorder(BSTNode<T>* node, Func func) const {
+        if (!node) return;
+        inorder(node->left, func);
+        func(node);
+        inorder(node->right, func);
+    }
+
+    void clear(BSTNode<T>* node) {
+        if (!node) return;
+        clear(node->left);
+        clear(node->right);
+        delete node;
     }
 };
 
