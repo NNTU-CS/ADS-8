@@ -37,7 +37,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 void printFreq(BST<std::string>& tree) {
     auto nodes = tree.getNodes();
     std::sort(nodes.begin(), nodes.end(),
-        [](auto a, auto b){ return a->count > b->count; });
+              [](auto a, auto b){ return a->count > b->count; });
 
     std::ofstream out("result/freq.txt");
     for (auto n : nodes) {

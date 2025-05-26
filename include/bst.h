@@ -79,7 +79,7 @@ class BST {
         std::vector<Node<T>*> v;
         collect(root, v);
         std::sort(v.begin(), v.end(),
-            [](Node<T>* a, Node<T>* b){ return a->key < b->key; });
+                  [](Node<T>* a, Node<T>* b){ return a->key < b->key; });
         for (auto n : v) {
             out << n->key << " : " << n->count << "\n";
         }
