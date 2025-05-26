@@ -1,52 +1,52 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
-#include <fstream>
-#include <locale>
+#include <algorithm>
 #include <cctype>
-#include <cstdlib>
+#include <fstream>
+#include <iostream>
 #include <string>
+#include <vector>
 #include "bst.h"
 
-void makeTree(BST<std::string>& tree, const char* filename) {
-    std::ifstream file(filename);
-    if (!file) {
-        std::cerr << "File error: cannot open " << filename << '\n';
-        return;
-    }
-
-    std::string word;
-    char ch;
-    while (file.get(ch)) {
-        if (std::isalpha(static_cast<unsigned char>(ch))) {
-            word.push_back(std::tolower(static_cast<unsigned char>(ch)));
-        } else {
-            if (!word.empty()) {
-                tree.insert(word);
-                word.clear();
-            }
-        }
-    }
-    if (!word.empty()) {
-        tree.insert(word);
-    }
-    file.close();
+static bool isAsciiLetter(char c) {
+    unsigned char uc = static_cast<unsigned char>(c);
+    return std::isalpha(uc) && !(uc & 0x80);
 }
 
-void printFreq(BST<std::string>& tree) {
-    std::vector<std::pair<std::string, int>> vec;
-    tree.inorder([&](auto node) {
-        vec.emplace_back(node->key, node->count);
-    });
-
-    std::sort(vec.begin(), vec.end(),
-              [](auto& a, auto& b) {
-                  return a.second > b.second;
-              });
-
-    std::ofstream ofs("result/freq.txt");
-    for (auto& p : vec) {
-        std::cout << p.first << ' ' << p.second << '\n';
-        if (ofs) ofs << p.first << ' ' << p.second << '\n';
+void makeTree(WordTree<std::string>& tree, const char* filename) {
+    std::ifstream in(filename);
+    if (!in) {
+        std::cerr << "File error!\n";
+        return;
     }
-    if (ofs) ofs.close();
+    std::string buf;
+    char ch;
+    while (in.get(ch)) {
+        if (isAsciiLetter(ch)) {
+            buf.push_back(static_cast<char>(std::tolower(static_cast<unsigned char>(ch))));
+        } else if (!buf.empty()) {
+            tree.add(buf);
+            buf.clear();
+        }
+    }
+    if (!buf.empty()) {
+        tree.add(buf);
+    }
+}
+
+void printFreq(WordTree<std::string>& tree) {
+    auto stats = tree.getFreqs();
+    std::sort(stats.begin(), stats.end(),
+              [](auto& a, auto& b) {
+                  return a.second > b.second
+                         || (a.second == b.second && a.first < b.first);
+              });
+    std::ofstream out("result/freq.txt");
+    if (!out) {
+        std::cerr << "Cannot open result file\n";
+        return;
+    }
+    for (auto& p : stats) {
+        std::cout << p.first << ": " << p.second << "\n";
+        out << p.first << ": " << p.second << "\n";
+    }
 }
