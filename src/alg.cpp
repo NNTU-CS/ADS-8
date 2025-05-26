@@ -1,52 +1,48 @@
 // Copyright 2021 NNTU-CS
-#include <algorithm>
-#include <cctype>
-#include <fstream>
 #include <iostream>
+#include <fstream>
 #include <string>
+#include <cctype>
+#include <algorithm>
 #include <vector>
 #include "bst.h"
 
-static bool isAsciiLetter(char c) {
+static bool isLatinLetter(char c) {
     unsigned char uc = static_cast<unsigned char>(c);
-    return std::isalpha(uc) && !(uc & 0x80);
+    return std::isalpha(uc) && (uc & 0x80) == 0;
 }
 
-void makeTree(WordTree<std::string>& tree, const char* filename) {
+void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream in(filename);
     if (!in) {
-        std::cerr << "File error!\n";
+        std::cout << "File error!\n";
         return;
     }
-    std::string buf;
-    char ch;
-    while (in.get(ch)) {
-        if (isAsciiLetter(ch)) {
-            buf.push_back(static_cast<char>(std::tolower(static_cast<unsigned char>(ch))));
-        } else if (!buf.empty()) {
-            tree.add(buf);
-            buf.clear();
+    std::string word;
+    char c;
+    while (in.get(c)) {
+        if (isLatinLetter(c)) {
+            unsigned char uc = static_cast<unsigned char>(c);
+            word.push_back(static_cast<char>(std::tolower(uc)));
+        } else if (!word.empty()) {
+            tree.insert(word);
+            word.clear();
         }
     }
-    if (!buf.empty()) {
-        tree.add(buf);
+    if (!word.empty()) {
+        tree.insert(word);
     }
 }
 
-void printFreq(WordTree<std::string>& tree) {
-    auto stats = tree.getFreqs();
-    std::sort(stats.begin(), stats.end(),
-              [](auto& a, auto& b) {
-                  return a.second > b.second
-                         || (a.second == b.second && a.first < b.first);
-              });
+void printFreq(BST<std::string>& tree) {
+    auto nodes = tree.getNodes();
+    std::sort(nodes.begin(), nodes.end(),
+              [](auto a, auto b) { return a->count > b->count; });
+
     std::ofstream out("result/freq.txt");
-    if (!out) {
-        std::cerr << "Cannot open result file\n";
-        return;
+    for (auto n : nodes) {
+        std::cout << n->key << " " << n->count << "\n";
+        out << n->key << " " << n->count << "\n";
     }
-    for (auto& p : stats) {
-        std::cout << p.first << ": " << p.second << "\n";
-        out << p.first << ": " << p.second << "\n";
-    }
+    out.close();
 }

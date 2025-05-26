@@ -1,121 +1,89 @@
-// bst.h
+// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <algorithm>
-#include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
-template<typename Key>
-class WordTree {
+template<typename T>
+struct Node {
+    T key;
+    int count;
+    Node* left;
+    Node* right;
+    explicit Node(const T& k)
+        : key(k), count(1), left(nullptr), right(nullptr) {}
+};
+
+template<typename T>
+class BST {
  private:
-    struct FreqNode {
-        Key word;
-        int freq;
-        FreqNode* left;
-        FreqNode* right;
-        explicit FreqNode(const Key& w)
-            : word(w), freq(1), left(nullptr), right(nullptr) {}
-    };
+    Node<T>* root = nullptr;
 
-    FreqNode* root = nullptr;
+    Node<T>* insertRec(Node<T>* node, const T& val) {
+        if (!node) return new Node<T>(val);
+        if (val < node->key) {
+            node->left = insertRec(node->left, val);
+        } else if (node->key < val) {
+            node->right = insertRec(node->right, val);
+        } else {
+            ++node->count;
+        }
+        return node;
+    }
 
-    void collect(FreqNode* node, std::vector<std::pair<Key,int>>& out) const {
+    int height(Node<T>* node) const {
+        if (!node) return 0;
+        int l = height(node->left);
+        int r = height(node->right);
+        return 1 + (l > r ? l : r);
+    }
+
+    int lookup(Node<T>* node, const T& val) const {
+        if (!node) return 0;
+        if (val < node->key) {
+            return lookup(node->left, val);
+        }
+        if (node->key < val) {
+            return lookup(node->right, val);
+        }
+        return node->count;
+    }
+
+    void collect(Node<T>* node, std::vector<Node<T>*>& out) const {
         if (!node) return;
         collect(node->left, out);
-        out.emplace_back(node->word, node->freq);
+        out.push_back(node);
         collect(node->right, out);
     }
 
-    void clearSubtree(FreqNode* node) {
+    void clear(Node<T>* node) {
         if (!node) return;
-        clearSubtree(node->left);
-        clearSubtree(node->right);
+        clear(node->left);
+        clear(node->right);
         delete node;
     }
 
-    int height(FreqNode* node) const {
-        if (!node) return -1;
-        int hl = height(node->left);
-        int hr = height(node->right);
-        return 1 + (hl > hr ? hl : hr);
-    }
-
-    FreqNode* insertRec(FreqNode* node, const Key& w) {
-        if (!node) {
-            return new FreqNode(w);
-        }
-        if (w < node->word) {
-            node->left = insertRec(node->left, w);
-        } else if (node->word < w) {
-            node->right = insertRec(node->right, w);
-        } else {
-            ++node->freq;
-        }
-        return node;
-    }
-
-    FreqNode* removeRec(FreqNode* node, const Key& w) {
-        if (!node) return nullptr;
-        if (w < node->word) {
-            node->left = removeRec(node->left, w);
-        } else if (node->word < w) {
-            node->right = removeRec(node->right, w);
-        } else {
-            if (!node->left) {
-                FreqNode* tmp = node->right;
-                delete node;
-                return tmp;
-            }
-            if (!node->right) {
-                FreqNode* tmp = node->left;
-                delete node;
-                return tmp;
-            }
-            FreqNode* succ = node->right;
-            while (succ->left) succ = succ->left;
-            node->word = succ->word;
-            node->freq = succ->freq;
-            node->right = removeRec(node->right, succ->word);
-        }
-        return node;
-    }
-
-    int lookup(FreqNode* node, const Key& w) const {
-        if (!node) return 0;
-        if (w < node->word) return lookup(node->left, w);
-        if (node->word < w) return lookup(node->right, w);
-        return node->freq;
-    }
-
  public:
-    WordTree() = default;
-    ~WordTree() { clear(); }
+    BST() = default;
+    ~BST() { clear(root); }
 
-    void add(const Key& w) {
-        root = insertRec(root, w);
+    void insert(const T& val) {
+        root = insertRec(root, val);
     }
 
-    void del(const Key& w) {
-        root = removeRec(root, w);
-    }
-
-    void clear() {
-        clearSubtree(root);
-        root = nullptr;
-    }
-
-    int search(const Key& w) const {
-        return lookup(root, w);
+    int search(const T& val) const {
+        return lookup(root, val);
     }
 
     int depth() const {
-        return height(root);
+        int h = height(root);
+        return h > 0 ? h - 1 : 0;
     }
 
-    std::vector<std::pair<Key,int>> getFreqs() const {
-        std::vector<std::pair<Key,int>> out;
+    std::vector<Node<T>*> getNodes() const {
+        std::vector<Node<T>*> out;
         collect(root, out);
         return out;
     }
