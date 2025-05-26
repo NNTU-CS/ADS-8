@@ -30,7 +30,7 @@ class BST {
     return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
   }
 
-  Node* search(Node* node, const T& value) const {
+  Node* searchNode(Node* node, const T& value) const {
     if (!node) return nullptr;
     if (value == node->value) return node;
     if (value < node->value)
@@ -65,7 +65,10 @@ class BST {
 
   void insert(const T& value) { insert(root, value); }
   int depth() const { return depth(root); }
-  Node* search(const T& value) const { return search(root, value); }
+  int search(const T& value) const {
+  Node* node = search(root, value);
+  return node ? node->count : 0;
+}
 
   void getAll(std::vector<std::pair<T, int>>& result) const {
     inOrder(root, result);
