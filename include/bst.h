@@ -34,9 +34,9 @@ class BST {
         }
     }
 
-    int depth(Node<T>* node) const {
+    int height(Node<T>* node) const {
         if (!node) return 0;
-        return 1 + std::max(depth(node->left), depth(node->right));
+        return 1 + std::max(height(node->left), height(node->right));
     }
 
     bool search(Node<T>* node, const T& value) const {
@@ -62,7 +62,8 @@ class BST {
     }
 
     int depth() const {
-        return depth(root);
+        int h = height(root);
+        return h > 0 ? h - 1 : 0;
     }
 
     bool search(const T& value) const {
@@ -76,8 +77,7 @@ class BST {
     }
 
     void print(std::ostream& out = std::cout) const {
-        std::vector<Node<T>*> v;
-        collect(root, v);
+        auto v = getNodes();
         std::sort(v.begin(), v.end(),
                   [](Node<T>* a, Node<T>* b){ return a->key < b->key; });
         for (auto n : v) {

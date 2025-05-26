@@ -17,7 +17,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         std::cout << "File error!\n";
         return;
     }
-
     std::string word;
     char ch;
     while (file.get(ch)) {
