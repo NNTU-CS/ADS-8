@@ -2,59 +2,53 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <locale>
-#include <cstdlib>
 #include <cctype>
 #include <algorithm>
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-  std::ifstream file(filename);
-  if (!file) {
-    std::cout << "File error!" << std::endl;
-    return;
-  }
-
-  std::string word;
-  char ch;
-
-  while (file.get(ch)) {
-    if (std::isalpha(static_cast<unsigned char>(ch))) {
-      word += std::tolower(static_cast<unsigned char>(ch));
-    } else if (ch == '\'' && !word.empty()) {
-      word += ch;
-    } else if (!word.empty()) {
-      tree.insert(word);
-      word.clear();
+    std::ifstream file(filename);
+    if (!file) {
+        std::cerr << "File error!" << std::endl;
+        return;
     }
-  }
 
-  if (!word.empty()) {
-    tree.insert(word);
-  }
+    std::string word;
+    char ch;
 
-  file.close();
+    while (file.get(ch)) {
+        if (isalpha(static_cast<unsigned char>(ch))) {
+            word += tolower(static_cast<unsigned char>(ch));
+        } else if (!word.empty()) {
+            tree.insert(word);
+            word.clear();
+        }
+    }
+
+    if (!word.empty()) {
+        tree.insert(word);
+    }
+
+    file.close();
 }
 
 void printFreq(BST<std::string>& tree) {
-  auto words = tree.getAllNodes();
+    auto words = tree.getAllNodes();
 
-  std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
-    if (a.second == b.second) {
-      return a.first < b.first;
+    std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
+        return a.second > b.second || (a.second == b.second && a.first < b.first);
+    });
+
+    std::ofstream out("result/freq.txt");
+    if (!out) {
+        std::cerr << "Output file error!" << std::endl;
+        return;
     }
-    return a.second > b.second;
-  });
 
-  std::ofstream out("result/freq.txt");
-  if (!out) {
-    std::cout << "Output file error!" << std::endl;
-    return;
-  }
+    for (const auto& pair : words) {
+        std::cout << pair.first << ": " << pair.second << std::endl;
+        out << pair.first << ": " << pair.second << std::endl;
+    }
 
-  for (const auto& [word, count] : words) {
-    out << word << ": " << count << std::endl;
-  }
-
-  out.close();
+    out.close();
 }
