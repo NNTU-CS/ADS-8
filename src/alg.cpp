@@ -1,5 +1,5 @@
 // Copyright 2021 NNTU-CS
-#include "../include/bst.h"
+#include "bst.h"
 
 #include <cctype>
 #include <cstdlib>
