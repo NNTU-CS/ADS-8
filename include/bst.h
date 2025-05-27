@@ -1,3 +1,4 @@
+// Copyright 2025 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
@@ -6,9 +7,9 @@
 
 template <typename T>
 class BST {
-private:
+ private:
   struct Node {
-    T value;          // Stores the node's valu
+    T value;          // Stores the node's value
     int count;        // Count of duplicate values
     Node* left;       // Left child pointer
     Node* right;      // Right child pointer
@@ -39,8 +40,8 @@ private:
 
   // Calculates tree depth using ternary operator
   int depth(Node* node) const {
-    return !node ? -1 : 1 + (depth(node->left) > depth(node->right) ? 
-                            depth(node->left) : depth(node->right));
+    return !node ? -1 : 1 + (depth(node->left) > depth(node->right) ?
+                             depth(node->left) : depth(node->right));
   }
 
   // In-order traversal that populates an output vector
@@ -59,7 +60,7 @@ private:
     delete node;
   }
 
-public:
+ public:
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
 
