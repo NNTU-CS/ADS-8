@@ -2,9 +2,30 @@
 #include  <iostream>
 #include  <fstream>
 #include  <locale>
+#include  <string>
 #include  <cstdlib>
-#include  "bst.h"
+#include  <vector>
+#include <algorithm>
+#include "../include/bst.h"
 
-void makeTree(BST<std::string>& tree, const char* filename) {
-  // поместите сюда свой код
+void collectWords(BST<std::string>& tree, std::vector<WordFrequencyPair>& words) {
+    BST<std::string>::Helper::traverse(tree.getRoot(), words);
+}
+
+void printFreq(BST<std::string>& tree) {
+    std::vector<WordFrequencyPair> words;
+    collectWords(tree, words);
+    std::sort(words.begin(), words.end());
+
+    for (auto& pair : words) {
+        std::cout << pair.word << ": " << pair.frequency << '\n';
+    }
+
+    std::ofstream out("result/freq.txt");
+    if (out.is_open()) {
+        for (auto& pair : words) {
+            out << pair.word << ": " << pair.frequency << '\n';
+        }
+        out.close();
+    }
 }

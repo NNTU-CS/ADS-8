@@ -1,6 +1,6 @@
 // Copyright 2021 NNTU-CS
-#include "bst.h"
+#include <iostream>
+#include <string>
+#include "../include/bst.h"
 
-int main() {
-    return 0;
-}
+int main() { return 0; }
