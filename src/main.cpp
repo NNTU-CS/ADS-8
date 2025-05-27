@@ -1,7 +1,7 @@
 // Copyright 2021 NNTU-CS
-#include "../include/bst.h"
 #include <iostream>
 #include <string>
+#include "../include/bst.h"
 void makeTree(BST<std::string>&, const char*);
 void printFreq(BST<std::string>&);
 int main() {
