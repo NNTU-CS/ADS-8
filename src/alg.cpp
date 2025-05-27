@@ -1,13 +1,12 @@
 // Copyright 2021 NNTU-CS
 #include  <iostream>
 #include  <fstream>
-#include  <locale>
-#include  <cstdlib>
-#include  "bst.h"
+#include <cctype>
 #include <algorithm>
 #include <vector>
 #include <string>
 #include <utility>
+#include  "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
@@ -15,21 +14,21 @@ void makeTree(BST<std::string>& tree, const char* filename) {
       std::cout << "File error!" << std::endl;
       return;
   }
-  std::string currentWord;
+  std::string curWord;
   while (!file.eof()) {
       char ch = file.get();
       if (isalpha(ch)) {
-          currentWord += tolower(ch);
+          curWord += tolower(ch);
       } else {
-        if (!currentWord.empty()) {
-            tree.insert(currentWord);
-            currentWord.clear();
+        if (!curWord.empty()) {
+            tree.insert(curWord);
+            curWord.clear();
         }
       }
   }
  
-  if (!currentWord.empty()) {
-      tree.insert(currentWord);
+  if (!curWord.empty()) {
+      tree.insert(curWord);
   }
   
   file.close();
