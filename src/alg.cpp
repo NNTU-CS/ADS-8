@@ -39,9 +39,9 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 // Prints word frequencies sorted by count (descending) and alphabetically (ascending)
 // Outputs to both console and "result/freq.txt" file
 void printFreq(BST<std::string>& tree) {
-  std::vector<std::pair<std::string, int>> elements = tree.getAllElements();
+  std::vector<std::pair<std::string, int>> elements;
+  tree.getAll(elements);
 
-  // Sort by frequency (higher first) then alphabetically
   std::sort(elements.begin(), elements.end(),
     [](const auto& a, const auto& b) {
       if (a.second != b.second) {
@@ -61,3 +61,4 @@ void printFreq(BST<std::string>& tree) {
   }
   outFile.close();
 }
+
