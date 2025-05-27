@@ -13,9 +13,11 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     while (file.get(ch)) {
         if (std::isalpha(static_cast<unsigned char>(ch))) {
             currentWord += std::tolower(static_cast<unsigned char>(ch));
-        } else if (!currentWord.empty()) {
-            tree.insert(currentWord);
-            currentWord.clear();
+        } else {
+            if (!currentWord.empty()) {
+                tree.insert(currentWord);
+                currentWord.clear();
+            }
         }
     }
     if (!currentWord.empty()) {
