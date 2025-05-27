@@ -9,7 +9,7 @@ template <typename T>
 class BST {
  private:
   struct Node {
-    explicit Node(const T& k) 
+    explicit Node(const T& k)
       : key(k), count(1), left(nullptr), right(nullptr) {}
     T key;
     int count;
