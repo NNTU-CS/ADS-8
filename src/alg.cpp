@@ -1,10 +1,10 @@
 // Copyright 2021 NNTU-CS
+#include "../include/bst.h"
+#include <cctype>
 #include  <iostream>
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
-#include "../include/bst.h"
-#include <cctype>
 #include <string>
 #include <algorithm>
 void makeTree(BST<std::string>& tree, const char* filename) {
