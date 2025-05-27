@@ -30,8 +30,8 @@ class BST {
         return node;
     }
     int depthRec(Node* node) const {
-        if (!node) return 0;
-        return 1 + std::max(depthRec(node->left), depthRec(node->right));
+     if (!node) return -1;
+     return std::max(depthRec(node->left), depthRec(node->right)) + 1;
     }
     Node* searchRec(Node* node, const T& key) const {
         if (!node || node->key == key) return node;
