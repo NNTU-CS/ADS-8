@@ -4,8 +4,12 @@
 #include  <locale>
 #include  <cstdlib>
 #include  "bst.h"
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <utility>
 
-void makeTree(BST<std::string>& tree, const char* filename) {  
+void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
   if (!file) {
       std::cout << "File error!" << std::endl;
@@ -27,7 +31,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   if (!currentWord.empty()) {
       tree.insert(currentWord);
   }
-    
+  
   file.close();
 }
-
