@@ -8,8 +8,18 @@
 
 template<typename T>
 class BST {
+ private:
+  struct Node {
+    T key;
+    int count;
+    Node* left;
+    Node* right;
+    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+  };
+  Node* root = nullptr;
+
  public:
-  BST() : root(nullptr) {}
+  BST() = default;
   ~BST() { destroy(root); }
 
   void insert(const T& value) { root = insert(root, value); }
@@ -26,15 +36,6 @@ class BST {
   Node* getRoot() const { return root; }
 
  private:
-  struct Node {
-    T key;
-    int count;
-    Node* left;
-    Node* right;
-    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
-  };
-  Node* root = nullptr;
-
   Node* insert(Node* node, const T& value) {
     if (!node) return new Node(value);
     if (value < node->key)
