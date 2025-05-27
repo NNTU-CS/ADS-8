@@ -26,3 +26,16 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     }
     file.close();
 }
+void printFreq(BST<std::string>& tree) {
+    auto elements = tree.getAll();
+    std::sort(elements.begin(), elements.end(),
+              [](const auto& a, const auto& b) {
+                  return a.second > b.second || (a.second == b.second && a.first < b.first);
+              });
+    std::ofstream outFile("result/freq.txt");
+    for (const auto& pair : elements) {
+        std::cout << pair.first << " " << pair.second << std::endl;
+        if (outFile) outFile << pair.first << " " << pair.second << std::endl;
+    }
+    outFile.close();
+}
