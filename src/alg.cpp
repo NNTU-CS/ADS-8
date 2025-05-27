@@ -1,20 +1,17 @@
 // Copyright 2021 NNTU-CS
-#include "bst.h"
-
 #include <cctype>
 #include <cstdlib>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 #include <algorithm>
 
+#include "bst.h"
+
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream in(filename);
-  if (!in) {
-    std::cerr << "File error: cannot open " << filename << "\n";
-    return;
-  }
+  if (!in) return;
 
   std::string word;
   char ch;
@@ -28,14 +25,12 @@ void makeTree(BST<std::string>& tree, const char* filename) {
       }
     }
   }
-  if (!word.empty()) {
-    tree.insert(word);
-  }
+  if (!word.empty()) tree.insert(word);
 }
 
 void printFreq(BST<std::string>& tree) {
   std::vector<std::pair<std::string, int>> freq;
-  tree.traverseInOrder([&freq](const std::string& w, int c) {
+  tree.traverseInOrder([&](const std::string& w, int c) {
     freq.emplace_back(w, c);
   });
 
@@ -43,13 +38,10 @@ void printFreq(BST<std::string>& tree) {
             [](auto& a, auto& b) { return a.second > b.second; });
 
   std::ofstream out("result/freq.txt");
-  if (!out) {
-    std::cerr << "File error: cannot open result/freq.txt for writing\n";
-    return;
-  }
-  for (const auto& p : freq) {
+  for (auto& p : freq) {
     std::cout << p.first << "\t" << p.second << "\n";
     out << p.first << "\t" << p.second << "\n";
   }
 }
+
 
