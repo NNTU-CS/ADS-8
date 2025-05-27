@@ -7,15 +7,17 @@
 
 template <typename T>
 class BST {
-private:
-    struct Node {
-        T key;
-        int count;
-        Node* left;
-        Node* right;
-        Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
-    };
-    Node* root;
+ private:
+  struct Node {
+    explicit Node(const T& k) 
+      : key(k), count(1), left(nullptr), right(nullptr) {}
+    T key;
+    int count;
+    Node* left;
+    Node* right;
+  };
+
+  Node* root;
     Node* insertRec(Node* node, const T& key) {
         if (!node) return new Node(key);
         if (key == node->key) {
@@ -47,7 +49,8 @@ private:
         deleteTree(node->right);
         delete node;
     }
-public:
+
+ public:
     BST() : root(nullptr) {}
     ~BST() { deleteTree(root); }
     void insert(const T& key) { root = insertRec(root, key); }
