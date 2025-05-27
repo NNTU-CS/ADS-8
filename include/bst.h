@@ -19,30 +19,21 @@ private:
     };
     Node* root;
 
-    // Рекурсивная вставка или увеличение счётчика
     Node* insert(Node* node, const T& value) {
-        if (!node) {
-            return new Node(value);
-        }
-        if (value < node->key) {
-            node->left = insert(node->left, value);
-        } else if (value > node->key) {
-            node->right = insert(node->right, value);
-        } else {
-            ++node->count;
-        }
+        if (!node) return new Node(value);
+        if (value < node->key) node->left = insert(node->left, value);
+        else if (value > node->key) node->right = insert(node->right, value);
+        else ++node->count;
         return node;
     }
 
-    // Рекурсивный поиск узла
     Node* search(Node* node, const T& value) const {
         if (!node) return nullptr;
-        if (value < node->key)      return search(node->left, value);
-        else if (value > node->key) return search(node->right, value);
-        else                         return node;
+        if (value < node->key) return search(node->left, value);
+        if (value > node->key) return search(node->right, value);
+        return node;
     }
 
-    // Рекурсивный подсчёт глубины (высоты)
     int depth(Node* node) const {
         if (!node) return 0;
         int dl = depth(node->left);
@@ -50,7 +41,6 @@ private:
         return std::max(dl, dr) + 1;
     }
 
-    // In-order обход с вызовом visitor(key,count)
     template<typename Vis>
     void traverseInOrder(Node* node, Vis vis) const {
         if (!node) return;
@@ -59,7 +49,6 @@ private:
         traverseInOrder(node->right, vis);
     }
 
-    // Удаление всех узлов
     void destroy(Node* node) {
         if (!node) return;
         destroy(node->left);
@@ -71,28 +60,25 @@ public:
     BST() : root(nullptr) {}
     ~BST() { destroy(root); }
 
-    // Внешний метод вставки
     void insert(const T& value) {
         root = insert(root, value);
     }
 
-    // Внешний метод поиска
-    bool search(const T& value) const {
-        return search(root, value) != nullptr;
+    int search(const T& value) const {
+        Node* n = search(root, value);
+        return n ? n->count : 0;
     }
 
-    // Внешний метод глубины
     int depth() const {
-        return depth(root);
+        if (!root) return 0;
+        return depth(root) - 1;
     }
 
-    // Внешний in-order обход
     template<typename Vis>
     void traverseInOrder(Vis vis) const {
         traverseInOrder(root, vis);
     }
 
-    // Доступ к корню (для внешних функций)
     Node* getRoot() const {
         return root;
     }
