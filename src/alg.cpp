@@ -16,7 +16,7 @@ bool compareFrequency(const std::pair<std::string, int>& a, const std::pair<std:
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cerr << "Error: Could not open file " << filename << std::endl;
+        std::cerr << "Ошибка: не удалось открыть файл '" << filename << "' для чтения." << std::endl;
         return;
     }
 
@@ -47,22 +47,21 @@ void printFreq(BST<std::string>& tree) {
 
     std::sort(word_frequencies.begin(), word_frequencies.end(), compareFrequency);
 
-    std::cout << "Word Frequencies (Descending Order):" << std::endl;
+    std::cout << "Частотный анализ слов (по убыванию встречаемости):" << std::endl;
     for (const auto& pair : word_frequencies) {
         std::cout << pair.first << ": " << pair.second << std::endl;
     }
 
     std::ofstream outfile("result/freq.txt");
     if (!outfile.is_open()) {
-        std::cerr << "Error: Could not open file result/freq.txt for writing." << std::endl;
+        std::cerr << "Ошибка: не получилось открыть файл 'result/freq.txt' для записи результатов." << std::endl;
         return;
     }
 
-    outfile << "Word Frequencies (Descending Order):" << std::endl;
+    outfile << "Частотный анализ слов (по убыванию встречаемости):" << std::endl;
     for (const auto& pair : word_frequencies) {
         outfile << pair.first << ": " << pair.second << std::endl;
     }
 
     outfile.close();
-    std::cout << "\nFrequencies also saved to result/freq.txt" << std::endl;
 }
