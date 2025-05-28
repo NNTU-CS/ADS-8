@@ -3,6 +3,9 @@
 #define INCLUDE_BST_H_
 
 #include <iostream>
+#include <vector>
+#include <utility>
+
 template <typename T>
 struct Node {
     T value;
