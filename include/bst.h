@@ -7,15 +7,16 @@
 
 template <typename T>
 class BST {
-private:
+ public:
   struct Node {
     T key;
     int count;
     Node* left;
     Node* right;
-    Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
 
+ private:
   Node* root;
 
   Node* insert(Node* node, T value) {
@@ -70,7 +71,7 @@ private:
     }
   }
 
-public:
+ public:
   BST() : root(nullptr) {}
   ~BST() { destroyTree(root); }
 
