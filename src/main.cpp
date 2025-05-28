@@ -1,5 +1,6 @@
 // Copyright 2021 NNTU-CS
 #include <iostream>
+#include <string>
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename);
@@ -22,25 +23,25 @@ int main() {
     printFreq(word_tree);
 
     std::string test_word1 = "war";
-    Node<std::string>* found_node1 = word_tree.search(test_word1);
-    if (found_node1) {
-        std::cout << "Word \"" << test_word1 << "\" found with frequency: " << found_node1->count << std::endl;
+    int count1 = word_tree.search(test_word1); // search теперь возвращает int
+    if (count1 > 0) {
+        std::cout << "Word \"" << test_word1 << "\" found with frequency: " << count1 << std::endl;
     } else {
         std::cout << "Word \"" << test_word1 << "\" not found." << std::endl;
     }
 
     std::string test_word2 = "peace";
-    Node<std::string>* found_node2 = word_tree.search(test_word2);
-    if (found_node2) {
-        std::cout << "Word \"" << test_word2 << "\" found with frequency: " << found_node2->count << std::endl;
+    int count2 = word_tree.search(test_word2); // search теперь возвращает int
+    if (count2 > 0) {
+        std::cout << "Word \"" << test_word2 << "\" found with frequency: " << count2 << std::endl;
     } else {
         std::cout << "Word \"" << test_word2 << "\" not found." << std::endl;
     }
-    
+    // Удален лишний пробел в конце следующей строки
     std::string test_word_nonexistent = "zubr";
-    Node<std::string>* found_node3 = word_tree.search(test_word_nonexistent);
-    if (found_node3) {
-        std::cout << "Word \"" << test_word_nonexistent << "\" found with frequency: " << found_node3->count << std::endl;
+    int count3 = word_tree.search(test_word_nonexistent); // search теперь возвращает int
+    if (count3 > 0) {
+        std::cout << "Word \"" << test_word_nonexistent << "\" found with frequency: " << count3 << std::endl;
     } else {
         std::cout << "Word \"" << test_word_nonexistent << "\" not found." << std::endl;
     }
