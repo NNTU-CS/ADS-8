@@ -16,6 +16,9 @@ template <typename T>
 class BST {
 public:
     BST() : root_(nullptr) {}
+    void getWordsAndFrequencies(std::vector<std::pair<T, int>>& freqVec) const {
+        getWordsAndFrequenciesRec(root_, freqVec);
+    }
     void insert(const T& value) {
         root_ = insertRec(root_, value);
     }
@@ -71,6 +74,14 @@ private:
         printFreqRec(node->left, os);
         os << node->value << ": " << node->count << std::endl;
         printFreqRec(node->right, os);
+    }
+    void getWordsAndFrequenciesRec(const Node<T>* node, std::vector<std::pair<T, int>>& freqVec) const {
+        if (node == nullptr) {
+            return;
+        }
+        getWordsAndFrequenciesRec(node->left, freqVec);
+        freqVec.push_back({node->value, node->count});
+        getWordsAndFrequenciesRec(node->right, freqVec);
     }
 };
 
