@@ -1,9 +1,12 @@
 // Copyright 2021 NNTU-CS
 #include  <iostream>
 #include  <fstream>
-#include  <locale>
-#include  <cstdlib>
 #include  "bst.h"
+#include <algorithm>
+#include <cctype>
+#include <string>
+#include <utility>
+#include <vector>
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
@@ -31,7 +34,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 void printFreq(BST<std::string>& tree) {
   std::vector<std::pair<std::string, int>> words;
 
-  auto collectWords = [&words](BST<std::string>::Node* node) {
+  auto collectWords = [&words](typename BST<std::string>::Node* node) {
     words.emplace_back(node->key, node->count);
   };
 
