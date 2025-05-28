@@ -5,7 +5,7 @@
 
 int main() {
     BST<std::string> tree;
-    const char* filename = "src/war_peace.txt";
+    const char* filename = "/home/runner/work/ADS-8/ADS-8/build/test/war_peace.txt";
     makeTree(tree, filename);
     printFreq(tree);
     return 0;
