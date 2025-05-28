@@ -33,8 +33,13 @@ class BST {
         root_ = insertRecursive(root_, value);
     }
 
-    Node<T>* search(const T& value) const {
-        return searchRecursive(root_, value);
+    // Измененный метод search, возвращает частоту слова (int) или 0, если не найдено
+    int search(const T& value) const {
+        Node<T>* found_node = searchNodeRecursive(root_, value);
+        if (found_node != nullptr) {
+            return found_node->count;
+        }
+        return 0;
     }
 
     int depth() const {
@@ -63,15 +68,16 @@ class BST {
         return node;
     }
 
-    Node<T>* searchRecursive(Node<T>* node, const T& value) const {
+    // Рекурсивный помощник для поиска узла
+    Node<T>* searchNodeRecursive(Node<T>* node, const T& value) const {
         if (node == nullptr || node->key == value) {
             return node;
         }
 
         if (value < node->key) {
-            return searchRecursive(node->left, value);
+            return searchNodeRecursive(node->left, value);
         } else {
-            return searchRecursive(node->right, value);
+            return searchNodeRecursive(node->right, value);
         }
     }
 
