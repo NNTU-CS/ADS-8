@@ -33,7 +33,6 @@ class BST {
         root_ = insertRecursive(root_, value);
     }
 
-    // Измененный метод search, возвращает частоту слова (int) или 0, если не найдено
     int search(const T& value) const {
         Node<T>* found_node = searchNodeRecursive(root_, value);
         if (found_node != nullptr) {
@@ -43,7 +42,10 @@ class BST {
     }
 
     int depth() const {
-        return depthRecursive(root_);
+        if (root_ == nullptr) {
+            return 0;
+        }
+        return depthRecursive(root_) - 1;
     }
 
     void getWordFrequencies(std::vector<std::pair<T, int>>& vec) const {
@@ -68,7 +70,6 @@ class BST {
         return node;
     }
 
-    // Рекурсивный помощник для поиска узла
     Node<T>* searchNodeRecursive(Node<T>* node, const T& value) const {
         if (node == nullptr || node->key == value) {
             return node;
