@@ -40,9 +40,10 @@ void treeToVector(const Node<std::string>* node, std::vector<std::pair<std::stri
 }
 void printFreq(BST<std::string>& tree) {
     std::vector<std::pair<std::string, int>> freqVec;
-    treeToVector(tree.root_, freqVec);
+    tree.getWordsAndFrequencies(freqVec);
     std::sort(freqVec.begin(), freqVec.end(),
             [](const auto& a, const auto& b) { return a.second > b.second; });
+
     std::ofstream os("result/freq.txt");
     for (const auto& pair : freqVec) {
         os << pair.first << ": " << pair.second << std::endl;
