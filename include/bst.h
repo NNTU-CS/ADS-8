@@ -8,7 +8,7 @@
 
 template <typename T>
 class BST {
-private:
+ private:
   struct Node {
     T key;
     int count;
@@ -48,10 +48,10 @@ private:
   }
 
   int depth_helper(Node* node) {
-    if (!node) return 0;
-    int left_depth = depth(node->left);
-    int right_depth = depth(node->right);
-    return (right_depth > left_depth ? right_depth : left_depth);
+    if (!node) return -1;
+    int left_depth = depth_helper(node->left);
+    int right_depth = depth_helper(node->right);
+    return 1 + (right_depth > left_depth ? right_depth : left_depth);
   }
 
   void build(Node* node, std::vector<std::pair<T, int>>& map) {
@@ -61,7 +61,7 @@ private:
     build(node->right, map);
   }
 
-public:
+ public:
   BST() : root(nullptr) {}
   ~BST() { delete_tree(root); }
   void insert(const T& word) { root = insert_helper(root, word); }
