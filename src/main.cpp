@@ -2,5 +2,14 @@
 #include "bst.h"
 
 int main() {
-    return 0;
+  BST<std::string> tree;
+  const char* filename = "src/war_peace.txt";
+
+  makeTree(tree, filename);
+
+  std::cout << "Tree depth: " << tree.depth() << std::endl;
+  printFreq(tree);
+
+  return 0;
 }
+
