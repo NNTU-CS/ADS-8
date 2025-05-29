@@ -63,14 +63,17 @@ class BST {
     delete node;
   }
 
- public:
+public:
   BST() : root_(nullptr) {}
 
   ~BST() { destroy(root_); }
 
   void insert(const T& key) { insert(root_, key); }
 
-  bool search(const T& key) const { return search(root_, key) != nullptr; }
+  int search(const T& key) const {
+    Node* node = search(root_, key);
+    return node ? node->count : 0;
+  }
 
   int depth() const { return depth(root_); }
 
@@ -82,5 +85,3 @@ class BST {
 };
 
 #endif  // INCLUDE_BST_H_
-
-
