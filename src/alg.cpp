@@ -1,57 +1,53 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
-#include <fstream>
+#include <algorithm>
 #include <cctype>
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
-#include <utility>
-#include <algorithm>
+
 #include "bst.h"
 
-void makeTree(BST<std::string>& tree, const char* filename) {
+void makeTree(bst::BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
-  if (!file) {
-    std::cout << "File error!" << std::endl;
+  if (!file.is_open()) {
+    std::cerr << "File error!" << std::endl;
     return;
   }
 
   std::string word;
   char ch;
-
   while (file.get(ch)) {
     if (std::isalpha(static_cast<unsigned char>(ch))) {
-      word += std::tolower(ch);
-    } else if (!word.empty()) {
-      tree.insert(word);
-      word.clear();
+      word += static_cast<char>(std::tolower(ch));
+    } else {
+      if (!word.empty()) {
+        tree.insert(word);
+        word.clear();
+      }
     }
   }
 
   if (!word.empty()) {
     tree.insert(word);
   }
-
-  file.close();
 }
 
-void printFreq(BST<std::string>& tree) {
-  auto elements = tree.getAllElements();
+void printFreq(bst::BST<std::string>& tree) {
+  std::vector<std::pair<std::string, int>> words = tree.toVector();
 
-  std::sort(elements.begin(), elements.end(),
+  std::sort(words.begin(), words.end(),
             [](const auto& a, const auto& b) {
               return b.second < a.second;
             });
 
-  std::ofstream out("result/freq.txt");
-  if (!out) {
-    std::cout << "Cannot write result!" << std::endl;
-    return;
+  std::ofstream fout("result/freq.txt");
+
+  for (const auto& [word, count] : words) {
+    std::cout << word << ": " << count << '\n';
+    fout << word << ": " << count << '\n';
   }
 
-  for (const auto& pair : elements) {
-    std::cout << std::setw(20) << std::left << pair.first << ": " << pair.second << std::endl;
-    out << pair.first << ": " << pair.second << '\n';
-  }
-
-  out.close();
+  fout.close();
 }
