@@ -1,0 +1,59 @@
+// Copyright 2021 NNTU-CS
+#include <iostream>
+#include <fstream>
+#include <locale>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <utility>
+#include "bst.h"
+
+// Builds a BST from words in a text file
+void makeTree(BST<std::string>& tree, const char* filename) {
+  std::ifstream file(filename);
+  if (!file.is_open()) {
+    std::cerr << "Error: " << filename << std::endl;
+    return;
+  }
+
+  std::string word;
+  char symbol;
+  while (file.get(symbol)) {
+    if (isalpha(symbol)) {
+      word += tolower(symbol);
+    } else if (!word.empty()) {
+      tree.insert(word);
+      word.clear();
+    }
+  }
+
+  if (!word.empty()) {
+    tree.insert(word);
+  }
+
+  file.close();
+}
+
+// Comparator function for sorting word frequencies in descending order
+bool compareFrequencies(const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
+  return a.second > b.second;
+}
+
+// Prints word frequencies sorted by occurrence count (descending)
+void printFreq(BST<std::string>& tree) {
+  std::vector<std::pair<std::string, int>> frequencies = tree.getFrequencies();
+  std::sort(frequencies.begin(), frequencies.end(), compareFrequencies);
+
+  std::ofstream outputFile("result/freq.txt");
+  if (!outputFile.is_open()) {
+    std::cerr << "Error opening result file!" << std::endl;
+    return;
+  }
+
+  for (const auto& pair : frequencies) {
+    std::cout << pair.first << " - " << pair.second << std::endl;
+    outputFile << pair.first << " - " << pair.second << std::endl;
+  }
+
+  outputFile.close();
+}
