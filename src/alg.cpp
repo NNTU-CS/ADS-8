@@ -17,9 +17,10 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
   std::string word;
   char ch;
+
   while (file.get(ch)) {
-    if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) {
-      word += std::tolower(static_cast<unsigned char>(ch));
+    if (std::isalpha(static_cast<unsigned char>(ch))) {
+      word += std::tolower(ch);
     } else if (!word.empty()) {
       tree.insert(word);
       word.clear();
@@ -37,22 +38,20 @@ void printFreq(BST<std::string>& tree) {
   auto elements = tree.getAllElements();
 
   std::sort(elements.begin(), elements.end(),
-            [](const std::pair<std::string, int>& a,
-               const std::pair<std::string, int>& b) {
+            [](const auto& a, const auto& b) {
               return b.second < a.second;
             });
 
   std::ofstream out("result/freq.txt");
   if (!out) {
-    std::cout << "Cannot open result/freq.txt" << std::endl;
+    std::cout << "Cannot write result!" << std::endl;
     return;
   }
 
-  for (const auto& [word, count] : elements) {
-    std::cout << word << ": " << count << std::endl;
-    out << word << ": " << count << std::endl;
+  for (const auto& pair : elements) {
+    std::cout << std::setw(20) << std::left << pair.first << ": " << pair.second << std::endl;
+    out << pair.first << ": " << pair.second << '\n';
   }
 
   out.close();
 }
-
