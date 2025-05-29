@@ -103,6 +103,6 @@ class BST {
   }
 };
 
-}  // namespace bst
+}
 
 #endif  // INCLUDE_BST_H_
