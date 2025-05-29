@@ -9,7 +9,7 @@
 
 #include "bst.h"
 
-void makeTree(bst::BST<std::string>& tree, const char* filename) {
+void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
   if (!file.is_open()) {
     std::cerr << "File error!" << std::endl;
@@ -28,13 +28,12 @@ void makeTree(bst::BST<std::string>& tree, const char* filename) {
       }
     }
   }
-
   if (!word.empty()) {
     tree.insert(word);
   }
 }
 
-void printFreq(bst::BST<std::string>& tree) {
+void printFreq(BST<std::string>& tree) {
   std::vector<std::pair<std::string, int>> words = tree.toVector();
 
   std::sort(words.begin(), words.end(),
