@@ -18,21 +18,19 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
   std::string word;
   char ch;
-
   while (file.get(ch)) {
     if (std::isalpha(static_cast<unsigned char>(ch))) {
-      word += std::tolower(static_cast<unsigned char>(ch));
-    } else if (!word.empty()) {
-      tree.insert(word);
-      word.clear();
+      word += static_cast<char>(std::tolower(ch));
+    } else {
+      if (!word.empty()) {
+        tree.insert(word);
+        word.clear();
+      }
     }
   }
-
   if (!word.empty()) {
     tree.insert(word);
   }
-
-  file.close();
 }
 
 void printFreq(BST<std::string>& tree) {
