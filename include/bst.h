@@ -2,8 +2,6 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <iostream>
-#include <string>
 #include <vector>
 #include <algorithm>
 
@@ -19,72 +17,64 @@ class BST {
     explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
 
-  Node* root;
+  Node* root_;
 
   void insert(Node*& node, const T& key) {
     if (!node) {
       node = new Node(key);
+    } else if (key == node->key) {
+      node->count++;
     } else if (key < node->key) {
       insert(node->left, key);
-    } else if (key > node->key) {
-      insert(node->right, key);
     } else {
-      node->count++;
+      insert(node->right, key);
     }
   }
 
-  int search(Node* node, const T& key) const {
-    if (!node) return 0;
-    if (key < node->key) {
-      return search(node->left, key);
-    } else if (key > node->key) {
-      return search(node->right, key);
-    } else {
-      return node->count;
-    }
+  Node* search(Node* node, const T& key) const {
+    if (!node) return nullptr;
+    if (key == node->key) return node;
+    return key < node->key ? search(node->left, key) : search(node->right, key);
   }
 
   int depth(Node* node) const {
     if (!node) return 0;
-    int left_depth = depth(node->left);
-    int right_depth = depth(node->right);
-    return 1 + std::max(left_depth, right_depth);
+    return 1 + std::max(depth(node->left), depth(node->right));
   }
 
-  void inOrder(Node* node, std::vector<std::pair<T, int>>& result) const {
+  void inorder(Node* node, std::vector<std::pair<T, int>>& result) const {
     if (!node) return;
-    inOrder(node->left, result);
-    result.push_back({node->key, node->count});
-    inOrder(node->right, result);
+    inorder(node->left, result);
+    result.emplace_back(node->key, node->count);
+    inorder(node->right, result);
   }
 
-  void clear(Node* node) {
+  void destroy(Node* node) {
     if (!node) return;
-    clear(node->left);
-    clear(node->right);
+    destroy(node->left);
+    destroy(node->right);
     delete node;
   }
 
  public:
-  BST() : root(nullptr) {}
-  ~BST() { clear(root); }
+  BST() : root_(nullptr) {}
 
-  void insert(const T& key) {
-    insert(root, key);
-  }
+  ~BST() { destroy(root_); }
+
+  void insert(const T& key) { insert(root_, key); }
 
   int search(const T& key) const {
-    return search(root, key);
+    Node* node = search(root_, key);
+    return node ? node->count : 0;
   }
 
-  int depth() const {
-    return depth(root);
-  }
+  int depth() const { return depth(root_); }
 
-  std::vector<std::pair<T, int>> getAllElements() const {
+  std::vector<std::pair<T, int>> toVector() const {
     std::vector<std::pair<T, int>> result;
-    inOrder(root, result);
+    inorder(root_, result);
     return result;
   }
 };
+
 #endif  // INCLUDE_BST_H_
