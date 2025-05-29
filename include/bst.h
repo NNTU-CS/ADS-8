@@ -1,11 +1,6 @@
 // Copyright 2021 NNTU-CS
-#ifndef INCLUDE_BST_H_
-#define INCLUDE_BST_H_
-
 #include <string>
 #include <vector>
-
-namespace bst {
 
 template <typename T>
 class BST {
@@ -103,7 +98,5 @@ class BST {
     return result;
   }
 };
-
-}  // namespace bst
 
 #endif  // INCLUDE_BST_H_
