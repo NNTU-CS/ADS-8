@@ -7,7 +7,7 @@
 
 template <typename T>
 class BST {
-private:
+ private:
   struct Node {
     T value;
     int count;
@@ -25,7 +25,7 @@ private:
   }
 
   int depth(Node* node) const {
-    if (!node) return -1;  // IMPORTANT: пустое поддерево даёт -1
+    if (!node) return -1;  // Пустое поддерево даёт -1
     int leftDepth = depth(node->left);
     int rightDepth = depth(node->right);
     return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
@@ -60,7 +60,7 @@ private:
     inOrder(node->right, result);
   }
 
-public:
+ public:
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
 
@@ -79,13 +79,12 @@ public:
   void getAll(std::vector<std::pair<T, int>>& result) const {
     inOrder(root, result);
   }
+
   std::vector<std::pair<T, int>> toVector() const {
     std::vector<std::pair<T, int>> result;
     inOrder(root, result);
     return result;
   }
-
 };
 
 #endif  // INCLUDE_BST_H_
-
