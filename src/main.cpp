@@ -12,7 +12,7 @@ int main() {
 
   makeTree(tree, filename);
 
-  std::cout << "Tree depth: " << tree.depth() << std::endl;
+  std::cout << "Depth: " << tree.depth() << std::endl;
   printFreq(tree);
 
   return 0;
