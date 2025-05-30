@@ -8,13 +8,13 @@
 
 template <typename T>
 class BST {
-private:
+ private:
     struct Node {
     T value;
     int freq;
     Node* left;
     Node* right;
-    Node(const T& v) : value(v), freq(1), left(nullptr), right(nullptr) {}
+    explicit Node(const T& v) : value(v), freq(1), left(nullptr), right(nullptr) {}
     };
     Node* root;
     int getDepth(Node* node) {
@@ -23,7 +23,8 @@ private:
     int right = getDepth(node->right);
     return 1 + (left > right ? left : right);
     }
-public:
+
+ public:
     BST() : root(nullptr) {}
     ~BST() {
         std::stack<Node*> stack;
@@ -101,4 +102,5 @@ public:
     BST(const BST&) = delete;
     BST& operator=(const BST&) = delete;
 };
+
 #endif  // INCLUDE_BST_H_

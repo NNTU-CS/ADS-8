@@ -2,6 +2,7 @@
 #include  <iostream>
 #include  <fstream>
 #include  "bst.h"
+#include <string>
 
 void makeTree(BST<std::string>& tree, const char* fi_name) {
     std::ifstream fi(fi_name);
@@ -40,4 +41,5 @@ void printFreq(BST<std::string>& tree) {
         outFile << pair.first << " " << pair.second << std::endl;
     }
     outFile.close();
+    
 }
