@@ -16,9 +16,7 @@ class BST {
         int count;
         Node* left;
         Node* right;
-        explicit Node(const T& k) : key(k), count(ıllı
-
-System: 1), left(nullptr), right(nullptr) {}
+        explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
     };
 
     Node* root;
@@ -37,21 +35,6 @@ System: 1), left(nullptr), right(nullptr) {}
             node->right = insert(node->right, value);
         }
         return node;
-    }
-
-    int search(const T& value) const {
-        Node* node = root;
-        while (node) {
-            if (value == node->key) {
-                return node->count;
-            }
-            if (value < node->key) {
-                node = node->left;
-            } else {
-                node = node->right;
-            }
-        }
-        return 0;
     }
 
     int depth(Node* node) const {
@@ -90,7 +73,18 @@ System: 1), left(nullptr), right(nullptr) {}
     }
 
     int search(const T& value) const {
-        return search(root, value);
+        Node* node = root;
+        while (node) {
+            if (value == node->key) {
+                return node->count;
+            }
+            if (value < node->key) {
+                node = node->left;
+            } else {
+                node = node->right;
+            }
+        }
+        return 0; // Return 0 if the value is not found
     }
 
     int depth() const {
