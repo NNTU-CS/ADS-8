@@ -21,12 +21,12 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     if (std::isalpha(ch)) {
       word += static_cast<char>(std::tolower(ch));
     } else if (!word.empty()) {
-      tree.insert(word);
+      tree.addNode(word);
       word.clear();
     }
   }
   if (!word.empty())
-    tree.insert(word);
+    tree.addNode(word);
   file.close();
 }
 void printfFreq(BST<std::string>& tree) {
