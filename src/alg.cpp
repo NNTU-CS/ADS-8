@@ -6,28 +6,28 @@
 #include  "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-    std::ifstream fileStream(filename);
-    if (!fileStream) {
-        std::cerr << "Error opening file!" << std::endl;
-        return;
-    }
+  std::ifstream file(filename);
+  if (!file) {
+    std::cerr << "File error!" << std::endl;
+    return;
+  }
 
-    std::string tempWord;
-    char currentChar;
-    while (fileStream.get(currentChar)) {
-        if (isalpha(currentChar)) {
-            tempWord += tolower(currentChar);
-        } else if (!tempWord.empty()) {
-            wordTree.insert(tempWord);
-            tempWord.clear();
-        }
+  std::string currentWord;
+  char ch;
+  while (file.get(ch)) {
+    if (isalpha(ch)) {
+      currentWord += tolower(ch);
+    } else if (!currentWord.empty()) {
+      tree.insert(currentWord);
+      currentWord.clear();
     }
-    if (!tempWord.empty()) {
-        wordTree.insert(tempWord);
-    }
-    fileStream.close();
+  }
+  if (!currentWord.empty()) {
+    tree.insert(currentWord);
+  }
+  file.close();
 }
 
-void printFreq(BST<std::string>& wordTree) {
-    wordTree.printReverseInOrder();
+void printFreq(BST<std::string>& tree) {
+  tree.printReverseInOrder();
 }
