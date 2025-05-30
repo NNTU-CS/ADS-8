@@ -2,104 +2,111 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
+#include <algorithm>
 #include <iostream>
 #include <string>
-#include <algorithm>
 
 template <typename T>
 class BST {
-private:
-    struct TreeNode {
-        T dataValue;
-        int occurrenceCount;
-        TreeNode* leftChild;
-        TreeNode* rightChild;
-        TreeNode(T val) : dataValue(val), occurrenceCount(1), 
-                          leftChild(nullptr), rightChild(nullptr) {}
-    };
+ private:
+  struct TreeNode {
+    T dataValue;
+    int occurrenceCount;
+    TreeNode* leftChild;
+    TreeNode* rightChild;
+    explicit TreeNode(T val) : dataValue(val), occurrenceCount(1),
+                             leftChild(nullptr), rightChild(nullptr) {}
+  };
 
-    TreeNode* rootNode;
+  TreeNode* rootNode;
 
-    TreeNode* addNode(TreeNode* currentNode, T keyData) {
-        if (!currentNode) 
-            return new TreeNode(keyData);
-        if (keyData == currentNode->dataValue) {
-            currentNode->occurrenceCount++;
-            return currentNode;
-        }
-        if (keyData < currentNode->dataValue) {
-            currentNode->leftChild = addNode(currentNode->leftChild, keyData);
-        } else {
-            currentNode->rightChild = addNode(currentNode->rightChild, keyData);
-        }
-        return currentNode;
+  TreeNode* addNode(TreeNode* currentNode, T keyData) {
+    if (!currentNode) {
+      return new TreeNode(keyData);
     }
-
-    int computeDepth(TreeNode* nodePtr) {
-        if (!nodePtr) 
-            return 0;
-        int leftSubtreeDepth = computeDepth(nodePtr->leftChild);
-        int rightSubtreeDepth = computeDepth(nodePtr->rightChild);
-        return std::max(leftSubtreeDepth, rightSubtreeDepth) + 1;
+    if (keyData == currentNode->dataValue) {
+      currentNode->occurrenceCount++;
+      return currentNode;
     }
-
-    TreeNode* findNode(TreeNode* nodePtr, T keyData) {
-        if (!nodePtr || nodePtr->dataValue == keyData) 
-            return nodePtr;
-        if (keyData < nodePtr->dataValue) 
-            return findNode(nodePtr->leftChild, keyData);
-        return findNode(nodePtr->rightChild, keyData);
+    if (keyData < currentNode->dataValue) {
+      currentNode->leftChild = addNode(currentNode->leftChild, keyData);
+    } else {
+      currentNode->rightChild = addNode(currentNode->rightChild, keyData);
     }
+    return currentNode;
+  }
 
-    void traverseInOrder(TreeNode* nodePtr, std::ostream& outputStream) {
-        if (!nodePtr) 
-            return;
-        traverseInOrder(nodePtr->leftChild, outputStream);
-        outputStream << nodePtr->dataValue << ": " 
-                     << nodePtr->occurrenceCount << std::endl;
-        traverseInOrder(nodePtr->rightChild, outputStream);
+  int computeDepth(TreeNode* nodePtr) {
+    if (!nodePtr) {
+      return 0;
     }
+    int leftSubtreeDepth = computeDepth(nodePtr->leftChild);
+    int rightSubtreeDepth = computeDepth(nodePtr->rightChild);
+    return std::max(leftSubtreeDepth, rightSubtreeDepth) + 1;
+  }
 
-    void traverseReverseOrder(TreeNode* nodePtr, std::ostream& outputStream) {
-        if (!nodePtr) 
-            return;
-        traverseReverseOrder(nodePtr->rightChild, outputStream);
-        outputStream << nodePtr->dataValue << ": " 
-                     << nodePtr->occurrenceCount << std::endl;
-        traverseReverseOrder(nodePtr->leftChild, outputStream);
+  TreeNode* findNode(TreeNode* nodePtr, T keyData) {
+    if (!nodePtr || nodePtr->dataValue == keyData) {
+      return nodePtr;
     }
-
-    void deleteTree(TreeNode* nodePtr) {
-        if (!nodePtr) 
-            return;
-        deleteTree(nodePtr->leftChild);
-        deleteTree(nodePtr->rightChild);
-        delete nodePtr;
+    if (keyData < nodePtr->dataValue) {
+      return findNode(nodePtr->leftChild, keyData);
     }
+    return findNode(nodePtr->rightChild, keyData);
+  }
 
-public:
-    BST() : rootNode(nullptr) {}
-    ~BST() { deleteTree(rootNode); }
-
-    void insert(T keyData) {
-        rootNode = addNode(rootNode, keyData);
+  void traverseInOrder(TreeNode* nodePtr, std::ostream& outputStream) {
+    if (!nodePtr) {
+      return;
     }
+    traverseInOrder(nodePtr->leftChild, outputStream);
+    outputStream << nodePtr->dataValue << ": "
+                << nodePtr->occurrenceCount << std::endl;
+    traverseInOrder(nodePtr->rightChild, outputStream);
+  }
 
-    int depth() {
-        return computeDepth(rootNode);
+  void traverseReverseOrder(TreeNode* nodePtr, std::ostream& outputStream) {
+    if (!nodePtr) {
+      return;
     }
+    traverseReverseOrder(nodePtr->rightChild, outputStream);
+    outputStream << nodePtr->dataValue << ": "
+                << nodePtr->occurrenceCount << std::endl;
+    traverseReverseOrder(nodePtr->leftChild, outputStream);
+  }
 
-    bool search(T keyData) {
-        return findNode(rootNode, keyData) != nullptr;
+  void deleteTree(TreeNode* nodePtr) {
+    if (!nodePtr) {
+      return;
     }
+    deleteTree(nodePtr->leftChild);
+    deleteTree(nodePtr->rightChild);
+    delete nodePtr;
+  }
 
-    void printInOrder(std::ostream& outputStream = std::cout) {
-        traverseInOrder(rootNode, outputStream);
-    }
+ public:
+  BST() : rootNode(nullptr) {}
+  ~BST() { deleteTree(rootNode); }
 
-    void printReverseInOrder(std::ostream& outputStream = std::cout) {
-        traverseReverseOrder(rootNode, outputStream);
-    }
+  void insert(T keyData) {
+    rootNode = addNode(rootNode, keyData);
+  }
+
+  int depth() {
+    return computeDepth(rootNode);
+  }
+
+  bool search(T keyData) {
+    return findNode(rootNode, keyData) != nullptr;
+  }
+
+  void printInOrder(std::ostream& outputStream = std::cout) {
+    traverseInOrder(rootNode, outputStream);
+  }
+
+  void printReverseInOrder(std::ostream& outputStream = std::cout) {
+    traverseReverseOrder(rootNode, outputStream);
+  }
 };
 
 #endif  // INCLUDE_BST_H_
