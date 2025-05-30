@@ -50,7 +50,7 @@ class BST {
       inorderNode(node->left, result);
     }
   }
-  void clearNode(Node* node) {
+  static void clearNode(Node* node) {
     if (node) {
       clearNode(node->left);
       clearNode(node->right);
@@ -75,7 +75,7 @@ class BST {
   void getSorted(std::vector<std::pair<T, int>>& result) const {
     inorderNode(root, result);
   }
-  void clear() const {
+  void clear() {
    return clearNode(root);
   }
 };
