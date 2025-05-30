@@ -41,7 +41,7 @@ class BST {
     if (!node) return 0;
     int leftDepth = depthNode(node->left);
     int rightDepth = depthNode(node->right);
-    return std::max(leftDepth, rightDepth);
+    return 1 + std::max(leftDepth, rightDepth);
   }
   void inorderNode(Node* node, std::vector<std::pair<T, int>>& result) const {
     if (node) {
