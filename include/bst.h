@@ -5,6 +5,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <string>
 
 template <typename T>
 struct Node {
@@ -17,7 +18,7 @@ struct Node {
 
 template <typename T>
 class BST {
- private:
+private:
     Node<T>* root;
 
     Node<T>* insert(Node<T>* node, const T& key) {
@@ -34,9 +35,10 @@ class BST {
         return node;
     }
 
-    Node<T>* search(Node<T>* node, const T& key) const {
-        if (!node || node->key == key) return node;
-        return (key < node->key) ? search(node->left, key) : search(node->right, key);
+    Node<T>* searchNode(Node<T>* node, const T& key) const {
+        if (!node) return nullptr;
+        if (key == node->key) return node;
+        return key < node->key ? searchNode(node->left, key) : searchNode(node->right, key);
     }
 
     int depth(Node<T>* node) const {
@@ -59,13 +61,16 @@ class BST {
         inOrder(node->right, nodes);
     }
 
- public:
+public:
     BST() : root(nullptr) {}
     ~BST() { destroy(root); }
 
     void insert(const T& key) { root = insert(root, key); }
 
-    Node<T>* search(const T& key) const { return search(root, key); }
+    int search(const T& key) const {
+        Node<T>* node = searchNode(root, key);
+        return node ? node->count : 0;
+    }
 
     int depth() const { return depth(root); }
 
