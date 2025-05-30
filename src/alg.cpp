@@ -20,7 +20,9 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         if (isalpha(static_cast<unsigned char>(ch))) {
             word += tolower(static_cast<unsigned char>(ch));
         } else if (!word.empty()) {
-            tree.insert(word);
+            if (word.length() > 1 || (word[0] != 'a' && word[0] != 'i')) {
+                tree.insert(word);
+            }
             word.clear();
         }
     }
