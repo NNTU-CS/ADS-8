@@ -1,6 +1,8 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
-#include <string>
+#include  <iostream>
+#include  <string>
+#include  <algorithm>
+#include  <vector>
 
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
@@ -13,7 +15,8 @@ class BST {
     int count;
     Node* left;
     Node* right;
-    Node(const T& n) : value(n), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(const T& n) : value(n), count(1), left(nullptr),
+                              right(nullptr) {}
   };
   Node* root;
   Node* addNode(Node* node, const T& value) {
