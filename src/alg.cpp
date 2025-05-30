@@ -29,7 +29,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     tree.add(word);
   file.close();
 }
-void printfFreq(BST<std::string>& tree) {
+void printFreq(BST<std::string>& tree) {
   std::vector<std::pair<std::string, int>> result;
   tree.getSorted(result);
   std::ofstream outFile("result/freq.txt");
