@@ -12,12 +12,12 @@ struct Node {
     int count;
     Node* left;
     Node* right;
-    Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
 };
 
 template <typename T>
 class BST {
-private:
+ private:
     Node<T>* root;
 
     Node<T>* insert(Node<T>* node, const T& key) {
@@ -59,7 +59,7 @@ private:
         inOrder(node->right, nodes);
     }
 
-public:
+ public:
     BST() : root(nullptr) {}
     ~BST() { destroy(root); }
 
