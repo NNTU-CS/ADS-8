@@ -36,15 +36,15 @@ private:
         return node;
     }
 
-    Node* search(Node* node, const T& value) const {
-        if (!node) return nullptr;
+    int searchCount(Node* node, const T& value) const {
+        if (!node) return 0;
         
         if (value == node->key) {
-            return node;
+            return node->count;
         } else if (value < node->key) {
-            return search(node->left, value);
+            return searchCount(node->left, value);
         } else {
-            return search(node->right, value);
+            return searchCount(node->right, value);
         }
     }
 
@@ -79,12 +79,8 @@ public:
         return depth(root);
     }
 
-    std::pair<T, int> search(const T& value) const {
-        Node* found = search(root, value);
-        if (found) {
-            return {found->key, found->count};
-        }
-        return {T(), 0};
+    int search(const T& value) const {
+        return searchCount(root, value);
     }
 
     std::vector<std::pair<T, int>> inorder() const {
@@ -93,5 +89,4 @@ public:
         return result;
     }
 };
-
 #endif  // INCLUDE_BST_H_
