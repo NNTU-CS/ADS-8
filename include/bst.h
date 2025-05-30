@@ -4,94 +4,103 @@
 
 #include <iostream>
 #include <string>
-#include <utility>
-#include <vector>
 #include <algorithm>
+#include <functional>
 
 template <typename T>
 class BST {
+private:
+    // Узел дерева
+    struct Node {
+        T data;
+        int count;
+        Node* left;
+        Node* right;
 
- private:
-  struct Node {
-    T key;
-    int count;
-    Node* left;
-    Node* right;
+        Node(T value) : data(value), count(1), left(nullptr), right(nullptr) {}
+    };
 
-    Node(T k) : key(std::move(k)), count(1), left(nullptr), right(nullptr) {}
-  };
+    Node* root;
 
-  Node* root;
+    void insert(Node*& node, const T& value);
+    void inOrder(Node* node, std::vector<std::pair<T, int>>& freqList);
+    int depth(Node* node);
+    Node* search(Node* node, const T& value);
 
-  Node* insert(Node* node, const T& value) {
-    if (!node) return new Node(value);
-
-    if (value == node->key) {
-      node->count++;
-    } else if (value < node->key) {
-      node->left = insert(node->left, value);
-    } else {
-      node->right = insert(node->right, value);
-    }
-
-    return node;
-  }
-
-  int searchCount(Node* node, const T& value) const {
-    if (!node) return 0;
-
-    if (value == node->key) {
-      return node->count;
-    } else if (value < node->key) {
-      return searchCount(node->left, value);
-    } else {
-      return searchCount(node->right, value);
-    }
-  }
-
-  int depth(Node* node) const {
-    if (!node) return 0;
-    return 1 + std::max(depth(node->left), depth(node->right));
-  }
-
-  void inorder(Node* node, std::vector<std::pair<T, int>>& result) const {
-    if (!node) return;
-    inorder(node->left, result);
-    result.emplace_back(node->key, node->count);
-    inorder(node->right, result);
-  }
-
-  void clear(Node* node) {
-    if (!node) return;
-    clear(node->left);
-    clear(node->right);
-    delete node;
-  }
-
- public:
-  BST() : root(nullptr) {}
-  ~BST() { clear(root); }
-
-  void insert(const T& value) { root = insert(root, value); }
-
-  int depth() const { return depth(root); }
-
-  int search(const T& value) const { return searchCount(root, value); }
-
-  void insertBalanced(const std::vector<T>& sortedItems, int start, int end) {
-    if (start > end) return;
-
-    int mid = start + (end - start) / 2;
-    this->insert(sortedItems[mid]);
-
-    insertBalanced(sortedItems, start, mid - 1);
-    insertBalanced(sortedItems, mid + 1, end);
-  }
-
-  std::vector<std::pair<T, int>> inorder() const {
-    std::vector<std::pair<T, int>> result;
-    inorder(root, result);
-    return result;
-  }
+public:
+    BST() : root(nullptr) {}
+    void insert(const T& value);
+    void inOrder(std::vector<std::pair<T, int>>& freqList);
+    int depth();
+    Node* search(const T& value);
+    Node* getRoot() { return root; } // Метод для получения корня дерева
 };
+
+// Вставка в дерево
+template <typename T>
+void BST<T>::insert(const T& value) {
+    insert(root, value);
+}
+
+template <typename T>
+void BST<T>::insert(Node*& node, const T& value) {
+    if (node == nullptr) {
+        node = new Node(value);
+    } else if (value == node->data) {
+        node->count++; // Увеличиваем счетчик, если слово уже существует
+    } else if (value < node->data) {
+        insert(node->left, value);
+    } else {
+        insert(node->right, value);
+    }
+}
+
+// Обход дерева в порядке возрастания
+template <typename T>
+void BST<T>::inOrder(std::vector<std::pair<T, int>>& freqList) {
+    inOrder(root, freqList);
+}
+
+template <typename T>
+void BST<T>::inOrder(Node* node, std::vector<std::pair<T, int>>& freqList) {
+    if (node) {
+        inOrder(node->left, freqList);
+        freqList.emplace_back(node->data, node->count);
+        inOrder(node->right, freqList);
+    }
+}
+
+// Измерение глубины дерева
+template <typename T>
+int BST<T>::depth() {
+    return depth(root);
+}
+
+template <typename T>
+int BST<T>::depth(Node* node) {
+    if (node == nullptr) {
+        return 0;
+    } else {
+        int leftDepth = depth(node->left);
+        int rightDepth = depth(node->right);
+        return std::max(leftDepth, rightDepth) + 1;
+    }
+}
+
+// Поиск в дереве
+template <typename T>
+typename BST<T>::Node* BST<T>::search(const T& value) {
+    return search(root, value);
+}
+
+template <typename T>
+typename BST<T>::Node* BST<T>::search(Node* node, const T& value) {
+    if (node == nullptr || node->data == value) {
+        return node;
+    }
+    if (value < node->data) {
+        return search(node->left, value);
+    }
+    return search(node->right, value);
+}
 #endif  // INCLUDE_BST_H_
