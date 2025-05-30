@@ -65,7 +65,7 @@ class BST {
   int depth() const {
     return depthNode(root);
   }
-  void getSorted(std::vector<std::pair<T, value>>& result) const {
+  void getSorted(std::vector<std::pair<T, int>>& result) const {
     inorderNode(root, result);
   }
   void clear(Node* node) {
