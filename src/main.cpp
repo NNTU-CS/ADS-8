@@ -1,7 +1,8 @@
 // Copyright 2021 NNTU-CS
 #include <iostream>
+#include <string>
 #include "bst.h"
-#include "alg.cpp"
+#include "alg.h"
 
 int main() {
     BST<std::string> tree;
