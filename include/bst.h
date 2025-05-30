@@ -2,78 +2,108 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <iostream>
 #include <string>
+#include <iostream>
+#include <vector>
+#include <utility>
 
 template <typename T>
 class BST {
- private:
-  struct Node {
-    explicit Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
-    T key;
-    int count;
-    Node* left;
-    Node* right;
-  };
+private:
+    struct Node {
+        T key;
+        int count;
+        Node* left;
+        Node* right;
+        Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+    };
 
-  Node* root;
+    Node* root;
 
-  Node* insert(Node* node, T value) {
-    if (!node) return new Node(value);
-    if (value == node->key) {
-      node->count++;
-      return node;
+    Node* insert(Node* node, const T& value) {
+        if (!node) {
+            return new Node(value);
+        }
+        if (value == node->key) {
+            node->count++;
+            return node;
+        }
+        if (value < node->key) {
+            node->left = insert(node->left, value);
+        } else {
+            node->right = insert(node->right, value);
+        }
+        return node;
     }
-    if (value < node->key) {
-      node->left = insert(node->left, value);
-    } else {
-      node->right = insert(node->right, value);
+
+    Node* search(Node* node, const T& value) const {
+        if (!node || node->key == value) {
+            return node;
+        }
+        if (value < node->key) {
+            return search(node->left, value);
+        }
+        return search(node->right, value);
     }
-    return node;
-  }
 
-  Node* search(Node* node, T value) const {
-    if (!node || node->key == value) {
-      return node;
+    int depth(Node* node) const {
+        if (!node) {
+            return 0;
+        }
+        int leftDepth = depth(node->left);
+        int rightDepth = depth(node->right);
+        return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
     }
-    if (value < node->key) {
-      return search(node->left, value);
+
+    void collectFreq(Node* node, std::vector<std::pair<T, int>>& freqList) const {
+        if (!node) {
+            return;
+        }
+        collectFreq(node->left, freqList);
+        freqList.emplace_back(node->key, node->count);
+        collectFreq(node->right, freqList);
     }
-    return search(node->right, value);
-  }
 
-  int depth(Node* node) const {
-    if (!node) return 0;
-    int leftDepth = depth(node->left);
-    int rightDepth = depth(node->right);
-    return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
-  }
+    void clear(Node* node) {
+        if (!node) {
+            return;
+        }
+        clear(node->left);
+        clear(node->right);
+        delete node;
+    }
 
-  void printFreq(Node* node, std::ostream& out) const {
-    if (!node) return;
-    printFreq(node->right, out);
-    out << node->key << " " << node->count << std::endl;
-    printFreq(node->left, out);
-  }
+public:
+    BST() : root(nullptr) {}
+    ~BST() { clear(root); }
 
-  void clear(Node* node) {
-    if (!node) return;
-    clear(node->left);
-    clear(node->right);
-    delete node;
-  }
+    void insert(const T& value) {
+        root = insert(root, value);
+    }
 
- public:
-  BST() : root(nullptr) {}
-  ~BST() { clear(root); }
+    Node* search(const T& value) const {
+        return search(root, value);
+    }
 
-  void insert(T value) { root = insert(root, value); }
-  int search(T value) const {
-    Node* node = search(root, value);
-    return node ? node->count : 0;
-  }
-  int depth() const { return depth(root); }
-  void printFreq(std::ostream& out = std::cout) const { printFreq(root, out); }
+    int depth() const {
+        return depth(root);
+    }
+
+    void printFreq(std::ostream& out) const {
+        std::vector<std::pair<T, int>> freqList;
+        collectFreq(root, freqList);
+        // Sort by frequency in descending order, then lexicographically by word
+        std::sort(freqList.begin(), freqList.end(),
+            [](const auto& a, const auto& b) {
+                if (a.second != b.second) {
+                    return a.second > b.second;
+                }
+                return a.first < b.first;
+            });
+        for (const auto& pair : freqList) {
+            out << pair.first << " " << pair.second << "\n";
+        }
+    }
 };
 
-#endif  // INCLUDE_BST_H_
+#endif // INCLUDE_BST_H_
