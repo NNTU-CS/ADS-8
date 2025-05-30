@@ -6,16 +6,17 @@
 #include <iostream>
 #include <vector>
 #include <utility>
+#include <algorithm>
 
 template <typename T>
 class BST {
-private:
+ private:
     struct Node {
         T key;
         int count;
         Node* left;
         Node* right;
-        Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+        explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
     };
 
     Node* root;
@@ -73,7 +74,7 @@ private:
         delete node;
     }
 
-public:
+ public:
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
 
@@ -92,7 +93,6 @@ public:
     void printFreq(std::ostream& out) const {
         std::vector<std::pair<T, int>> freqList;
         collectFreq(root, freqList);
-        // Sort by frequency in descending order, then lexicographically by word
         std::sort(freqList.begin(), freqList.end(),
             [](const auto& a, const auto& b) {
                 if (a.second != b.second) {
