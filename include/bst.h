@@ -1,4 +1,4 @@
-// Copyright 2021 NNTU-CS
+﻿// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 #include <string>
@@ -101,5 +101,4 @@ class BST {
     }    BST(const BST&) = delete;
     BST& operator=(const BST&) = delete;
 };
-
 #endif  // INCLUDE_BST_H_

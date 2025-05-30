@@ -1,8 +1,9 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
-#include <fstream>
-#include <string>
-#include "bst.h"
+#include  <iostream>
+#include  <fstream>
+#include  <locale>
+#include  <cstdlib>
+#include  "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* fi_name) {
     std::ifstream fi(fi_name);
