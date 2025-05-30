@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 template <typename T>
 class BST {
@@ -37,12 +38,10 @@ class BST {
     return search(node->right, value);
   }
 
-  int depth(Node* node) const {
-    if (!node) return 0;
-    int left_depth = depth(node->left);
-    int right_depth = depth(node->right);
-    return 1 + (left_depth > right_depth ? left_depth : right_depth);
-  }
+int depth(Node* node) const {
+    if (node == nullptr) return -1;
+    return 1 + std::max(depth(node->left), depth(node->right));
+}
 
   void inorder(Node* node, std::vector<std::pair<T, int>>& result) const {
     if (!node) return;
