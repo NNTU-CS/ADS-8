@@ -47,6 +47,7 @@ class BST {
       inorderNode(node->left, result);
     }
   }
+
  public:
   BST() : root(nullptr) {}
   ~BST() {
