@@ -71,7 +71,8 @@ class BST {
     return result ? result->count : 0;
   }
   int depth() const {
-    return depthNode(root);
+    if (!root) return 0;
+    return depthNode(root) - 1;
   }
   void getSorted(std::vector<std::pair<T, int>>& result) const {
     inorderNode(root, result);
