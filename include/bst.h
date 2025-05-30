@@ -68,7 +68,10 @@ class BST {
   ~BST() { clear(root); }
 
   void insert(T value) { root = insert(root, value); }
-  Node* search(T value) const { return search(root, value); }
+  int searchCount(T value) const {
+    Node* node = search(root, value);
+    return node ? node->count : 0;
+  }
   int depth() const { return depth(root); }
   void printFreq(std::ostream& out = std::cout) const { printFreq(root, out); }
 };
