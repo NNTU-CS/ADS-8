@@ -1,21 +1,23 @@
 // Copyright 2021 NNTU-CS
 #include "bst.h"
-#include <fstream>
 
-void makeTree(BST<std::string>& wordTree, const char* filename);
-void printFreq(BST<std::string>& wordTree);
+#include <fstream>
+#include <string>
+
+void makeTree(BST<std::string>& tree, const char* filename);
+void printFreq(BST<std::string>& tree);
 
 int main() {
-    BST<std::string> frequencyTree;
-    const char* novelFile = "war_peace.txt";
+  BST<std::string> tree;
+  const char* filename = "war_peace.txt";
 
-    makeTree(frequencyTree, novelFile);
+  makeTree(tree, filename);
 
-    std::ofstream resultFile("result/freq.txt");
-    if (resultFile) {
-        frequencyTree.printReverseInOrder(resultFile);
-        resultFile.close();
-    }
+  std::ofstream outFile("result/freq.txt");
+  if (outFile) {
+    tree.printReverseInOrder(outFile);
+    outFile.close();
+  }
 
-    return 0;
+  return 0;
 }
