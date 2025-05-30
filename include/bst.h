@@ -7,70 +7,70 @@
 
 template <typename T>
 class BST {
-private:
-    struct Node {
-        T key;
-        int count;
-        Node* left;
-        Node* right;
-        Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
-    };
+ private:
+  struct Node {
+    explicit Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
+    T key;
+    int count;
+    Node* left;
+    Node* right;
+  };
 
-    Node* root;
+  Node* root;
 
-    Node* insert(Node* node, T value) {
-        if (!node) return new Node(value);
-        if (value == node->key) {
-            node->count++;
-            return node;
-        }
-        if (value < node->key) {
-            node->left = insert(node->left, value);
-        } else {
-            node->right = insert(node->right, value);
-        }
-        return node;
+  Node* insert(Node* node, T value) {
+    if (!node) return new Node(value);
+    if (value == node->key) {
+      node->count++;
+      return node;
     }
-
-    Node* search(Node* node, T value) const {
-        if (!node || node->key == value) {
-            return node;
-        }
-        if (value < node->key) {
-            return search(node->left, value);
-        }
-        return search(node->right, value);
+    if (value < node->key) {
+      node->left = insert(node->left, value);
+    } else {
+      node->right = insert(node->right, value);
     }
+    return node;
+  }
 
-    int depth(Node* node) const {
-        if (!node) return 0;
-        int leftDepth = depth(node->left);
-        int rightDepth = depth(node->right);
-        return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
+  Node* search(Node* node, T value) const {
+    if (!node || node->key == value) {
+      return node;
     }
-
-    void printFreq(Node* node, std::ostream& out) const {
-        if (!node) return;
-        printFreq(node->right, out);
-        out << node->key << " " << node->count << std::endl;
-        printFreq(node->left, out);
+    if (value < node->key) {
+      return search(node->left, value);
     }
+    return search(node->right, value);
+  }
 
-    void clear(Node* node) {
-        if (!node) return;
-        clear(node->left);
-        clear(node->right);
-        delete node;
-    }
+  int depth(Node* node) const {
+    if (!node) return 0;
+    int leftDepth = depth(node->left);
+    int rightDepth = depth(node->right);
+    return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
+  }
 
-public:
-    BST() : root(nullptr) {}
-    ~BST() { clear(root); }
+  void printFreq(Node* node, std::ostream& out) const {
+    if (!node) return;
+    printFreq(node->right, out);
+    out << node->key << " " << node->count << std::endl;
+    printFreq(node->left, out);
+  }
 
-    void insert(T value) { root = insert(root, value); }
-    Node* search(T value) const { return search(root, value); }
-    int depth() const { return depth(root); }
-    void printFreq(std::ostream& out = std::cout) const { printFreq(root, out); }
+  void clear(Node* node) {
+    if (!node) return;
+    clear(node->left);
+    clear(node->right);
+    delete node;
+  }
+
+ public:
+  BST() : root(nullptr) {}
+  ~BST() { clear(root); }
+
+  void insert(T value) { root = insert(root, value); }
+  Node* search(T value) const { return search(root, value); }
+  int depth() const { return depth(root); }
+  void printFreq(std::ostream& out = std::cout) const { printFreq(root, out); }
 };
 
 #endif  // INCLUDE_BST_H_
