@@ -39,7 +39,7 @@ class BST {
 
     int depth(Node* node) const {
         if (!node) {
-            return 0;
+            return -1;
         }
         int leftDepth = depth(node->left);
         int rightDepth = depth(node->right);
@@ -84,7 +84,7 @@ class BST {
                 node = node->right;
             }
         }
-        return 0; // Return 0 if the value is not found
+        return 0;
     }
 
     int depth() const {
