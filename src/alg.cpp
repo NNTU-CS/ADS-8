@@ -7,50 +7,48 @@
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-    std::ifstream file(filename);
-    if (!file) {
-        std::cerr << "File error!" << std::endl;
-        return;
+  std::ifstream file(filename);
+  if (!file) {
+    std::cerr << "File error!" << std::endl;
+    return;
+  }
+
+  std::string word;
+  char ch;
+
+  while (file.get(ch)) {
+    if (isalpha(static_cast<unsigned char>(ch))) {
+      word += tolower(static_cast<unsigned char>(ch));
+    } else if (!word.empty()) {
+      tree.insert(word);
+      word.clear();
     }
+  }
 
-    std::string word;
-    char ch;
-    bool in_word = false;
+  if (!word.empty()) {
+    tree.insert(word);
+  }
 
-    while (file.get(ch)) {
-        if (isalpha(static_cast<unsigned char>(ch))) {
-            word += tolower(static_cast<unsigned char>(ch));
-            in_word = true;
-        } else if (in_word) {
-            tree.insert(word);
-            word.clear();
-            in_word = false;
-        }
-    }
-
-    if (in_word) {
-        tree.insert(word);
-    }
-
-    file.close();
+  file.close();
 }
 
 void printFreq(BST<std::string>& tree) {
-    auto words = tree.getAllNodes();
-    
-    std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
-        return a.second > b.second || (a.second == b.second && a.first < b.first);
-    });
+  auto words = tree.getAllNodes();
 
-    std::ofstream out("result/freq.txt");
-    if (!out) {
-        std::cerr << "Output file error!" << std::endl;
-        return;
-    }
+  std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
+    return a.second > b.second || (a.second == b.second && a.first < b.first);
+  });
 
-    for (const auto& [word, count] : words) {
-        out << word << ": " << count << std::endl;
-    }
+  std::ofstream out("result/freq.txt");
+  if (!out) {
+    std::cerr << "Output file error!" << std::endl;
+    return;
+  }
 
-    out.close();
+  for (const auto& pair : words) {
+    std::cout << pair.first << ": " << pair.second << std::endl;
+    out << pair.first << ": " << pair.second << std::endl;
+  }
+
+  out.close();
 }
