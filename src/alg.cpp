@@ -9,11 +9,10 @@
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
-    if (!file) {
-        std::cerr << "File error!" << std::endl;
+    if (!file.is_open()) {
+        std::cerr << "Ошибка открытия файла!" << std::endl;
         return;
     }
-
     std::string word;
     char ch;
     while (file.get(ch)) {
@@ -27,7 +26,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     if (!word.empty()) {
         tree.insert(word);
     }
-
     file.close();
 }
 void treeToVector(const Node<std::string>* node, std::vector<std::pair<std::string, int>>& freqVec) {
@@ -43,11 +41,14 @@ void printFreq(BST<std::string>& tree) {
     tree.getWordsAndFrequencies(freqVec);
     std::sort(freqVec.begin(), freqVec.end(),
             [](const auto& a, const auto& b) { return a.second > b.second; });
-
     std::ofstream os("result/freq.txt");
-    for (const auto& pair : freqVec) {
-        os << pair.first << ": " << pair.second << std::endl;
-        std::cout << pair.first << ": " << pair.second << std::endl;
+    if (os.is_open()) {
+        for (const auto& pair : freqVec) {
+            os << pair.first << ": " << pair.second << std::endl;
+            std::cout << pair.first << ": " << pair.second << std::endl;
+        }
+        os.close();
+    } else {
+        std::cerr << "Ошибка открытия файла для вывода результата!" << std::endl;
     }
-    os.close();
 }
