@@ -18,7 +18,7 @@ struct Node {
 
 template <typename T>
 class BST {
-private:
+ private:
     Node<T>* root;
 
     Node<T>* insert(Node<T>* node, const T& key) {
@@ -42,7 +42,7 @@ private:
     }
 
     int depth(Node<T>* node) const {
-        if (!node) return 0;
+        if (!node) return -1;
         return 1 + std::max(depth(node->left), depth(node->right));
     }
 
@@ -61,7 +61,7 @@ private:
         inOrder(node->right, nodes);
     }
 
-public:
+ public:
     BST() : root(nullptr) {}
     ~BST() { destroy(root); }
 
