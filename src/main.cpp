@@ -15,3 +15,4 @@ int main() {
 
     std::cout << "Tree depth: " << tree.depth() << std::endl;
     return 0;
+}
