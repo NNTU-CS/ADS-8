@@ -39,7 +39,7 @@ void printFreq(BST<std::string>& tree) {
     std::sort(words.begin(), words.end(), 
         [](const auto& a, const auto& b) { return a.second > b.second; });
     
-    std::ofstream out("result/freq.txt");
+    std::ofstream out("freq.txt");
     if (!out) {
         std::cout << "Cannot open output file!" << std::endl;
         return;
