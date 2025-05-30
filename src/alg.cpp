@@ -42,10 +42,9 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 /* -------------------------------------------------------------- */
 /*  Вывод слов по убыванию частоты                                */
 /* -------------------------------------------------------------- */
-void printFreq(BST<std::string>& tree)
-{
+void printFreq(BST<std::string>& tree) {
     /* 1. Собираем пары (слово, частота) во вектор */
-    std::vector<std::pair<std::string,std::size_t>> v;
+    std::vector<std::pair<std::string, std::size_t>> v;
     tree.inorder([&](const std::string& w, std::size_t c){
         v.emplace_back(w, c);
     });
@@ -63,7 +62,7 @@ void printFreq(BST<std::string>& tree)
         std::cerr << "Cannot open result/freq.txt for writing!\n";
     }
 
-    for (const auto& [w,c] : v) {
+    for (const auto& [w, c] : v) {
         std::cout << w << " : " << c << '\n';
         if (out) out << w << ' ' << c << '\n';
     }
