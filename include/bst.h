@@ -77,7 +77,8 @@ class BST {
     inorderNode(root, result);
   }
   void clear() {
-    return clearNode(root);
+    clearNode(root);
+    root = nullptr;
   }
 };
 
