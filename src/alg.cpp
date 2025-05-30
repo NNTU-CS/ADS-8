@@ -4,7 +4,9 @@
 #include <locale>
 #include <cstdlib>
 #include <cctype>
+#include <string>
 #include <algorithm>
+#include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream fin(filename);
@@ -15,9 +17,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   std::string word;
   char c;
 
-    std::string word;
-    char c;
-  
   while (fin.get(c)) {
     if (isalpha(static_cast<unsigned char>(c))) {
       word.clear();
@@ -32,7 +31,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 }
 void printFreq(BST<std::string>& tree) {
   auto words = tree.getAll();
-
+  
   std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
     if (a.second != b.second) return a.second > b.second;
     return a.first < b.first;
