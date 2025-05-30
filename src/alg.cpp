@@ -10,7 +10,7 @@
 #include  "bst.h"
 
 template<typename T>
-void sortRec(BST<T>& t, const std::vector<Y>& w, int l, int r) {
+void sortRec(BST<T>& t, const std::vector<T>& w, int l, int r) {
   if (l > r)
     return;
   int mid = (l + r) / 2;
