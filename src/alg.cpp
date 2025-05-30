@@ -22,8 +22,8 @@ void makeTree(BST<std::string>& tree, const char* filename) {
       word += static_cast<char>(std::tolower(ch));
     } else {
       if (!word.empty()) {
-      tree.add(word);
-      word.clear();
+        tree.add(word);
+        word.clear();
       }
     }
   }
