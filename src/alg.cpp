@@ -33,7 +33,6 @@ void printFreq(BST<std::string>& tree) {
             [](const auto& a, const auto& b) {
               return a.second > b.second;
             });
-  std::filesystem::create_directory("result");
   std::ofstream out("result/freq.txt");
   for (const auto& pair : words) {
     std::cout << pair.first << " - " << pair.second << std::endl;
