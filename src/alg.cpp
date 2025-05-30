@@ -4,6 +4,7 @@
 #include  <locale>
 #include  <cstdlib>
 #include  "bst.h"
+#include <string>
 
 void makeTree(BST<std::string>& tree, const char* fi_name) {
     std::ifstream fi(fi_name);
