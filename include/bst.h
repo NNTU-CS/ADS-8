@@ -52,8 +52,8 @@ class BST {
   }
   void clearNode(Node* node) {
     if (node) {
-      clear(node->left);
-      clear(node->right);
+      clearNode(node->left);
+      clearNode(node->right);
       delete node;
     }
   }
@@ -61,7 +61,7 @@ class BST {
  public:
   BST() : root(nullptr) {}
   ~BST() {
-    clearNode(root);
+    clear();
   }
   void add(const T& value) {
     root = addNode(root, value);
@@ -74,6 +74,9 @@ class BST {
   }
   void getSorted(std::vector<std::pair<T, int>>& result) const {
     inorderNode(root, result);
+  }
+  void clear() const {
+   return clearNode(root);
   }
 };
 
