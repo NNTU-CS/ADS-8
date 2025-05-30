@@ -68,7 +68,7 @@ class BST {
   ~BST() { clear(root); }
 
   void insert(T value) { root = insert(root, value); }
-  int searchCount(T value) const {
+  int search(T value) const {
     Node* node = search(root, value);
     return node ? node->count : 0;
   }
