@@ -1,8 +1,8 @@
 // Copyright 2021 NNTU-CS
-#include  <iostream>
-#include  <fstream>
-#include  "bst.h"
+#include <iostream>
+#include <fstream>
 #include <string>
+#include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* fi_name) {
     std::ifstream fi(fi_name);
@@ -35,11 +35,9 @@ void printFreq(BST<std::string>& tree) {
     std::ofstream outFile("result/freq.txt");
     if (!outFile.is_open()) {
         return;
-    }
-    for (const auto& pair : words) {
+    }    for (const auto& pair : words) {
         std::cout << pair.first << " " << pair.second << std::endl;
         outFile << pair.first << " " << pair.second << std::endl;
     }
     outFile.close();
-    
 }

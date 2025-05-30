@@ -98,8 +98,7 @@ class BST {
             current = (value < current->value) ? current->left : current->right;
         }
         return 0;
-    }
-    BST(const BST&) = delete;
+    }    BST(const BST&) = delete;
     BST& operator=(const BST&) = delete;
 };
 
