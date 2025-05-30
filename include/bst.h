@@ -11,19 +11,19 @@ template<typename T>
 class BST {
  private:
   struct Node {
-    T value;
+    T data;
     int count;
     Node* left;
     Node* right;
-    explicit Node(const T& n) : value(n), count(1), left(nullptr),
+    explicit Node(const T& n) : data(n), count(1), left(nullptr),
                               right(nullptr) {}
   };
   Node* root;
   Node* addNode(Node* node, const T& value) {
     if (!node) return new Node(value);
-    if (value < node->value)
+    if (value < node->data)
       node->left = addNode(node->left, value);
-    else if (value > node->value)
+    else if (value > node->data)
       node->right = addNode(node->right, value);
     else
       node->count++;
@@ -46,15 +46,22 @@ class BST {
   void inorderNode(Node* node, std::vector<std::pair<T, int>>& result) const {
     if (node) {
       inorderNode(node->right, result);
-      result.emplace_back(node->value, node->count);
+      result.emplace_back(node->data, node->count);
       inorderNode(node->left, result);
+    }
+  }
+  void clearNode(Node* node) {
+    if (node) {
+      clear(node->left);
+      clear(node->right);
+      delete node;
     }
   }
 
  public:
   BST() : root(nullptr) {}
   ~BST() {
-    clear(root);
+    clearNode(root);
   }
   void add(const T& value) {
     root = addNode(root, value);
@@ -67,13 +74,6 @@ class BST {
   }
   void getSorted(std::vector<std::pair<T, int>>& result) const {
     inorderNode(root, result);
-  }
-  void clear(Node* node) {
-    if (node) {
-      clear(node->left);
-      clear(node->right);
-      delete node;
-    }
   }
 };
 
