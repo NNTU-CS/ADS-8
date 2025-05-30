@@ -30,9 +30,9 @@ class BST {
     return node;
   }
   Node* searchNode(Node* node, const T& value) const {
-    if (!node || node->value == value)
+    if (!node || node->data == value)
       return node;
-    if (value < node->value)
+    else if (value < node->data)
       return searchNode(node->left, value);
     else
       return searchNode(node->right, value);
