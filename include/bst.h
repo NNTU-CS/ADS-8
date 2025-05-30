@@ -1,4 +1,3 @@
-// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
@@ -14,13 +13,14 @@ class BST {
     int occurrenceCount;
     TreeNode* leftChild;
     TreeNode* rightChild;
-    explicit TreeNode(T val) : dataValue(val), occurrenceCount(1),
-                             leftChild(nullptr), rightChild(nullptr) {}
+    explicit TreeNode(const T& val)
+        : dataValue(val), occurrenceCount(1),
+          leftChild(nullptr), rightChild(nullptr) {}
   };
 
-  TreeNode* rootNode;
+  TreeNode* rootNode = nullptr;
 
-  TreeNode* addNode(TreeNode* currentNode, T keyData) {
+  TreeNode* addNode(TreeNode* currentNode, const T& keyData) {
     if (!currentNode) {
       return new TreeNode(keyData);
     }
@@ -36,16 +36,16 @@ class BST {
     return currentNode;
   }
 
-  int computeDepth(TreeNode* nodePtr) {
+  int computeDepth(TreeNode* nodePtr) const {
     if (!nodePtr) {
-      return 0;
+      return -1;
     }
-    int leftSubtreeDepth = computeDepth(nodePtr->leftChild);
-    int rightSubtreeDepth = computeDepth(nodePtr->rightChild);
-    return std::max(leftSubtreeDepth, rightSubtreeDepth) + 1;
+    int leftDepth  = computeDepth(nodePtr->leftChild);
+    int rightDepth = computeDepth(nodePtr->rightChild);
+    return std::max(leftDepth, rightDepth) + 1;
   }
 
-  TreeNode* findNode(TreeNode* nodePtr, T keyData) {
+  TreeNode* findNode(TreeNode* nodePtr, const T& keyData) const {
     if (!nodePtr || nodePtr->dataValue == keyData) {
       return nodePtr;
     }
@@ -55,57 +55,50 @@ class BST {
     return findNode(nodePtr->rightChild, keyData);
   }
 
-  void traverseInOrder(TreeNode* nodePtr, std::ostream& outputStream) {
-    if (!nodePtr) {
-      return;
-    }
-    traverseInOrder(nodePtr->leftChild, outputStream);
-    outputStream << nodePtr->dataValue << ": "
-                << nodePtr->occurrenceCount << std::endl;
-    traverseInOrder(nodePtr->rightChild, outputStream);
+  void traverseInOrder(TreeNode* nodePtr, std::ostream& output) const {
+    if (!nodePtr) return;
+    traverseInOrder(nodePtr->leftChild, output);
+    output << nodePtr->dataValue << ": " << nodePtr->occurrenceCount << std::endl;
+    traverseInOrder(nodePtr->rightChild, output);
   }
 
-  void traverseReverseOrder(TreeNode* nodePtr, std::ostream& outputStream) {
-    if (!nodePtr) {
-      return;
-    }
-    traverseReverseOrder(nodePtr->rightChild, outputStream);
-    outputStream << nodePtr->dataValue << ": "
-                << nodePtr->occurrenceCount << std::endl;
-    traverseReverseOrder(nodePtr->leftChild, outputStream);
+  void traverseReverseOrder(TreeNode* nodePtr, std::ostream& output) const {
+    if (!nodePtr) return;
+    traverseReverseOrder(nodePtr->rightChild, output);
+    output << nodePtr->dataValue << ": " << nodePtr->occurrenceCount << std::endl;
+    traverseReverseOrder(nodePtr->leftChild, output);
   }
 
   void deleteTree(TreeNode* nodePtr) {
-    if (!nodePtr) {
-      return;
-    }
+    if (!nodePtr) return;
     deleteTree(nodePtr->leftChild);
     deleteTree(nodePtr->rightChild);
     delete nodePtr;
   }
 
  public:
-  BST() : rootNode(nullptr) {}
+  BST() = default;
   ~BST() { deleteTree(rootNode); }
 
-  void insert(T keyData) {
+  void insert(const T& keyData) {
     rootNode = addNode(rootNode, keyData);
   }
 
-  int depth() {
+  int depth() const {
     return computeDepth(rootNode);
   }
 
-  bool search(T keyData) {
-    return findNode(rootNode, keyData) != nullptr;
+  int search(const T& keyData) const {
+    TreeNode* found = findNode(rootNode, keyData);
+    return found ? found->occurrenceCount : 0;
   }
 
-  void printInOrder(std::ostream& outputStream = std::cout) {
-    traverseInOrder(rootNode, outputStream);
+  void printInOrder(std::ostream& output = std::cout) const {
+    traverseInOrder(rootNode, output);
   }
 
-  void printReverseInOrder(std::ostream& outputStream = std::cout) {
-    traverseReverseOrder(rootNode, outputStream);
+  void printReverseInOrder(std::ostream& output = std::cout) const {
+    traverseReverseOrder(rootNode, output);
   }
 };
 
