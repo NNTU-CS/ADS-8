@@ -9,18 +9,16 @@ template <typename T>
 class BST
 {
     struct Node {
-        T           key;        // само слово
-        std::size_t count;      // сколько раз встретилось
+        T           key;
+        std::size_t count;
         Node*       left;
         Node*       right;
-
-        explicit Node(const T& k)
-            : key(k), count(1), left(nullptr), right(nullptr) {}
+        explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
     };
 
     Node* root = nullptr;
 
-/* ------------ вспомогательные рекурсивные методы ------------- */
+/* ---------- вспомогательные рекурсивные функции --------------- */
     static void clear(Node* n) {
         if (!n) return;
         clear(n->left);
@@ -29,54 +27,60 @@ class BST
     }
 
     static void insert(Node*& n, const T& value) {
-        if (!n) {                         // пустое место — ставим новый узел
-            n = new Node(value);
-            return;
-        }
-        if (value == n->key) {            // слово уже есть — увеличиваем счётчик
-            ++n->count;
-        } else if (value < n->key) {      // идём влево
-            insert(n->left, value);
-        } else {                          // идём вправо
-            insert(n->right, value);
-        }
+        if (!n) { n = new Node(value); return; }
+        if (value == n->key) ++n->count;
+        else if (value < n->key) insert(n->left, value);
+        else                     insert(n->right, value);
     }
 
-    static bool search(Node* n, const T& value) {
-        while (n) {
-            if (value == n->key)  return true;
-            n = (value < n->key) ? n->left : n->right;
-        }
-        return false;
-    }
-
-    static std::size_t depth(Node* n) {
+    /* глубина‑по‑узлам */
+    static int depth_nodes(Node* n) {
         if (!n) return 0;
-        std::size_t l = depth(n->left);
-        std::size_t r = depth(n->right);
+        int l = depth_nodes(n->left);
+        int r = depth_nodes(n->right);
         return 1 + (l > r ? l : r);
     }
 
-    template <typename F>
-    static void inorder(Node* n, F&& f) {
-        if (!n) return;
-        inorder(n->left,  f);
-        f(n->key, n->count);
-        inorder(n->right, f);
-    }
-
-/* ---------------------- публичный интерфейс ------------------- */
+/* ------------------------ публичный интерфейс ----------------- */
 public:
     BST() = default;
     ~BST() { clear(root); }
 
     void insert(const T& value)              { insert(root, value); }
-    bool search(const T& value) const        { return search(root, value); }
-    std::size_t depth()      const           { return depth(root); }
 
-    /** Обход in-order.  Функция-коллбэк получает (key, count). */
+    /**
+     * Поиск слова.
+     * @return  количество повторений (0, если слово не найдено)
+     */
+    int search(const T& value) const {
+        Node* n = root;
+        while (n) {
+            if (value == n->key)  return static_cast<int>(n->count);
+            n = (value < n->key) ? n->left : n->right;
+        }
+        return 0;
+    }
+
+    /**
+     * Глубина дерева в **рёбрах** (корень &rarr; потомок = 1).
+     * Пустое дерево = 0.
+     */
+    int depth() const {
+        if (!root) return 0;
+        return depth_nodes(root) - 1;   // вычитаем 1, чтобы получить рёбра
+    }
+
+    /* симметричный обход с коллбэком (key, count) */
     template <typename F>
-    void inorder(F&& f) const { inorder(root, std::forward<F>(f)); }
+    void inorder(F&& f) const {
+        std::function<void(Node*)> walk = [&](Node* n){
+            if (!n) return;
+            walk(n->left);
+            f(n->key, n->count);
+            walk(n->right);
+        };
+        walk(root);
+    }
 };
 
 #endif  // INCLUDE_BST_H_
