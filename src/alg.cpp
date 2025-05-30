@@ -4,11 +4,12 @@
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <iostream>
 #include <filesystem>
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
- std::ifstream file(filename);
+  std::ifstream file(filename);
   if (!file) return;
 
   std::string word;
@@ -33,6 +34,7 @@ void printFreq(BST<std::string>& tree) {
             [](const auto& a, const auto& b) {
               return a.second > b.second;
             });
+  std::filesystem::create_directory("result");
   std::ofstream out("result/freq.txt");
   for (const auto& pair : words) {
     std::cout << pair.first << " - " << pair.second << std::endl;
