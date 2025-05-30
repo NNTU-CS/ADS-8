@@ -18,7 +18,7 @@ class BST {
     Node* left;
     Node* right;
 
-    Node(T k) explicit : key(std::move(k)), count(1), left(nullptr), right(nullptr) {}
+    Node(T k) : key(std::move(k)), count(1), left(nullptr), right(nullptr) {}
   };
 
   Node* root;
