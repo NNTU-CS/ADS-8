@@ -1,7 +1,8 @@
 // Copyright 2021 NNTU-CS
 #include "bst.h"
-#include <string>
+#include <cstdlib>
 #include <fstream>
+#include <string>
 
 void makeTree(BST<std::string>& tree, const char* filename);
 void printFreq(BST<std::string>& tree);
@@ -13,10 +14,9 @@ int main() {
   makeTree(tree, filename);
 
   std::ofstream outFile("result/freq.txt");
-  if (outFile) {
-    tree.printReverseInOrder(outFile);
-    outFile.close();
+  if (!outFile) {
+    return EXIT_FAILURE;
   }
-
-  return 0;
+  tree.printReverseInOrder(outFile);
+  return EXIT_SUCCESS;
 }
