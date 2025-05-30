@@ -21,6 +21,14 @@ class BST {
 
     Node* root;
 
+    int searchCount(Node* node, const T& value) const {
+        if (!node) return 0;
+        if (value == node->value) return node->count;
+        if (value < node->value)
+            return searchCount(node->left, value);
+        return searchCount(node->right, value);
+    }
+
     void insert(Node*& node, const T& value) {
         if (!node) {
             node = new Node(value);
@@ -60,6 +68,10 @@ class BST {
 
     void insert(const T& value) {
         insert(root, value);
+    }
+
+    int search(const T& value) const {
+        return searchCount(root, value);
     }
 
     int depth() const {
