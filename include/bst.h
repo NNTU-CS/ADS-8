@@ -6,8 +6,7 @@
 #include <utility>
 
 template <typename T>
-class BST
-{
+class BST {
     struct Node {
         T           key;
         std::size_t count;
@@ -27,7 +26,10 @@ class BST
     }
 
     static void insert(Node*& n, const T& value) {
-        if (!n) { n = new Node(value); return; }
+        if (!n) {
+            n = new Node(value);
+            return;
+        }
         if (value == n->key) ++n->count;
         else if (value < n->key) insert(n->left, value);
         else                     insert(n->right, value);
@@ -42,7 +44,7 @@ class BST
     }
 
 /* ------------------------ публичный интерфейс ----------------- */
-public:
+ public:
     BST() = default;
     ~BST() { clear(root); }
 
