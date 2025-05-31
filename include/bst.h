@@ -4,93 +4,82 @@
 
 #include <iostream>
 #include <string>
-#include <algorithm>
-#include <functional>
 
 template <typename T>
 class BST {
-public:
+ private:
     struct Node {
         T key;
         int count;
         Node* left;
         Node* right;
-        
         Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
     };
 
-private:
     Node* root;
 
-    Node* insert(Node* node, T value, bool updateDepth = true) {
-        if (!node) return new Node(value);
-        
-        if (value == node->key) {
-            node->count++;
-            return node;
+    Node* insert(Node* node, T key) {
+        if (node == nullptr) {
+            return new Node(key);
         }
-        
-        if (value < node->key) {
-            node->left = insert(node->left, value, updateDepth);
+        if (key < node->key) {
+            node->left = insert(node->left, key);
+        } else if (key > node->key) {
+            node->right = insert(node->right, key);
         } else {
-            node->right = insert(node->right, value, updateDepth);
+            node->count++;
         }
         return node;
     }
 
-    const Node* searchNode(const Node* node, T value) const {
-        if (!node) return nullptr;
-        
-        if (value == node->key) {
-            return node;
-        } else if (value < node->key) {
-            return searchNode(node->left, value);
-        } else {
-            return searchNode(node->right, value);
+    int depth(Node* node) const {
+        if (node == nullptr) {
+            return 0;
         }
-    }
-
-    int calculateDepth(const Node* node) const {
-        if (!node) return 0;
-        int leftDepth = calculateDepth(node->left);
-        int rightDepth = calculateDepth(node->right);
+        int leftDepth = depth(node->left);
+        int rightDepth = depth(node->right);
         return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
     }
 
-    void inOrder(const Node* node, std::function<void(const Node*)> visit) const {
-        if (!node) return;
-        inOrder(node->left, visit);
-        visit(node);
-        inOrder(node->right, visit);
+    int search(Node* node, T key) const {
+        if (node == nullptr) {
+            return 0;
+        }
+        if (key < node->key) {
+            return search(node->left, key);
+        } else if (key > node->key) {
+            return search(node->right, key);
+        } else {
+            return node->count;
+        }
     }
 
-    void clear(Node* node) {
-        if (!node) return;
-        clear(node->left);
-        clear(node->right);
-        delete node;
+    void inOrder(Node* node, void (*visit)(Node*)) const {
+        if (node != nullptr) {
+            inOrder(node->right, visit);
+            visit(node);
+            inOrder(node->left, visit);
+        }
     }
 
-public:
+ public:
     BST() : root(nullptr) {}
-    ~BST() { clear(root); }
 
-    void insert(T value) {
-        root = insert(root, value);
-    }
-
-    int search(T value) const {
-        const Node* node = searchNode(root, value);
-        return node ? node->count : 0;
+    void insert(T key) {
+        root = insert(root, key);
     }
 
     int depth() const {
-        return calculateDepth(root);
+        return depth(root);
     }
 
-    void inOrder(std::function<void(const Node*)> visit) const {
+    int search(T key) const {
+        return search(root, key);
+    }
+
+    void inOrder(void (*visit)(Node*)) const {
         inOrder(root, visit);
     }
 };
 
-#endif  // INCLUDE_BST_H_
+#endif  // BST_H
