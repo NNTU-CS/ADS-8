@@ -4,6 +4,7 @@
 #include <cctype>
 #include <algorithm>
 #include <vector>
+#include <iostream>
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
@@ -11,7 +12,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         std::cout << "File error!" << std::endl;
         return;
     }
-
     std::string currentWord;
     char ch;
     while (file.get(ch)) {
@@ -22,14 +22,11 @@ void makeTree(BST<std::string>& tree, const char* filename) {
             currentWord.clear();
         }
     }
-    
     if (!currentWord.empty()) {
         tree.insert(currentWord);
     }
-    
     file.close();
 }
-
 void printFreq(BST<std::string>& tree) {
     auto items = tree.getAllItems();
     
@@ -37,7 +34,6 @@ void printFreq(BST<std::string>& tree) {
         [](const auto& a, const auto& b) {
             return b.second < a.second;
         });
-
     std::ofstream out("result/freq.txt");
     for (const auto& [word, count] : items) {
         std::cout << word << ": " << count << std::endl;
