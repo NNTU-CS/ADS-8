@@ -2,6 +2,9 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
+#include <algorithm>
+#include <string>
+
 template <typename T>
 class BST {
  public:
@@ -14,7 +17,7 @@ class BST {
     Node(const T& val) : value(val), count(1), left(nullptr), right(nullptr) {}
   };
 
-  BST() : root(nullptr) {}
+  explicit BST() : root(nullptr) {}
   ~BST() { clearTree(root); }
 
   void add(T value) { root = addNode(root, value); }
