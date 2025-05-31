@@ -11,48 +11,46 @@
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-  std::ifstream file(filename);
-  if (!file) {
-    std::cout << "File error!" << std::endl;
+  std::ifstream fin(filename);
+  if (!fin.is_open()) {
+    std::cerr << "Cannot open file: " << filename << "\n";
     return;
   }
-
-  std::string currentWord;
-  while (file) {
-    char ch = file.get();
-    if (isalpha(ch)) {
-      currentWord += tolower(ch);
-    } else {
-      if (!currentWord.empty()) {
-        tree.insert(currentWord);
-        currentWord.clear();
-      }
+  std::string word;
+  char c;
+  while (fin.get(c)) {
+    if (std::isalpha(static_cast<unsigned char>(c))) {
+      word += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+    } else if (!word.empty()) {
+      tree.insert(word);
+      word.clear();
     }
   }
-
-  if (!currentWord.empty()) {
-    tree.insert(currentWord);
+  if (!word.empty()) {
+    tree.insert(word);
   }
-
-  file.close();
+  fin.close();
 }
 
 void printFreq(BST<std::string>& tree) {
   auto words = tree.inOrder();
 
   std::sort(words.begin(), words.end(),
-    [](const std::pair<std::string, int>& a,
-    const std::pair<std::string, int>& b) {
-      return a.second > b.second;
+    [](const auto& a, const auto& b) {
+      return (a.second != b.second) ? a.second > b.second : a.first < b.first;
     });
 
-  for (const auto& pair : words) {
-    std::cout << pair.first << ": " << pair.second << std::endl;
+  for (const auto& p : words) {
+    std::cout << p.first << " " << p.second << "\n";
   }
 
-  std::ofstream out("result/freq.txt");
-  for (const auto& pair : words) {
-    out << pair.first << ": " << pair.second << std::endl;
+  std::ofstream fout("result/freq.txt");
+  if (fout.is_open()) {
+    for (const auto& p : words) {
+      fout << p.first << " " << p.second << "\n";
+    }
+    fout.close();
+  } else {
+    std::cerr << "Cannot create output file\n";
   }
-  out.close();
 }
