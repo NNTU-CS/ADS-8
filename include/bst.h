@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <utility>
 
 template <typename T>
 class BST {
@@ -14,27 +15,20 @@ class BST {
     int count;
     Node* left;
     Node* right;
-    explicit Node(const T& k):key(k), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(const T& value) : key(value), count(1), left(nullptr), right(nullptr) {}
   };
 
   Node* root;
 
-  Node* insert(Node* node, const T& key) {
-    if (!node) return new Node(key);
-    if (key == node->key) {
-      node->count++;
-      return node;
-    }
-    if (key < node->key)
-      node->left = insert(node->left, key);
+  Node* insert(Node* node, const T& value) {
+    if (!node) return new Node(value);
+    if (value < node->key)
+      node->left = insert(node->left, value);
+    else if (value > node->key)
+      node->right = insert(node->right, value);
     else
-      node->right = insert(node->right, key);
+      node->count++;
     return node;
-  }
-
-  int depth(Node* node) const {
-    if (!node) return -1;
-    return 1 + std::max(depth(node->left), depth(node->right));
   }
 
   Node* search(Node* node, const T& value) const {
@@ -46,44 +40,34 @@ class BST {
       return search(node->right, value);
   }
 
+  int depth(Node* node) const {
+    if (!node) return 0;
+    return 1 + std::max(depth(node->left), depth(node->right));
+  }
+
   void inOrder(Node* node, std::vector<std::pair<T, int>>& result) const {
-    if (!node) return;
-    inOrder(node->left, result);
-    result.emplace_back(node->key, node->count);
-    inOrder(node->right, result);
+    if (node) {
+      inOrder(node->left, result);
+      result.emplace_back(node->key, node->count);
+      inOrder(node->right, result);
+    }
   }
 
   void clear(Node* node) {
-    if (!node) return;
-    clear(node->left);
-    clear(node->right);
-    delete node;
+    if (node) {
+      clear(node->left);
+      clear(node->right);
+      delete node;
+    }
   }
 
  public:
   BST() : root(nullptr) {}
+  ~BST() { clear(root); }
 
-  ~BST() {
-    clear(root);
-  }
-
-  void insert(const T& key) {
-    root = insert(root, key);
-  }
-
-  int depth() const {
-    return depth(root);
-  }
-
-  bool search(const T& value) const {
-    return search(root, value) != nullptr;
-  }
-
-  int getCount(const T& value) const {
-    Node* found = search(root, value);
-    return found ? found->count : 0;
-  }
-
+  void insert(const T& value) { root = insert(root, value); }
+  bool search(const T& value) const { return search(root, value) != nullptr; }
+  int depth() const { return depth(root); }
   std::vector<std::pair<T, int>> inOrder() const {
     std::vector<std::pair<T, int>> result;
     inOrder(root, result);
