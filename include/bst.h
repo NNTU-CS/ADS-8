@@ -22,42 +22,42 @@ class BST {
 
   Node* root;
 
+
   void destroyTree(Node* node) {
-    if (node) {
+    if (node != nullptr) {
       destroyTree(node->left);
       destroyTree(node->right);
       delete node;
     }
   }
 
+
   int depth(Node* node) const {
-    if (!node) {
-      return 0;
+    if (node == nullptr) {
+      return -1;
     }
-    return 1 + std::max(depth(node->left), depth(node->right));
+    int left_depth = depth(node->left);
+    int right_depth = depth(node->right);
+    return 1 + std::max(left_depth, right_depth);
   }
+
+  // Рекурсивный поиск узла
   Node* search(Node* node, const T& value) const {
-    if (!node) {
-      return nullptr;
+    if (node == nullptr || value == node->data) {
+      return node;
     }
 
-    if (value == node->data) {
-      return node;
-    } else if (value < node->data) {
-      return search(node->left, value);
-    } else {
-      return search(node->right, value);
-    }
+    return (value < node->data) ? search(node->left, value) : search(node->right, value);
   }
+
 
   Node* insert(Node* node, const T& value) {
-    if (!node) {
+    if (node == nullptr) {
       return new Node(value);
     }
 
     if (value == node->data) {
-      node->frequency++;
-      return node;
+      ++node->frequency;
     } else if (value < node->data) {
       node->left = insert(node->left, value);
     } else {
@@ -68,41 +68,30 @@ class BST {
   }
 
   void inorderTraversal(Node* node, std::vector<std::pair<T, int>>& data) {
-    if (node) {
+    if (node != nullptr) {
       inorderTraversal(node->left, data);
-      data.push_back(std::make_pair(node->data, node->frequency));
+      data.emplace_back(node->data, node->frequency);
       inorderTraversal(node->right, data);
     }
   }
 
   int size(Node* node) const {
-    if (!node) {
-      return 0;
-    }
-    return 1 + size(node->left) + size(node->right);
+    return (node == nullptr) ? 0 : 1 + size(node->left) + size(node->right);
   }
 
-   public:
+ public:
   BST() : root(nullptr) {}
 
-  ~BST() {
-    destroyTree(root);
+  ~BST() { destroyTree(root); }
+
+  int depth() const { return depth(root); }
+
+  int search(const T& value) const {
+    Node* node = search(root, value);
+    return (node != nullptr) ? node->frequency : 0;
   }
 
-  int depth() const {
-    return depth(root);
-  }
-    int search(const T& value) const {
-        Node* node = search(root, value);
-        if(node) {
-            return node->frequency;
-        }
-        return 0;
-    }
-
-  void insert(const T& value) {
-    root = insert(root, value);
-  }
+  void insert(const T& value) { root = insert(root, value); }
 
   std::vector<std::pair<T, int>> getFrequencies() {
     std::vector<std::pair<T, int>> frequencies;
@@ -110,9 +99,7 @@ class BST {
     return frequencies;
   }
 
-  int size() const {
-    return size(root);
-  }
+  int size() const { return size(root); }
 };
 
 #endif  // INCLUDE_BST_H_
