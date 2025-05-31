@@ -1,10 +1,11 @@
 // Copyright 2021 NNTU-CS
 #include <iostream>
 #include <fstream>
+#include <locale>
+#include <cstdlib>
 #include <cctype>
 #include <vector>
 #include <algorithm>
-#include <string>
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
@@ -14,32 +15,34 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         return;
     }
 
-    std::string word;
+    std::string currentWord;
     char ch;
 
     while (file.get(ch)) {
-        if (isalpha(ch)) {
-            word += tolower(ch);
-        } else if (!word.empty()) {
-            tree.add(word);
-            word.clear();
+        if (isalpha(static_cast<unsigned char>(ch))) {
+            currentWord += tolower(static_cast<unsigned char>(ch));
+        } else if (!currentWord.empty()) {
+            tree.add(currentWord);
+            currentWord.clear();
         }
     }
 
-    if (!word.empty()) {
-        tree.add(word);
+    if (!currentWord.empty()) {
+        tree.add(currentWord);
     }
 
     file.close();
 }
 
 void printFreq(BST<std::string>& tree) {
-    std::vector<std::pair<std::string, int>> words;
-    tree.getAll(words);
+    std::vector<std::pair<std::string, int>> wordFrequencies;
+    tree.getAllWords(wordFrequencies);
 
-    std::sort(words.begin(), words.end(),
+    std::sort(wordFrequencies.begin(), wordFrequencies.end(),
         [](const auto& a, const auto& b) {
-            return a.second > b.second || (a.second == b.second && a.first < b.first);
+            if (a.second != b.second)
+                return a.second > b.second;
+            return a.first < b.first;
         });
 
     std::ofstream outFile("result/freq.txt");
@@ -48,7 +51,7 @@ void printFreq(BST<std::string>& tree) {
         return;
     }
 
-    for (const auto& pair : words) {
+    for (const auto& pair : wordFrequencies) {
         std::cout << pair.first << " " << pair.second << std::endl;
         outFile << pair.first << " " << pair.second << std::endl;
     }
