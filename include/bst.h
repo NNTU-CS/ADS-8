@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include <utility>
 
 template <typename T>
 class BST {
@@ -54,11 +56,11 @@ class BST {
         }
     }
 
-    void inOrder(Node* node, void (*visit)(Node*)) const {
+    void collectNodes(Node* node, std::vector<std::pair<T, int>>& nodes) const {
         if (node != nullptr) {
-            inOrder(node->right, visit);
-            visit(node);
-            inOrder(node->left, visit);
+            collectNodes(node->left, nodes);
+            nodes.emplace_back(node->key, node->count);
+            collectNodes(node->right, nodes);
         }
     }
 
@@ -77,8 +79,10 @@ class BST {
         return search(root, key);
     }
 
-    void inOrder(void (*visit)(Node*)) const {
-        inOrder(root, visit);
+    std::vector<std::pair<T, int>> getAllNodes() const {
+        std::vector<std::pair<T, int>> nodes;
+        collectNodes(root, nodes);
+        return nodes;
     }
 };
 
