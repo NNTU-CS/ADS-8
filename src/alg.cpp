@@ -1,56 +1,56 @@
 // Copyright 2021 NNTU-CS
 #include <iostream>
 #include <fstream>
-#include <locale>
-#include <cstdlib>
 #include <cctype>
-#include <algorithm>
 #include <vector>
-#include <utility>
-#include <string>
+#include <algorithm>
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-  std::ifstream fin(filename);
-  if (!fin.is_open()) {
-    std::cerr << "Cannot open file: " << filename << "\n";
-    return;
-  }
-  std::string word;
-  char c;
-  while (fin.get(c)) {
-    if (std::isalpha(static_cast<unsigned char>(c))) {
-      word += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
-    } else if (!word.empty()) {
-      tree.insert(word);
-      word.clear();
+    std::ifstream file(filename);
+    if (!file) {
+        std::cerr << "File error!" << std::endl;
+        return;
     }
-  }
-  if (!word.empty()) {
-    tree.insert(word);
-  }
-  fin.close();
+
+    std::string currentWord;
+    char ch;
+
+    while (file.get(ch)) {
+        if (isalpha(ch)) {
+            currentWord += tolower(ch);
+        } else if (!currentWord.empty()) {
+            tree.add(currentWord);
+            currentWord.clear();
+        }
+    }
+
+    if (!currentWord.empty()) {
+        tree.add(currentWord);
+    }
+
+    file.close();
 }
 
 void printFreq(BST<std::string>& tree) {
-  auto words = tree.inOrder();
+    std::vector<std::pair<std::string, int>> words;
+    tree.getAll(words);
 
-  std::sort(words.begin(), words.end(),
-    [](const auto& a, const auto& b) {
-      return (a.second != b.second) ? a.second > b.second : a.first < b.first;
-    });
+    std::sort(words.begin(), words.end(),
+        [](const auto& a, const auto& b) {
+            return a.second > b.second || (a.second == b.second && a.first < b.first);
+        });
 
-  for (const auto& p : words) {
-    std::cout << p.first << " " << p.second << "\n";
-  }
-
-  std::ofstream fout("result/freq.txt");
-  if (fout.is_open()) {
-    for (const auto& p : words) {
-      fout << p.first << " " << p.second << "\n";
+    std::ofstream outFile("result/freq.txt");
+    if (!outFile) {
+        std::cerr << "Cannot create output file" << std::endl;
+        return;
     }
-    fout.close();
-  } else {
-    std::cerr << "Cannot create output file\n";
-  }
+
+    for (const auto& pair : words) {
+        std::cout << pair.first << " " << pair.second << std::endl;
+        outFile << pair.first << " " << pair.second << std::endl;
+    }
+
+    outFile.close();
 }
