@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <vector>
 #include <iostream>
+#include <string>
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
@@ -29,7 +30,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 }
 void printFreq(BST<std::string>& tree) {
     auto items = tree.getAllItems();
-    
     std::sort(items.begin(), items.end(),
         [](const auto& a, const auto& b) {
             return b.second < a.second;
