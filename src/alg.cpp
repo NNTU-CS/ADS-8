@@ -16,21 +16,18 @@ std::string clean_word(const std::string& word) {
   return result;
 }
 
-BST<std::string> build_tree(const std::string& filename) {
-  BST<std::string> tree;
+void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
-  std::string line;
-
-  while (std::getline(file, line)) {
-    std::istringstream iss(line);
-    std::string word;
-    while (iss >> word) {
-      std::string cleaned = clean_word(word);
-      if (!cleaned.empty()) {
-        tree.insert(cleaned);
-      }
-    }
+  if (!file) {
+    std::cerr << "File error: " << filename << std::endl;
+    return;
   }
 
-  return tree;
+  std::string word;
+  while (file >> word) {
+    std::string cleaned = clean_word(word);
+    if (!cleaned.empty()) {
+      tree.insert(cleaned);
+    }
+  }
 }
