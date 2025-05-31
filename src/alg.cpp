@@ -17,9 +17,8 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     char c;
     bool in_word = false;
     while (fin.get(c)) {
-        unsigned char uc = static_cast<unsigned char>(c);
-        if (std::isalnum(uc) || c == '\'' || c == '-') {
-            word += static_cast<char>(std::tolower(uc));
+        if (std::isalpha(static_cast<unsigned char>(c))) {
+            word += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
             in_word = true;
         } else if (in_word) {
             if (!word.empty()) {
@@ -29,7 +28,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
             in_word = false;
         }
     }
-    if (in_word && !word.empty()) {
+    if (!word.empty()) {
         tree.add(word);
     }
     fin.close();
