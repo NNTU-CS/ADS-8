@@ -2,10 +2,11 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <string>
-#include <vector>
-#include <utility>
 #include <algorithm>
+#include <iostream>
+#include <string>
+#include <utility>
+#include <vector>
 
 template <typename T>
 class BST {
