@@ -1,10 +1,9 @@
 // Copyright 2021 NNTU-CS
-#ifndef INCLUDE_BST_H_
-#define INCLUDE_BST_H_
+#ifndef BST_H
+#define BST_H
 
 #include <iostream>
 #include <string>
-#include <functional>
 
 template <typename T>
 class BST {
@@ -57,7 +56,7 @@ private:
         }
     }
 
-    void inOrder(Node* node, void (*visit)(T, int)) const {
+    void inOrder(Node* node, void (*visit)(std::string, int)) const {
         if (node) {
             inOrder(node->left, visit);
             visit(node->key, node->count);
@@ -86,9 +85,9 @@ public:
         return found ? found->count : 0;
     }
 
-    void inOrder(void (*visit)(T, int)) const {
+    void inOrder(void (*visit)(std::string, int)) const {
         inOrder(root, visit);
     }
 };
 
-#endif  // INCLUDE_BST_H_
+#endif // BST_H
