@@ -6,6 +6,67 @@
 #include  <cstdlib>
 #include  "bst.h"
 
+bool latinLetter(char sm) {
+    return (sm >= 'a' && sm <= 'z') || (sm >= 'A' && sm <= 'Z');
+}
+
 void makeTree(BST<std::string>& tree, const char* filename) {
-  // поместите сюда свой код
+    std::ifstream file(filename);
+    if (!file) {
+        std::cout << "Error!" << std::endl;
+        return;
+    }
+
+    std::string curtWord;
+    char sm;
+
+    while (file.get(sm)) {
+        if (latinLetter(sm)) {
+            curtWord += tolower(sm);
+        } else if (!curtWord.empty()) {
+            tree.addNode(curtWord);
+            curtWord.clear();
+        }
+    }
+
+    if (!curtWord.empty()) {
+        tree.addNode(curtWord);
+    }
+
+    file.close();
+}
+
+struct WordFreq {
+    std::string word;
+    int kol;
+};
+
+bool compareWordFreq(const WordFreq& a, const WordFreq& b) {
+    return a.kol > b.kol;
+}
+
+void printFreq(BST<std::string>& tree) {
+    std::vector<WordFreq> words;
+
+    auto collectWords = [&words](typename BST<std::string>::Node* node) {
+        words.push_back({node->slovo, node->kol});
+    };
+
+    tree.obhod(collectWords);
+
+    std::sort(words.begin(), words.end(), compareWordFreq);
+
+    for (const auto& wf : words) {
+        std::cout << wf.word << ": " << wf.count << std::endl;
+    }
+
+    std::ofstream outFile("result/freq.txt");
+    if (outFile) {
+        for (const auto& wf : words) {
+            outFile << wf.word << ": " << wf.count << std::endl;
+        }
+        outFile.close();
+    } else {
+        std::cerr << "Unable" << std::endl;
+    }
 }
