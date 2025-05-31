@@ -4,13 +4,14 @@
 
 #include <iostream>
 #include <string>
+#include <functional>
 
 template <typename T>
 class BST {
 private:
     struct Node {
         T key;
-        int count; 
+        int count;
         Node* left;
         Node* right;
         
@@ -56,10 +57,10 @@ private:
         }
     }
 
-    void inOrder(Node* node, void (*visit)(Node*)) const {
+    void inOrder(Node* node, void (*visit)(T, int)) const {
         if (node) {
             inOrder(node->left, visit);
-            visit(node);
+            visit(node->key, node->count);
             inOrder(node->right, visit);
         }
     }
@@ -85,7 +86,7 @@ public:
         return found ? found->count : 0;
     }
 
-    void inOrder(void (*visit)(Node*)) const {
+    void inOrder(void (*visit)(T, int)) const {
         inOrder(root, visit);
     }
 };
