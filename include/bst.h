@@ -9,15 +9,14 @@
 
 template <typename T>
 class BST {
-private:
-    struct Node {
-        T key;
-        int count;
-        Node* left;
-        Node* right;
-
-        Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
-    };
+ private:
+  struct Node {
+    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+    T key;
+    int count;
+    Node* left;
+    Node* right;
+  };
 
     Node* root;
 
@@ -34,7 +33,7 @@ private:
     }
 
     int calculateDepth(Node* node) const {
-        if (!node) return 0;
+        if (!node) return -1;
         return 1 + std::max(calculateDepth(node->left),
             calculateDepth(node->right));
     }
