@@ -45,7 +45,7 @@ class BST {
 
     int calculateDepth(Node* node) const {
         if (!node)
-            return 0;
+            return -1;
         int leftDepth = calculateDepth(node->left);
         int rightDepth = calculateDepth(node->right);
         return 1 + std::max(leftDepth, rightDepth);
