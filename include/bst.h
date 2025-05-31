@@ -2,35 +2,24 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
+#pragma once
+
 #include <string>
 #include <vector>
 #include <algorithm>
 
-template <typename T>
+template<typename T>
 class BST {
- public:
-  BST() : root_(nullptr) {}
-  ~BST() { Clear(root_); }
-
-  void Insert(const T& key) { Insert(root_, key); }
-  int Depth() const { return Depth(root_); }
-  bool Search(const T& key) const { return Search(root_, key) != nullptr; }
-  std::vector<std::pair<T, int>> ToVector() const {
-    std::vector<std::pair<T, int>> result;
-    InOrder(root_, result);
-    return result;
-  }
-
  private:
   struct Node {
-    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
     T key;
     int count;
     Node* left;
     Node* right;
+    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
 
-  Node* root_;
+  Node* root;
 
   void Insert(Node*& node, const T& key) {
     if (!node) {
@@ -54,11 +43,11 @@ class BST {
     return (key < node->key) ? Search(node->left, key) : Search(node->right, key);
   }
 
-  void InOrder(Node* node, std::vector<std::pair<T, int>>& result) const {
+  void Inorder(Node* node, std::vector<std::pair<T, int>>& result) const {
     if (!node) return;
-    InOrder(node->left, result);
+    Inorder(node->left, result);
     result.push_back({node->key, node->count});
-    InOrder(node->right, result);
+    Inorder(node->right, result);
   }
 
   void Clear(Node* node) {
@@ -66,6 +55,22 @@ class BST {
     Clear(node->left);
     Clear(node->right);
     delete node;
+  }
+
+ public:
+  BST() : root(nullptr) {}
+  ~BST() { Clear(root); }
+
+  void Insert(const T& key) { Insert(root, key); }
+  int Depth() const { return Depth(root); }
+  int Search(const T& key) const {
+    Node* result = Search(root, key);
+    return result ? result->count : 0;
+  }
+  std::vector<std::pair<T, int>> ToVector() const {
+    std::vector<std::pair<T, int>> result;
+    Inorder(root, result);
+    return result;
   }
 };
 
