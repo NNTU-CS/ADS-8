@@ -60,9 +60,9 @@ class BST {
         inOrderTraversal(node->right, result);
     }
 
-public:
-    BST() : root(nullptr) {}
-    ~BST() { clearTree(root); }
+ public:
+  BST() : root(nullptr) {}
+  ~BST() { clearTree(root); }
 
     void insert(const T& value) {
         root = insertNode(root, value);
