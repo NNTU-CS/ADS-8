@@ -3,7 +3,18 @@
 #include <fstream>
 #include <locale>
 #include <cstdlib>
+#include <vector>   
+#include <algorithm>  
+#include <utility>    
 #include "bst.h"
+
+
+static std::vector<std::pair<std::string, int>> wordFreq;
+
+
+void collectWordStats(std::string word, int count) {
+    wordFreq.emplace_back(word, count);
+}
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
@@ -33,26 +44,21 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     file.close();
 }
 
-static std::vector<std::pair<std::string, int>> wordFreq;
-
-void collectWordStats(std::string word, int count) {
-    wordFreq.emplace_back(word, count);
-}
-
 void printFreq(BST<std::string>& tree) {
+
     wordFreq.clear();
-    
+
     tree.inOrder(collectWordStats);
     
     std::sort(wordFreq.begin(), wordFreq.end(), 
         [](const auto& a, const auto& b) {
             return a.second > b.second;
         });
-    
+
     for (const auto& [word, count] : wordFreq) {
         std::cout << word << ": " << count << std::endl;
     }
-    
+
     std::ofstream out("result/freq.txt");
     for (const auto& [word, count] : wordFreq) {
         out << word << ": " << count << std::endl;
