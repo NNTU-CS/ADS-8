@@ -9,14 +9,14 @@
 
 template <typename T>
 class BST {
-private:
+ private:
   struct Node {
         T slovo;
         int kol;
         Node* left;
         Node* right;
         Node(T s) : slovo(s), kol(1), left(nullptr), right(nullptr) {}
-    };
+  };
   Node* root;
   Node* addNode(Node* spot, T value) {
     if (spot == nullptr) {
@@ -48,7 +48,8 @@ private:
         return searchNode(spot->left, value);
     } else if (value > spot->slovo) {
         return searchNode(spot->right, value);
-    } else return spot->kol;
+    }
+    return spot->kol;
   }
 
   void obhod(Node* node, Visitor visit) const {
@@ -60,14 +61,14 @@ private:
   }
 
   void delet(Node* root) {
-    if(root == nullptr)
+    if (root == nullptr)
       return;
     delet(root->left);
     delet(root->right);
     delete root;
   }
 
-public:
+ public:
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
 
