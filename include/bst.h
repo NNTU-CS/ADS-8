@@ -56,6 +56,13 @@ class BST {
     delete node;
   }
 
+  int search(Node* node, const T& key) const {
+    if (!node) return 0;
+    if (key == node->key) return node->count;
+    if (key < node->key) return search(node->left, key);
+    return search(node->right, key);
+  }
+
  public:
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
@@ -76,6 +83,10 @@ class BST {
 
   int count() const {
     return countNodes(root);
+  }
+
+  int search(const T& key) const {
+    return search(root, key);
   }
 };
 
