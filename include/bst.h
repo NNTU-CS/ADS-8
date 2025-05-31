@@ -85,6 +85,7 @@ class BST {
       return searchNode(root, value);
   }
 
+
   void obhod(void (*visit)(Node*)) const {
       obhod(root, visit);
   }
