@@ -52,6 +52,7 @@ class BST {
     return spot->kol;
   }
 
+  template <typename Visitor>
   void obhod(Node* node, Visitor visit) const {
     if (node != nullptr) {
       obhod(node->left, visit);
