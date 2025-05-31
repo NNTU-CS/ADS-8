@@ -11,14 +11,14 @@
 
 template <typename T>
 class BST {
-private:
+ private:
     struct Node {
         T data;
         int count;
         Node* left;
         Node* right;
 
-        Node(const T& value) : data(value), count(1), left(nullptr), right(nullptr) {}
+        explicit Node(const T& value) : data(value), count(1), left(nullptr), right(nullptr) {}
     };
     Node* root;
     Node* addNode(Node* node, const T& value) {
@@ -63,7 +63,8 @@ private:
             delete node;
         }
     }
-public:
+
+ public:
     BST() : root(nullptr) {}
     ~BST() {
         clear(root);
