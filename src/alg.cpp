@@ -59,7 +59,7 @@ void printFreq(BST<std::string>& tree) {
     std::sort(words.begin(), words.end(), compareWordFreq);
 
     for (const auto& wf : words) {
-        std::cout << wf.word << ": " << wf.kolt << std::endl;
+        std::cout << wf.word << ": " << wf.kol << std::endl;
     }
 
     std::ofstream outFile("result/freq.txt");
