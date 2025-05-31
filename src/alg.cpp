@@ -1,10 +1,10 @@
 // Copyright 2021 NNTU-CS
 #include  <iostream>
+#include <string>
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
 #include  "bst.h"
-#include <string>
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
@@ -15,7 +15,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
     std::string cword;
     char cch;
-  
+
     while (file.get(cch)) {
         if (std::isalpha(cch)) {
             cword += std::tolower(cch);
@@ -24,7 +24,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
             cword.clear();
         }
     }
-  
+
     if (!cword.empty()) {
         tree.insert(cword);
     }
