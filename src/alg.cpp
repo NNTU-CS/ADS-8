@@ -35,7 +35,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
 static std::vector<std::pair<std::string, int>> wordFreq;
 
-void collectWordStats(const std::string& word, int count) {
+void collectWordStats(std::string word, int count) {
     wordFreq.emplace_back(word, count);
 }
 
@@ -44,12 +44,12 @@ void printFreq(BST<std::string>& tree) {
     
     tree.inOrder(collectWordStats);
     
-
     std::sort(wordFreq.begin(), wordFreq.end(), 
         [](const auto& a, const auto& b) {
             return a.second > b.second;
         });
-        for (const auto& [word, count] : wordFreq) {
+    
+    for (const auto& [word, count] : wordFreq) {
         std::cout << word << ": " << count << std::endl;
     }
     
