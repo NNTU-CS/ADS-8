@@ -4,7 +4,30 @@
 #include  <locale>
 #include  <cstdlib>
 #include  "bst.h"
+#include <string>
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-  // поместите сюда свой код
+  std::ifstream file(filename);
+    if (!file) {
+        std::cerr << "File ERR" << std::endl;
+        return;
+    }
+
+    std::string cword;
+    char cch;
+  
+    while (file.get(cch)) {
+        if (std::isalpha(cch)) {
+            cword += std::tolower(cch);
+        } else if (!cword.empty()) {
+            tree.insert(cword);
+            cword.clear();
+        }
+    }
+  
+    if (!cword.empty()) {
+        tree.insert(cword);
+    }
+
+    file.close();
 }
