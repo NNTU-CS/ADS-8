@@ -1,52 +1,36 @@
 // Copyright 2021 NNTU-CS
 #include <fstream>
-#include <iostream>
-#include <algorithm>
+#include <sstream>
 #include <string>
+#include <cctype>
+#include <algorithm>
 #include "bst.h"
 
-void MakeTree(BST<std::string>& tree, const char* filename) {
-  std::ifstream file(filename);
-  if (!file) {
-    std::cerr << "File error!" << std::endl;
-    return;
+std::string clean_word(const std::string& word) {
+  std::string result;
+  for (char c : word) {
+    if (std::isalpha(static_cast<unsigned char>(c))) {
+      result += std::tolower(static_cast<unsigned char>(c));
+    }
   }
+  return result;
+}
 
-  std::string word;
-  char ch;
-  while (file.get(ch)) {
-    if (std::isalpha(static_cast<unsigned char>(ch))) {
-      word += std::tolower(static_cast<unsigned char>(ch));
-    } else {
-      if (!word.empty()) {
-        tree.Insert(word);
-        word.clear();
+BST<std::string> build_tree(const std::string& filename) {
+  BST<std::string> tree;
+  std::ifstream file(filename);
+  std::string line;
+
+  while (std::getline(file, line)) {
+    std::istringstream iss(line);
+    std::string word;
+    while (iss >> word) {
+      std::string cleaned = clean_word(word);
+      if (!cleaned.empty()) {
+        tree.insert(cleaned);
       }
     }
   }
-  if (!word.empty()) {
-    tree.Insert(word);
-  }
 
-  file.close();
-}
-
-void PrintFreq(BST<std::string>& tree) {
-  auto vec = tree.ToVector();
-  std::sort(vec.begin(), vec.end(), [](const auto& a, const auto& b) {
-    return a.second > b.second;
-  });
-
-  std::ofstream out("result/freq.txt");
-  if (!out) {
-    std::cerr << "Can't write to result/freq.txt" << std::endl;
-    return;
-  }
-
-  for (const auto& [word, count] : vec) {
-    std::cout << word << " — " << count << '\n';
-    out << word << " — " << count << '\n';
-  }
-
-  out.close();
+  return tree;
 }
