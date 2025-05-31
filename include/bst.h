@@ -47,7 +47,7 @@ class BST {
             return 0;
         int left = depth(node->left);
         int right = depth(node->right);
-        return 1 + std::max(left, right);
+        return std::max(left, right);
     }
     void Travel(Node* node, std::vector<std::pair<T, int>>& result) const {
         if (node) {
