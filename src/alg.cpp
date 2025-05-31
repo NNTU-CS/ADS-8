@@ -3,6 +3,7 @@
 #include <fstream>
 #include <cctype>
 #include <string>
+#include <algorithm>
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
@@ -27,8 +28,11 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 }
 
 void printFreq(BST<std::string>& tree) {
-    auto printNode = [](BST<std::string>::Node* node) {
-        std::cout << node->key << " " << node->count << std::endl;
-    };
-    tree.inOrder(printNode);
+    auto nodes = tree.getAllNodes();
+    std::sort(nodes.begin(), nodes.end(), [](const auto& a, const auto& b) {
+        return a.second > b.second;
+    });
+    for (const auto& node : nodes) {
+        std::cout << node.first << " " << node.second << std::endl;
+    }
 }
