@@ -72,8 +72,9 @@ class BST {
     void add(const T& value) {
         root = addNode(root, value);
     }
-    bool search(const T& value) const {
-        return search(root, value) != nullptr;
+    int search(const T& value) const {
+        Node* node = search(root, value);
+        return node ? node->count : 0;
     }
     int depth() const {
         return depth(root);
