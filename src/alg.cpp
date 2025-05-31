@@ -1,59 +1,68 @@
 // Copyright 2021 NNTU-CS
-#include  <iostream>
-#include  <fstream>
-#include  <locale>
-#include  <cstdlib>
-#include  "bst.h"
+#include <fstream>
 #include <string>
+#include <vector>
+#include <iostream>
+#include <utility>
+#include "bst.h"
 
-bool isLatinLetter(char c) {
-    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+bool isAsciiLetter(char ch) {
+    return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
 }
 
-char toLowerLatin(char c) {
-    if (c >= 'A' && c <= 'Z') {
-        return c + ('a' - 'A');
-    }
-    return c;
+char toLowerAscii(char ch) {
+    return (ch >= 'A' && ch <= 'Z') ? ch + 32 : ch;
 }
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-    std::ifstream file(filename);
+    std::ifstream file(filename, std::ios::binary);
     if (!file.is_open()) {
-        std::cerr << "Cannot open file: " << filename << "\n";
+        std::cerr << "Failed to open file: " << filename << '\n';
         return;
     }
 
-    std::string word;
+    std::string currentWord;
     char ch;
+
+    auto storeWord = [&]() {
+        if (!currentWord.empty()) {
+            tree.insert(currentWord);
+            currentWord.clear();
+        }
+    };
+
     while (file.get(ch)) {
-        if (isLatinLetter(ch)) {
-            word += toLowerLatin(ch);
-        } else if (!word.empty()) {
-            tree.insert(word);
-            word.clear();
+        if (isAsciiLetter(ch)) {
+            currentWord += toLowerAscii(ch);
+        } else {
+            storeWord();
         }
     }
-    if (!word.empty()) {
-        tree.insert(word);
-    }
-
-    file.close();
+    storeWord();
 }
 
 void printFreq(BST<std::string>& tree) {
-    auto data = tree.getSortedByFrequency();
+    std::vector<std::pair<std::string, std::size_t>> entries;
+    tree.inorder([&](const std::string& word, std::size_t freq) {
+        entries.emplace_back(word, freq);
+    });
 
-    std::ofstream fout("result/freq.txt");
-    if (!fout.is_open()) {
-        std::cerr << "Cannot write to result/freq.txt\n";
-        return;
+    std::sort(entries.begin(), entries.end(),
+              [](const auto& a, const auto& b) {
+                  return (a.second == b.second)
+                      ? a.first < b.first
+                      : a.second > b.second;
+              });
+
+    std::ofstream output("result/freq.txt");
+    if (!output.is_open()) {
+        std::cerr << "Error: cannot write to result/freq.txt\n";
     }
 
-    for (const auto& entry : data) {
-        std::cout << entry.first << " " << entry.second << "\n";
-        fout << entry.first << " " << entry.second << "\n";
+    for (const auto& [word, freq] : entries) {
+        std::cout << word << " : " << freq << '\n';
+        if (output) {
+            output << word << ' ' << freq << '\n';
+        }
     }
-
-    fout.close();
 }
