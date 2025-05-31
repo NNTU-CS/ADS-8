@@ -17,9 +17,15 @@ std::string toLower(const std::string& str) {
     return result;
 }
 
-void makeTree(BST<std::string>& tree, const char* filename) {std::ifstream file(filename);
+bool compareFrequencies(const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
+    return a.second > b.second;
+}
+
+
+void makeTree(BST<std::string>& tree, const char* filename) {
+    std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cerr << "Error opening file: " << filename << std::endl;
+        std::cerr << "Ошибка открытия файла: " << filename << std::endl;
         return;
     }
 
@@ -41,22 +47,14 @@ void makeTree(BST<std::string>& tree, const char* filename) {std::ifstream file(
     file.close();
 }
 
-
-bool compareFrequencies(
-const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
-    return a.second > b.second;
-}
-
-
 void printFreq(BST<std::string>& tree) {
     std::vector<std::pair<std::string, int>> frequencies = tree.getFrequencies();
-
     std::sort(frequencies.begin(), frequencies.end(), compareFrequencies);
 
     std::ofstream outfile("result/freq.txt");
 
     if (!outfile.is_open()) {
-        std::cerr << "Error opening file result/freq.txt for writing!" << std::endl;
+        std::cerr << "Ошибка открытия файла result/freq.txt для записи!" << std::endl;
         return;
     }
 
@@ -67,4 +65,3 @@ void printFreq(BST<std::string>& tree) {
 
     outfile.close();
 }
-
