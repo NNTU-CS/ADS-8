@@ -2,92 +2,84 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <algorithm>
-#include <iostream>
 #include <string>
+#include <vector>
+#include <utility>
 
 template <typename T>
-class BST {
+class FrequencyTree {
  private:
-  struct Node {
-    explicit Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
-    T key;
-    int count;
-    Node* left;
-    Node* right;
+  struct TreeNode {
+    T data;
+    int frequency;
+    TreeNode* left;
+    TreeNode* right;
+
+    explicit TreeNode(const T& val)
+        : data(val), frequency(1), left(nullptr), right(nullptr) {}
   };
 
-  Node* root;
+  TreeNode* root_;
 
-  Node* insert(Node* node, T value) {
-    if (!node) return new Node(value);
-    
-    if (value == node->key) {
-      node->count++;
-    } else if (value < node->key) {
-      node->left = insert(node->left, value);
+  void clearSubtree(TreeNode* node) {
+    if (!node) return;
+    clearSubtree(node->left);
+    clearSubtree(node->right);
+    delete node;
+  }
+
+  int calculateDepth(TreeNode* node) const {
+    if (!node) return -1;
+    return 1 + std::max(calculateDepth(node->left), 
+                       calculateDepth(node->right));
+  }
+
+  TreeNode* findNode(TreeNode* node, const T& value) const {
+    if (!node) return nullptr;
+    if (value == node->data) return node;
+    return findNode(value < node->data ? node->left : node->right, value);
+  }
+
+  void addNode(TreeNode*& node, const T& value) {
+    if (!node) {
+      node = new TreeNode(value);
+      return;
+    }
+    if (value == node->data) {
+      node->frequency++;
     } else {
-      node->right = insert(node->right, value);
-    }
-    
-    return node;
-  }
-
-  int depth(Node* node) const {
-    if (!node) return 0;
-    return 1 + std::max(depth(node->left), depth(node->right));
-  }
-
-  Node* search(Node* node, T value) const {
-    if (!node || node->key == value) return node;
-    
-    if (value < node->key) {
-      return search(node->left, value);
-    } else {
-      return search(node->right, value);
+      addNode(value < node->data ? node->left : node->right, value);
     }
   }
 
-  void clear(Node* node) {
-    if (node) {
-      clear(node->left);
-      clear(node->right);
-      delete node;
-    }
-  }
-
-  void inOrder(Node* node, void (*visit)(std::string, int)) const {
-    if (node) {
-      inOrder(node->left, visit);
-      visit(node->key, node->count);
-      inOrder(node->right, visit);
-    }
+  void traverseInOrder(TreeNode* node, 
+                      std::vector<std::pair<T, int>>* result) const {
+    if (!node) return;
+    traverseInOrder(node->left, result);
+    result->emplace_back(node->data, node->frequency);
+    traverseInOrder(node->right, result);
   }
 
  public:
-  BST() : root(nullptr) {}
-  ~BST() { clear(root); }
+  FrequencyTree() : root_(nullptr) {}
+  ~FrequencyTree() { clearSubtree(root_); }
 
-  void insert(T value) {
-    root = insert(root, value);
+  void add(const T& value) { addNode(root_, value); }
+
+  int getDepth() const {
+    int d = calculateDepth(root_);
+    return d < 0 ? 0 : d;
   }
 
-  int depth() const {
-    return depth(root);
+  int getFrequency(const T& value) const {
+    TreeNode* node = findNode(root_, value);
+    return node ? node->frequency : 0;
   }
 
-  bool search(T value) const {
-    return search(root, value) != nullptr;
-  }
-
-  int getCount(T value) const {
-    Node* found = search(root, value);
-    return found ? found->count : 0;
-  }
-
-  void inOrder(void (*visit)(std::string, int)) const {
-    inOrder(root, visit);
+  std::vector<std::pair<T, int>> getAllItems() const {
+    std::vector<std::pair<T, int>> items;
+    traverseInOrder(root_, &items);
+    return items;
   }
 };
-
 #endif  // INCLUDE_BST_H_
