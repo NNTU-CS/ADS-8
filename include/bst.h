@@ -2,11 +2,11 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <string>
 #include <iostream>
-#include <vector>
 #include <utility>
+#include <string>
 #include <algorithm>
+#include <vector>
 
 template <typename T>
 class BST {
@@ -21,34 +21,44 @@ class BST {
 
     Node* root;
 
-    Node* add(Node* node, const T& t) {
-        if (!node) {
+    Node* add(Node* n, const T& t) {
+        if (!n) {
             return new Node(t);
         }
-        if (t == node->val) {
-            node->ocCount++;
-            return node;
+
+        if (t == n->val) {
+            n->ocCount++;
+            return n;
         }
-        if (t < node->val) {
-            node->left = insert(node->left, t);
+
+        if (t < n->val) {
+            n->left = insert(n->left, t);
         } else {
-            node->right = insert(node->right, t);
+            n->right = insert(n->right, t);
         }
-        return node;
+
+        return n;
     }
 
-    int depthTree(Node* node) const {
-        if (!node) return -1;
-        int lDepth = depthTree(node->left);
-        int rDepth = depthTree(node->right);
+    int depthTree(Node* n) const {
+        if (!n) return -1;
+        int lDepth = depthTree(n->left);
+        int rDepth = depthTree(n->right);
         return 1 + (lDepth > rDepth ? lDepth : rDepth);
     }
 
-    void clear(Node* node) {
-        if (!node) return;
-        clear(node->left);
-        clear(node->right);
-        delete node;
+    void clear(Node* n) {
+        if (!n) return;
+        clear(n->left);
+        clear(n->right);
+        delete n;
+    }
+
+    void ord(Node* n, std::vector<std::pair<T, int>>& res) const {
+        if (!n) return;
+        inorder(n->left, res);
+        res.push_back({n->data, n->count});
+        inorder(n->right, res);
     }
 
  public:
@@ -76,6 +86,12 @@ class BST {
 
     int depth() const {
         return depthTree(root);
+    }
+
+    std::vector<std::pair<T, int>> toVector() const {
+      std::vector<std::pair<T, int>> res;
+      ord(root, res);
+      return res;
     }
 };
 
