@@ -37,7 +37,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
 void printFreq(BST<std::string>& tree) {
     std::vector<std::pair<std::string, int>> words;
-    tree.getAll(words);
+    tree.getAllWords(words);
 
     std::sort(words.begin(), words.end(),
         [](const auto& a, const auto& b) {
