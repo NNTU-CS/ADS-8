@@ -11,13 +11,6 @@
 #include <utility>
 #include  "bst.h"
 
-std::string toLower(const std::string& str) {
-    std::string result = str;
-    std::transform(result.begin(), result.end(), result.begin(), ::tolower);
-    return result;
-}
-
-
 
 void makeTree(BST<std::string>& tree, const char* filename) {std::ifstream file(filename);
     if (!file.is_open()) {
