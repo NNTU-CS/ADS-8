@@ -1,92 +1,53 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
 #include <fstream>
 #include <cctype>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+#include "bst.h"
 
-template <typename T>
-class BST {
- private:
-    struct Node {
-        explicit Node(const T& value) : data(value), count(1), left(nullptr), right(nullptr) {}
-
-        T data;
-        int count;
-        Node* left;
-        Node* right;
-    };
-
-    Node* root;
-
-    Node* addNode(Node* node, const T& value) {
-        if (!node)
-            return new Node(value);
-        if (value < node->data)
-            node->left = addNode(node->left, value);
-        else if (value > node->data)
-            node->right = addNode(node->right, value);
-        else
-            node->count++;
-        return node;
+void makeTree(BST<std::string>& tree, const char* filename) {
+    std::ifstream fin(filename);
+    if (!fin.is_open()) {
+        std::cerr << "Cannot open file: " << filename << "\n";
+        return;
     }
 
-    Node* search(Node* node, const T& value) const {
-        if (!node)
-            return nullptr;
-        if (value == node->data)
-            return node;
-        else if (value < node->data)
-            return search(node->left, value);
-        else
-            return search(node->right, value);
-    }
+    std::string word;
+    char c;
 
-    int depth(Node* node) const {
-        if (!node)
-            return 0;
-        int left = depth(node->left);
-        int right = depth(node->right);
-        return 1 + std::max(left, right);
-    }
-
-    void Travel(Node* node, std::vector<std::pair<T, int>>& result) const {
-        if (node) {
-            Travel(node->left, result);
-            result.emplace_back(node->data, node->count);
-            Travel(node->right, result);
+    while (fin.get(c)) {
+        if (std::isalpha(static_cast<unsigned char>(c))) {
+            word += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+        } else if (!word.empty()) {
+            tree.add(word);
+            word.clear();
         }
     }
+    if (!word.empty()) {
+        tree.add(word);
+    }
 
-    void clear(Node* node) {
-        if (node) {
-            clear(node->left);
-            clear(node->right);
-            delete node;
+    fin.close();
+}
+
+void printFreq(BST<std::string>& tree) {
+    std::vector<std::pair<std::string, int>> words;
+    tree.getAll(words);
+    std::sort(words.begin(), words.end(),
+        [](const auto& a, const auto& b) {
+            return (a.second != b.second) ? a.second > b.second : a.first < b.first;
+        });
+    for (const auto& p : words) {
+        std::cout << p.first << " " << p.second << "\n";
+    }
+    std::ofstream fout("result/freq.txt");
+    if (fout.is_open()) {
+        for (const auto& p : words) {
+            fout << p.first << " " << p.second << "\n";
         }
+        fout.close();
+    } else {
+        std::cerr << "Cannot create output file\n";
     }
-
- public:
-    BST() : root(nullptr) {}
-
-    ~BST() {
-        clear(root);
-    }
-
-    void add(const T& value) {
-        root = addNode(root, value);
-    }
-
-    bool search(const T& value) const {
-        return search(root, value) != nullptr;
-    }
-
-    int height() const {
-        return depth(root);
-    }
-
-    void getAll(std::vector<std::pair<T, int>>& result) const {
-        Travel(root, result);
-    }
-};
+}
