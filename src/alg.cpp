@@ -3,12 +3,14 @@
 #include <fstream>
 #include <iostream>
 #include <locale>
+#include <string>
+
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
   if (!file) {
-    std::cerr << "Ошибка открытия файла: " << filename << std::endl;
+    std::cerr << "Error while file open: " << filename << std::endl;
     return;
   }
 
@@ -23,7 +25,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     }
   }
 
-  // Добавляем последнее слово, если оно есть
   if (!word.empty()) {
     tree.add(word);
   }
