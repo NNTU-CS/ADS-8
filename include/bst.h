@@ -4,6 +4,8 @@
 
 #include <algorithm>
 #include <string>
+#include <vector>
+#include <utility>
 
 template <typename T>
 class BST {
@@ -14,7 +16,7 @@ class BST {
     Node* left;
     Node* right;
 
-    explicit Node(const T& val) : value(val), count(1), left(nullptr), right(nullptr) {}
+    Node(const T& val) : value(val), count(1), left(nullptr), right(nullptr) {}
   };
 
   explicit BST() : root(nullptr) {}
@@ -23,6 +25,9 @@ class BST {
   void add(T value) { root = addNode(root, value); }
   int search(T value) const { return searchNode(root, value); }
   int depth() const { return depthTree(root); }
+  void collectAll(std::vector<std::pair<T, int>>& out) const {
+    collectHelper(root, out);
+  }
 
  private:
   Node* root;
@@ -69,6 +74,13 @@ class BST {
       clearTree(node->right);
       delete node;
     }
+  }
+
+  void collectHelper(Node* node, std::vector<std::pair<T, int>>& out) const {
+    if (!node) return;
+    collectHelper(node->left, out);
+    out.emplace_back(node->value, node->count);
+    collectHelper(node->right, out);
   }
 };
 
