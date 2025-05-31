@@ -2,22 +2,15 @@
 #include "bst.h"
 #include <iostream>
 
-void processTextFile(const std::string& filename);
-
 int main() {
-  try {
-    const std::string filename = "src/war_peace.txt";
-    FrequencyTree<std::string> word_tree;
+    BST<std::string> wordTree;
+    const char* filename = "src/war_peace.txt";
     
-    buildFrequencyTree(word_tree, filename);
+    makeTree(wordTree, filename);
     
-    std::cout << "Tree depth: " << word_tree.getDepth() << std::endl;
-    displayFrequencyResults(word_tree);
+    std::cout << "Tree depth: " << wordTree.depth() << std::endl;
     
-  } catch (const std::exception& e) {
-    std::cerr << "Error: " << e.what() << std::endl;
-    return 1;
-  }
-  
-  return 0;
+    printFreq(wordTree);
+    
+    return 0;
 }
