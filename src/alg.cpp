@@ -14,20 +14,20 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         return;
     }
 
-    std::string currentWord;
+    std::string word;
     char ch;
 
     while (file.get(ch)) {
         if (isalpha(ch)) {
-            currentWord += tolower(ch);
-        } else if (!currentWord.empty()) {
-            tree.add(currentWord);
-            currentWord.clear();
+            word += tolower(ch);
+        } else if (!word.empty()) {
+            tree.add(word);
+            word.clear();
         }
     }
 
-    if (!currentWord.empty()) {
-        tree.add(currentWord);
+    if (!word.empty()) {
+        tree.add(word);
     }
 
     file.close();
