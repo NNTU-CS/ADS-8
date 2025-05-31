@@ -1,15 +1,11 @@
 // Copyright 2021 NNTU-CS
-// Copyright 2021 NNTU-CS
 #include <iostream>
 #include <string>
 #include "bst.h"
 
-void printFreq(const BST<std::string>& tree) {
-  auto words = tree.toVector();
-  for (const auto& pair : words) {
-    std::cout << pair.first << ": " << pair.second << std::endl;
-  }
-}
+void makeTree(BST<std::string>& tree, const char* filename);
+
+void printFreq(const BST<std::string>& tree);
 
 int main() {
   const char* filename = "src/war_peace.txt";
