@@ -56,7 +56,7 @@ class BST {
 
   int depthTree(Node* node) const {
     if (!node) {
-      return 0;
+      return -1;
     }
     int leftDepth = depthTree(node->left);
     int rightDepth = depthTree(node->right);
