@@ -51,17 +51,13 @@ class BST {
     }
   }
 
-  int searchNode(Node* node, T value) const {
+  int depthTree(Node* node) const {
     if (!node) {
       return 0;
     }
-    if (value < node->value) {
-      return searchNode(node->left, value);
-    } else if (value > node->value) {
-      return searchNode(node->right, value);
-    } else {
-      return node->count;
-    }
+    int leftDepth = depthTree(node->left);
+    int rightDepth = depthTree(node->right);
+    return 1 + std::max(leftDepth, rightDepth);
   }
 
   void clearTree(Node* node) {
@@ -71,7 +67,6 @@ class BST {
       delete node;
     }
   }
-
 };
 
 #endif  // INCLUDE_BST_H_
