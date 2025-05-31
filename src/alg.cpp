@@ -1,65 +1,46 @@
 // Copyright 2021 NNTU-CS
 #include "bst.h"
-
 #include <algorithm>
+#include <cctype>
 #include <fstream>
 #include <iostream>
-#include <locale>
-#include <string>
-#include <utility>
-#include <vector>
 
-static std::vector<std::pair<std::string, int>> wordFreq;
-
-void collectWordStats(std::string word, int count) {
-  wordFreq.emplace_back(word, count);
-}
-
-void makeTree(BST<std::string>& tree, const char* filename) {
-  std::ifstream file(filename);
-  if (!file) {
-    std::cout << "File error!" << std::endl;
-    return;
+void buildFrequencyTree(FrequencyTree<std::string>& tree, 
+                       const std::string& filename) {
+  std::ifstream input_file(filename);
+  if (!input_file.is_open()) {
+    throw std::runtime_error("Failed to open file: " + filename);
   }
 
-  std::string currentWord;
-  while (!file.eof()) {
-    char ch = file.get();
-    
-    if (isalpha(ch) && isascii(ch)) {
-      currentWord += tolower(ch);
-    } else {
-      if (!currentWord.empty()) {
-        tree.insert(currentWord);
-        currentWord.clear();
-      }
+  std::string current_word;
+  char ch;
+  while (input_file.get(ch)) {
+    if (isalpha(ch)) {
+      current_word += tolower(ch);
+    } else if (!current_word.empty()) {
+      tree.add(current_word);
+      current_word.clear();
     }
   }
   
-  if (!currentWord.empty()) {
-    tree.insert(currentWord);
+  if (!current_word.empty()) {
+    tree.add(current_word);
   }
-  
-  file.close();
 }
 
-void printFreq(BST<std::string>& tree) {
-  wordFreq.clear();
+void displayFrequencyResults(const FrequencyTree<std::string>& tree) {
+  auto items = tree.getAllItems();
   
-  tree.inOrder(collectWordStats);
+  std::sort(items.begin(), items.end(),
+            [](const auto& a, const auto& b) {
+              return b.second < a.second || 
+                    (b.second == a.second && b.first > a.first);
+            });
+
+  std::ofstream output_file("result/frequency_results.txt");
   
-  std::sort(wordFreq.begin(), wordFreq.end(),
-      [](const auto& a, const auto& b) {
-        return a.second > b.second;
-      });
-  
-  for (const auto& [word, count] : wordFreq) {
-    std::cout << word << ": " << count << std::endl;
+  for (const auto& [word, count] : items) {
+    std::cout << word << ": " << count << '\n';
+    output_file << word << ": " << count << '\n';
   }
-  
-  std::ofstream out("result/freq.txt");
-  for (const auto& [word, count] : wordFreq) {
-    out << word << ": " << count << std::endl;
-  }
-  out.close();
 }
