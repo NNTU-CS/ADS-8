@@ -12,50 +12,50 @@
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
     if (!file) {
-        std::cerr << "File error!" << std::endl;
+        std::cout << "File error!" << std::endl;
         return;
     }
 
-    std::string currentWord;
+    std::string word;
     char ch;
 
     while (file.get(ch)) {
-        if (isalpha(static_cast<unsigned char>(ch))) {
-            currentWord += tolower(static_cast<unsigned char>(ch));
-        } else if (!currentWord.empty()) {
-            tree.add(currentWord);
-            currentWord.clear();
+        if (isalpha(ch)) {
+            word += tolower(ch);
+        } else if (!word.empty()) {
+            tree.add(word);
+            word.clear();
         }
     }
 
-    if (!currentWord.empty()) {
-        tree.add(currentWord);
+    if (!word.empty()) {
+        tree.add(word);
     }
 
     file.close();
 }
 
 void printFreq(BST<std::string>& tree) {
-    std::vector<std::pair<std::string, int>> wordFrequencies;
-    tree.getAllWords(wordFrequencies);
+    std::vector<std::pair<std::string, int>> words;
+    tree.getAll(words);
 
-    std::sort(wordFrequencies.begin(), wordFrequencies.end(),
+    std::sort(words.begin(), words.end(),
         [](const auto& a, const auto& b) {
             if (a.second != b.second)
                 return a.second > b.second;
             return a.first < b.first;
         });
 
-    std::ofstream outFile("result/freq.txt");
-    if (!outFile) {
-        std::cerr << "Cannot create output file" << std::endl;
+    std::ofstream fout("result/freq.txt");
+    if (!fout) {
+        std::cout << "Cannot create output file" << std::endl;
         return;
     }
 
-    for (const auto& pair : wordFrequencies) {
-        std::cout << pair.first << " " << pair.second << std::endl;
-        outFile << pair.first << " " << pair.second << std::endl;
+    for (const auto& p : words) {
+        std::cout << p.first << " " << p.second << std::endl;
+        fout << p.first << " " << p.second << std::endl;
     }
 
-    outFile.close();
+    fout.close();
 }
