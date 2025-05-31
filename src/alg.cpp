@@ -1,6 +1,4 @@
 // Copyright 2021 NNTU-CS
-#include "alg.h"
-
 #include <fstream>
 #include <string>
 #include <cctype>
