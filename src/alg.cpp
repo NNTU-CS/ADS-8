@@ -2,9 +2,10 @@
 #include "bst.h"
 
 #include <cctype>
-#include <fstream>
+#include <cstdlib>
 
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
