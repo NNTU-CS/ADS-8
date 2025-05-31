@@ -4,6 +4,7 @@
 #include <cctype>
 #include <string>
 #include <algorithm>
+#include <vector>
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
@@ -32,7 +33,7 @@ void printFreq(BST<std::string>& tree) {
     std::sort(nodes.begin(), nodes.end(), [](const auto& a, const auto& b) {
         return a.second > b.second;
     });
-    for (const auto& node : nodes) {
-        std::cout << node.first << " " << node.second << std::endl;
+    for (const auto& pair : nodes) {
+        std::cout << pair.first << " " << pair.second << std::endl;
     }
 }
