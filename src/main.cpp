@@ -1,9 +1,9 @@
 // Copyright 2021 NNTU-CS
 #include "bst.h"
-
+#include <string>
 #include <iostream>
 #include <fstream>
-#include <string>
+
 
 int main() {
     BST<std::string> wordTree;
