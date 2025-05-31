@@ -1,84 +1,57 @@
 // Copyright 2021 NNTU-CS
-#ifndef INCLUDE_BST_H_
-#define INCLUDE_BST_H_
+#ifndef BST_H
+#define BST_H
 
-#include <vector>
-#include <utility>
+#include <iostream>
+#include <algorithm>
+#include <string>
 
 template <typename T>
 class BST {
- private:
-  struct Node {
-    T key;
-    int count;
-    Node* left;
-    Node* right;
-    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
-  };
+public:
+    BST() : root(nullptr), tree_size(0) {}
 
-  Node* root;
-
-  void insert(Node*& node, const T& key) {
-    if (!node) {
-      node = new Node(key);
-    } else if (key < node->key) {
-      insert(node->left, key);
-    } else if (key > node->key) {
-      insert(node->right, key);
-    } else {
-      node->count++;
+    void insert(const T& value) {
+        root = insertNode(root, value);
+        ++tree_size;
     }
-  }
 
-  int depth(Node* node) const {
-    if (!node) return 0;
-    int left_depth = depth(node->left);
-    int right_depth = depth(node->right);
-    return 1 + std::max(left_depth, right_depth);
-  }
-
-  Node* search(Node* node, const T& key) const {
-    if (!node || node->key == key) {
-      return node;
+    int depth() const {
+        return nodeDepth(root);
     }
-    if (key < node->key) {
-      return search(node->left, key);
+
+    int size() const {
+        return tree_size;
     }
-    return search(node->right, key);
-  }
 
-  void inorder(Node* node, std::vector<std::pair<T, int>>& result) const {
-    if (!node) return;
-    inorder(node->left, result);
-    result.emplace_back(node->key, node->count);
-    inorder(node->right, result);
-  }
+private:
+    struct Node {
+        T data;
+        std::unique_ptr<Node> left;
+        std::unique_ptr<Node> right;
 
-  void clear(Node* node) {
-    if (!node) return;
-    clear(node->left);
-    clear(node->right);
-    delete node;
-  }
+        Node(const T& val) : data(val), left(nullptr), right(nullptr) {}
+    };
 
- public:
-  BST() : root(nullptr) {}
-  ~BST() { clear(root); }
+    std::unique_ptr<Node> root;
+    int tree_size;
 
-  void insert(const T& key) { insert(root, key); }
+    std::unique_ptr<Node> insertNode(std::unique_ptr<Node>& node, const T& value) {
+        if (!node) {
+            return std::make_unique<Node>(value);
+        }
+        if (value < node->data) {
+            node->left = insertNode(node->left, value);
+        } else {
+            node->right = insertNode(node->right, value);
+        }
+        return std::move(node);
+    }
 
-  int depth() const { return depth(root); }
-
-  int search(const T& key) const {
-    Node* result = search(root, key);
-    return result ? result->count : 0;
-  }
-
-  std::vector<std::pair<T, int>> to_vector() const {
-    std::vector<std::pair<T, int>> result;
-    inorder(root, result);
-    return result;
-  }
+    int nodeDepth(const std::unique_ptr<Node>& node) const {
+        if (!node) return 0;
+        return 1 + std::max(nodeDepth(node->left), nodeDepth(node->right));
+    }
 };
 
-#endif  // INCLUDE_BST_H_
+#endif // BST_H
