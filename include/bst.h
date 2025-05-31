@@ -32,9 +32,9 @@ class BST {
         }
 
         if (t < n->val) {
-            n->left = insert(n->left, t);
+            n->left = add(n->left, t);
         } else {
-            n->right = insert(n->right, t);
+            n->right = add(n->right, t);
         }
 
         return n;
