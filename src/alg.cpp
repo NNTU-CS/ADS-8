@@ -1,9 +1,9 @@
 // Copyright 2021 NNTU-CS
-#include "bst.h"
+#include <iostream>
 #include <fstream>
-#include <cctype>
-#include <vector>
-#include <algorithm>
+#include <locale>
+#include <cstdlib>
+#include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
@@ -33,33 +33,29 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     file.close();
 }
 
-struct WordFreq {
-    std::string word;
-    int count;
-    
-    bool operator<(const WordFreq& other) const {
-        return count > other.count;
-    }
-};
+static std::vector<std::pair<std::string, int>> wordFreq;
+
+void collectWordStats(const std::string& word, int count) {
+    wordFreq.emplace_back(word, count);
+}
 
 void printFreq(BST<std::string>& tree) {
-    std::vector<WordFreq> words;
+    wordFreq.clear();
     
-    auto collect = [&words](BST<std::string>::Node* node) {
-        words.push_back({node->key, node->count});
-    };
+    tree.inOrder(collectWordStats);
     
-    tree.inOrder(collect);
-    
-    std::sort(words.begin(), words.end());
-    
-    for (const auto& wf : words) {
-        std::cout << wf.word << ": " << wf.count << std::endl;
-    }
 
+    std::sort(wordFreq.begin(), wordFreq.end(), 
+        [](const auto& a, const auto& b) {
+            return a.second > b.second;
+        });
+        for (const auto& [word, count] : wordFreq) {
+        std::cout << word << ": " << count << std::endl;
+    }
+    
     std::ofstream out("result/freq.txt");
-    for (const auto& wf : words) {
-        out << wf.word << ": " << wf.count << std::endl;
+    for (const auto& [word, count] : wordFreq) {
+        out << word << ": " << count << std::endl;
     }
     out.close();
 }
