@@ -87,6 +87,6 @@ class BST {
     void obhod(void (*visit)(Node*)) const {
         obhod(root, visit);
     }
-}
+};
 
 #endif  // INCLUDE_BST_H_
