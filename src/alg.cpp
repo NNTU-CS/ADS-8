@@ -1,34 +1,27 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
+#include "bst.h"
 #include <fstream>
 #include <sstream>
-#include <string>
-#include <cctype>
 #include <algorithm>
-#include "bst.h"
+#include <cctype>
+#include <string>
 
-std::string clean_word(const std::string& word) {
-  std::string result;
-  for (char c : word) {
-    if (std::isalpha(static_cast<unsigned char>(c))) {
-      result += std::tolower(static_cast<unsigned char>(c));
+void process(const std::string& filename, BST<std::string>& tree) {
+    std::ifstream file(filename);
+    std::string line, word;
+
+    while (std::getline(file, line)) {
+        std::istringstream iss(line);
+        while (iss >> word) {
+            word.erase(std::remove_if(word.begin(), word.end(),
+                [](unsigned char c) { return !std::isalpha(c); }),
+                word.end());
+
+            std::transform(word.begin(), word.end(), word.begin(), ::tolower);
+
+            if (!word.empty()) {
+                tree.insert(word);
+            }
+        }
     }
-  }
-  return result;
-}
-
-void makeTree(BST<std::string>& tree, const char* filename) {
-  std::ifstream file(filename);
-  if (!file) {
-    std::cerr << "File error: " << filename << std::endl;
-    return;
-  }
-
-  std::string word;
-  while (file >> word) {
-    std::string cleaned = clean_word(word);
-    if (!cleaned.empty()) {
-      tree.insert(cleaned);
-    }
-  }
 }
