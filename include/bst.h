@@ -18,21 +18,21 @@ class BST {
         explicit Node(T s) : slovo(s), kol(1), left(nullptr), right(nullptr) {}
   };
   Node* root;
-  Node* addNode(Node* spot, T value) {
+  Node* insert(Node* spot, T value) {
     if (spot == nullptr) {
       Node* newNode = new Node(value);
       return newNode;
     } else if (value < spot->slovo) {
-      spot->left = addNode(spot->left, value);
+      spot->left = insert(spot->left, value);
     } else if (value > spot->slovo) {
-      spot->right = addNode(spot->right, value);
+      spot->right = insert(spot->right, value);
     } else {
       spot->kol++;
     }
     return spot;
   }
 
-  int heightT(Node* root) {
+  int depth(Node* root) {
     if (root == nullptr) {
       return 0;
     }
@@ -41,23 +41,23 @@ class BST {
     return std::max(leftH, rightH) + 1;
   }
 
-  int searchNode(Node* spot, T value) const {
+  int search(Node* spot, T value) const {
     if (spot == nullptr) {
         return 0;
     } else if (value < spot->slovo) {
-        return searchNode(spot->left, value);
+        return search(spot->left, value);
     } else if (value > spot->slovo) {
-        return searchNode(spot->right, value);
+        return search(spot->right, value);
     }
     return spot->kol;
   }
 
   template <typename Visitor>
-  void obhod(Node* node, Visitor visit) const {
+  void inOrder(Node* node, Visitor visit) const {
     if (node != nullptr) {
-      obhod(node->left, visit);
+      inOrder(node->left, visit);
       visit(node);
-      obhod(node->right, visit);
+      inOrder(node->right, visit);
     }
   }
 
@@ -73,20 +73,20 @@ class BST {
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
 
-  void addNode(T value) {
-    root = addNode(root, value);
+  void insert(T value) {
+    root = insert(root, value);
   }
 
-    int heightT() const {
-        return heightT(root);
+    int depth() const {
+        return depth(root);
     }
 
-    Node* searchNode(T value) const {
-        return searchNode(root, value);
+    Node* search(T value) const {
+        return search(root, value);
     }
 
-    void obhod(void (*visit)(Node*)) const {
-        obhod(root, visit);
+    void inOrder(void (*visit)(Node*)) const {
+        inOrder(root, visit);
     }
 };
 
