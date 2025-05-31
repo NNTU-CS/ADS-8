@@ -35,8 +35,8 @@ private:
 
     int calculateDepth(Node* node) const {
         if (!node) return 0;
-        return 1 + std::max(calculateDepth(node->left), 
-                           calculateDepth(node->right));
+        return 1 + std::max(calculateDepth(node->left),
+            calculateDepth(node->right));
     }
 
     Node* findNode(Node* node, const T& value) const {
