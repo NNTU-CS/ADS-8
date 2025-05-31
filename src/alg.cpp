@@ -41,8 +41,8 @@ void printFreq(BST<std::string>& tree) {
   auto words = tree.inOrder();
 
   std::sort(words.begin(), words.end(),
-    [](const pair<string, int>& a,
-    const pair<string, int>& b) {
+    [](const std::pair<std::string, int>& a,
+    const std::pair<std::string, int>& b) {
       return a.second > b.second;
     });
 
