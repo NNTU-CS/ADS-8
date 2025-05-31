@@ -1,12 +1,11 @@
 #pragma once
-// Copyright 2021 NNTU-CS
-#ifndef INCLUDE_BST_H_
-#define INCLUDE_BST_H_
 
 #include <iostream>
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <fstream>
+#include <cctype>
 
 template <typename T>
 class BST {
@@ -16,12 +15,13 @@ private:
         int count;
         Node* left;
         Node* right;
+
         Node(const T& value) : data(value), count(1), left(nullptr), right(nullptr) {}
     };
     Node* root;
     Node* addNode(Node* node, const T& value) {
         if (!node)
-            return new Node(data);
+            return new Node(value);
         if (value < node->data)
             node->left = addNode(node->left, value);
         else if (value > node->data)
@@ -30,45 +30,52 @@ private:
             node->count++;
         return node;
     }
-
-    Node* searchNode(Node* node, const T& value) const {
-        if (!node || node->data)
-            return searchNode(node->left, value);
+    Node* search(Node* node, const T& value) const {
+        if (!node)
+            return nullptr;
+        if (value == node->data)
+            return node;
+        else if (value < node->data)
+            return search(node->left, value);
         else
-            return searchNode(node->right, value);
+            return search(node->right, value);
     }
-
-    int getHeight(Node* node) const {
+    int depth(Node* node) const {
         if (!node)
             return 0;
-        int left = getHeight(node->left);
-        int right = getHeight(node->right);
-        return std::max(left, right);
+        int left = depth(node->left);
+        int right = depth(node->right);
+        return 1 + std::max(left, right);
     }
-
     void Travel(Node* node, std::vector<std::pair<T, int>>& result) const {
-        if (node)
+        if (node) {
             Travel(node->left, result);
-        result.emplace_back(node->data, node->count);
-        Travel(node->right, result);
+            result.emplace_back(node->data, node->count);
+            Travel(node->right, result);
+        }
     }
-
+    void clear(Node* node) {
+        if (node) {
+            clear(node->left);
+            clear(node->right);
+            delete node;
+        }
+    }
 public:
-    BST() :root(nullptr) {}
+    BST() : root(nullptr) {}
+    ~BST() {
+        clear(root);
+    }
     void add(const T& value) {
         root = addNode(root, value);
     }
-
-    bool search(consr T& value) const {
-        return searchNode(root, value) != nullptr;
+    bool search(const T& value) const {
+        return search(root, value) != nullptr;
     }
-
     int height() const {
-        return getHeight(root);
+        return depth(root);
     }
-
     void getAll(std::vector<std::pair<T, int>>& result) const {
         Travel(root, result);
     }
 };
-#endif  // INCLUDE_BST_H_
