@@ -9,27 +9,27 @@ TEST(lab8, test1_1) {
     const char* filename = "/home/runner/work/ADS-8/ADS-8/build/test/war_peace.txt";
     BST<std::string> tree;
     makeTree(tree, filename);
-    int depth = tree.depth();
+    int depth = tree.heightT();
     EXPECT_EQ(depth, 35);
 }
 TEST(lab8, test1_2) {
     const char* filename = "/home/runner/work/ADS-8/ADS-8/build/test/war_peace.txt";
     BST<std::string> tree;
     makeTree(tree, filename);
-    int count = tree.search("pierre");
+    int count = tree.searchNode("pierre");
     EXPECT_EQ(count, 1963);
 }
 TEST(lab8, test1_3) {
     const char* filename = "/home/runner/work/ADS-8/ADS-8/build/test/war_peace.txt";
     BST<std::string> tree;
     makeTree(tree, filename);
-    int count = tree.search("natasha");
+    int count = tree.searchNode("natasha");
     EXPECT_EQ(count, 1212);
 }
 TEST(lab8, test1_4) {
     const char* filename = "/home/runner/work/ADS-8/ADS-8/build/test/war_peace.txt";
     BST<std::string> tree;
     makeTree(tree, filename);
-    int count = tree.search("andrew");
+    int count = tree.searchNode("andrew");
     EXPECT_EQ(count, 1143);
 }
