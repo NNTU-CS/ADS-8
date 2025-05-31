@@ -15,7 +15,7 @@ class BST {
         int kol;
         Node* left;
         Node* right;
-        Node(T s) : slovo(s), kol(1), left(nullptr), right(nullptr) {}
+        explicit Node(T s) : slovo(s), kol(1), left(nullptr), right(nullptr) {}
   };
   Node* root;
   Node* addNode(Node* spot, T value) {
