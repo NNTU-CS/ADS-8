@@ -18,21 +18,21 @@ class BST {
         explicit Node(T s) : slovo(s), kol(1), left(nullptr), right(nullptr) {}
   };
   Node* root;
-  Node* insert(Node* spot, T value) {
+  Node* addNode(Node* spot, T value) {
     if (spot == nullptr) {
       Node* newNode = new Node(value);
       return newNode;
     } else if (value < spot->slovo) {
-      spot->left = insert(spot->left, value);
+      spot->left = addNode(spot->left, value);
     } else if (value > spot->slovo) {
-      spot->right = insert(spot->right, value);
+      spot->right = addNode(spot->right, value);
     } else {
       spot->kol++;
     }
     return spot;
   }
 
-  int depth(Node* root) {
+  int heightT(Node* root) {
     if (root == nullptr) {
       return 0;
     }
@@ -41,23 +41,23 @@ class BST {
     return std::max(leftH, rightH) + 1;
   }
 
-  int search(Node* spot, T value) const {
+  int searchNode(Node* spot, T value) const {
     if (spot == nullptr) {
         return 0;
     } else if (value < spot->slovo) {
-        return search(spot->left, value);
+        return searchNode(spot->left, value);
     } else if (value > spot->slovo) {
-        return search(spot->right, value);
+        return searchNode(spot->right, value);
     }
     return spot->kol;
   }
 
   template <typename Visitor>
-  void inOrder(Node* node, Visitor visit) const {
+  void obhod(Node* node, Visitor visit) const {
     if (node != nullptr) {
-      inOrder(node->left, visit);
+      obhod(node->left, visit);
       visit(node);
-      inOrder(node->right, visit);
+      obhod(node->right, visit);
     }
   }
 
@@ -71,23 +71,23 @@ class BST {
 
  public:
   BST() : root(nullptr) {}
-  ~BST() { clear(root); }
+  ~BST() { delet(root); }
 
-  void insert(T value) {
-    root = insert(root, value);
+  void addNode(T value) {
+    root = addNode(root, value);
   }
 
-    int depth() const {
-        return depth(root);
-    }
+  int heightT() const {
+      return heightT(root);
+  }
 
-    Node* search(T value) const {
-        return search(root, value);
-    }
+  int searchNode(T value) const {
+      return searchNode(root, value);
+  }
 
-    void inOrder(void (*visit)(Node*)) const {
-        inOrder(root, visit);
-    }
+  void obhod(void (*visit)(Node*)) const {
+      obhod(root, visit);
+  }
 };
 
 #endif  // INCLUDE_BST_H_
