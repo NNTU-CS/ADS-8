@@ -56,9 +56,9 @@ class BST {
 
     void ord(Node* n, std::vector<std::pair<T, int>>& res) const {
         if (!n) return;
-        inorder(n->left, res);
-        res.push_back({n->data, n->count});
-        inorder(n->right, res);
+        ord(n->left, res);
+        res.push_back({n->val, n->ocCount});
+        ord(n->right, res);
     }
 
  public:
