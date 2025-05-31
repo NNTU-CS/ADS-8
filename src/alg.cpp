@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <cctype>
+#include "bst.h"
 #include <iostream>
 
 void makeTree(BST<std::string>& tree, const char* filename) {
