@@ -4,9 +4,9 @@
 #include <cctype>
 #include <cstdlib>
 
-#include <algorithm>
-#include <fstream>
 #include <iostream>
+#include <fstream>
+#include <algorithm>
 #include <string>
 #include <vector>
 
