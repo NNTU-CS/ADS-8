@@ -1,6 +1,5 @@
 // Copyright 2021 NNTU-CS
 #include "bst.h"
-#include "alg.h"
 #include <iostream>
 
 int main() {
