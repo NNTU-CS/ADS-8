@@ -1,25 +1,23 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
-#include <vector>
-#include <string>
-#include <utility>
-#include <algorithm>
+#include <cstddef>
+#include <functional>
 
-template<typename T>
+template <typename T>
 class BST {
  private:
     struct Node {
         T key;
-        int count;
+        std::size_t frequency;
         Node* left;
         Node* right;
 
-        explicit Node(const T& val)
-            : key(val), count(1), left(nullptr), right(nullptr) {}
+        explicit Node(const T& k)
+            : key(k), frequency(1), left(nullptr), right(nullptr) {}
     };
 
-    Node* root;
+    Node* root_;
 
     void destroy(Node* node) {
         if (!node) return;
@@ -28,76 +26,60 @@ class BST {
         delete node;
     }
 
-    int calcDepth(Node* node) const {
-        if (!node) return 0;
-        int l = calcDepth(node->left);
-        int r = calcDepth(node->right);
-        return 1 + (l > r ? l : r);
+    void add(Node*& node, const T& value) {
+        if (!node) {
+            node = new Node(value);
+            return;
+        }
+        if (value == node->key) {
+            ++node->frequency;
+        } else if (value < node->key) {
+            add(node->left, value);
+        } else {
+            add(node->right, value);
+        }
     }
 
-    void collect(Node* node, std::vector<std::pair<T, int>>& list) const {
+    int computeDepth(Node* node) const {
+        if (!node) return 0;
+        int leftDepth = computeDepth(node->left);
+        int rightDepth = computeDepth(node->right);
+        return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
+    }
+
+    template <typename F>
+    void traverse(Node* node, F&& func) const {
         if (!node) return;
-        collect(node->left, list);
-        list.emplace_back(node->key, node->count);
-        collect(node->right, list);
+        traverse(node->left, func);
+        func(node->key, node->frequency);
+        traverse(node->right, func);
     }
 
  public:
-    BST() : root(nullptr) {}
-    ~BST() { destroy(root); }
+    BST() : root_(nullptr) {}
+    ~BST() { destroy(root_); }
 
-    void insert(const T& val) {
-        if (!root) {
-            root = new Node(val);
-            return;
-        }
-        Node* cur = root;
-        while (true) {
-            if (val == cur->key) {
-                ++cur->count;
-                return;
-            } else if (val < cur->key) {
-                if (!cur->left) {
-                    cur->left = new Node(val);
-                    return;
-                }
-                cur = cur->left;
-            } else {
-                if (!cur->right) {
-                    cur->right = new Node(val);
-                    return;
-                }
-                cur = cur->right;
-            }
-        }
+    void insert(const T& value) {
+        add(root_, value);
     }
 
-    int search(const T& val) const {
-        Node* cur = root;
-        while (cur) {
-            if (val == cur->key) return cur->count;
-            cur = (val < cur->key) ? cur->left : cur->right;
+    int search(const T& value) const {
+        Node* current = root_;
+        while (current) {
+            if (value == current->key) return static_cast<int>(current->frequency);
+            current = (value < current->key) ? current->left : current->right;
         }
         return 0;
     }
 
     int depth() const {
-        return calcDepth(root) - 1;
+        return root_ ? computeDepth(root_) - 1 : 0;
     }
 
-    std::vector<std::pair<T, int>> getSortedByFrequency() const {
-        std::vector<std::pair<T, int>> result;
-        collect(root, result);
-        std::sort(result.begin(), result.end(),
-                  [](const auto& a, const auto& b) {
-                      return a.second > b.second;
-                  });
-        return result;
+    template <typename F>
+    void inorder(F&& func) const {
+        traverse(root_, std::forward<F>(func));
     }
-
-    BST(const BST&) = delete;
-    BST& operator=(const BST&) = delete;
 };
-
 
 #endif  // INCLUDE_BST_H_
