@@ -13,22 +13,25 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         std::cerr << "Cannot open file: " << filename << "\n";
         return;
     }
-
     std::string word;
     char c;
-
+    bool in_word = false;
     while (fin.get(c)) {
-        if (std::isalpha(static_cast<unsigned char>(c))) {
-            word += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
-        } else if (!word.empty()) {
-            tree.add(word);
-            word.clear();
+        unsigned char uc = static_cast<unsigned char>(c);
+        if (std::isalnum(uc) || c == '\'' || c == '-') {
+            word += static_cast<char>(std::tolower(uc));
+            in_word = true;
+        } else if (in_word) {
+            if (!word.empty()) {
+                tree.add(word);
+                word.clear();
+            }
+            in_word = false;
         }
     }
-    if (!word.empty()) {
+    if (in_word && !word.empty()) {
         tree.add(word);
     }
-
     fin.close();
 }
 
