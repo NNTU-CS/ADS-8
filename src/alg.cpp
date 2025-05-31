@@ -12,7 +12,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         return;
     }
 
-    std::string word; //проверка чекеров
+    std::string word;
     char ch;
     while (file.get(ch)) {
         if (std::isalpha(ch)) {
