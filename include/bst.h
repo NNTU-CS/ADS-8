@@ -2,67 +2,99 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
+#include <string>
 #include <iostream>
-#include <memory>
-#include <algorithm>
+#include <vector>
 #include <utility>
+#include <algorithm>
 
 template <typename T>
 class BST {
- public:
-  BST() : root(nullptr), tree_size(0) {}
-
-  void insert(const T& value) {
-    root = insertNode(std::move(root), value);
-    ++tree_size;
-  }
-
-  bool search(const T& value) const {
-    return searchNode(root, value);
-  }
-
-  int depth() const {
-    return nodeDepth(root);
-  }
-
-  int size() const {
-    return tree_size;
-  }
-
  private:
   struct Node {
-    T data;
-    std::unique_ptr<Node> left;
-    std::unique_ptr<Node> right;
-
-    explicit Node(const T& val) : data(val), left(nullptr), right(nullptr) {}
+    T key;
+    int count;
+    Node* left;
+    Node* right;
+    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
 
-  std::unique_ptr<Node> root;
-  int tree_size;
+  Node* root;
 
-  std::unique_ptr<Node> insertNode(std::unique_ptr<Node> node, const T& value) {
+  Node* insert(Node* node, const T& value) {
     if (!node) {
-      return std::make_unique<Node>(value);
+      return new Node(value);
     }
-    if (value < node->data) {
-      node->left = insertNode(std::move(node->left), value);
-    } else if (value > node->data) {
-      node->right = insertNode(std::move(node->right), value);
+    if (value == node->key) {
+      node->count++;
+      return node;
+    }
+    if (value < node->key) {
+      node->left = insert(node->left, value);
+    } else {
+      node->right = insert(node->right, value);
     }
     return node;
   }
 
-  bool searchNode(const std::unique_ptr<Node>& node, const T& value) const {
-    if (!node) return false;
-    if (value == node->data) return true;
-    if (value < node->data) return searchNode(node->left, value);
-    return searchNode(node->right, value);
+  int depth(Node* node) const {
+    if (!node) {
+      return -1;
+    }
+    int leftDepth = depth(node->left);
+    int rightDepth = depth(node->right);
+    return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
   }
 
-  int nodeDepth(const std::unique_ptr<Node>& node) const {
-    if (!node) return 0;
-    return 1 + std::max(nodeDepth(node->left), nodeDepth(node->right));
+  void collectFreq(Node* node, std::vector<std::pair<T, int>>& freqList) const {
+    if (!node) {
+      return;
+    }
+    collectFreq(node->left, freqList);
+    freqList.emplace_back(node->key, node->count);
+    collectFreq(node->right, freqList);
+  }
+
+  void clear(Node* node) {
+    if (!node) {
+      return;
+    }
+    clear(node->left);
+    clear(node->right);
+    delete node;
+  }
+
+ public:
+  BST() : root(nullptr) {}
+  ~BST() { clear(root); }
+
+  void insert(const T& value) {
+    root = insert(root, value);
+  }
+
+  int search(const T& value) const {
+    Node* node = root;
+    while (node) {
+      if (value == node->key) {
+        return node->count;
+      }
+      if (value < node->key) {
+        node = node->left;
+      } else {
+        node = node->right;
+      }
+    }
+    return 0;
+  }
+
+  int depth() const {
+    return depth(root);
+  }
+
+  std::vector<std::pair<T, int>> toVector() const {
+    std::vector<std::pair<T, int>> freqList;
+    collectFreq(root, freqList);
+    return freqList;
   }
 };
 
