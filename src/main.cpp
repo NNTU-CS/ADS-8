@@ -1,18 +1,15 @@
 // Copyright 2021 NNTU-CS
 #include "bst.h"
 
-#include <iostream>
-#include <string>
-
 int main() {
   BST<std::string> wordTree;
-  const char* filename = "src/war_peace.txt";
   
-  makeTree(wordTree, filename);
-  
-  std::cout << "Tree depth: " << wordTree.depth() << std::endl;
-  
-  printFreq(wordTree);
+  wordTree.insert("test");
+  wordTree.insert("example");
+  wordTree.insert("test");
+
+  std::cout << "Depth: " << wordTree.depth() << std::endl;
+  std::cout << "'test' count: " << wordTree.getCount("test") << std::endl;
   
   return 0;
 }
