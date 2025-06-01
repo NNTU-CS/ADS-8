@@ -53,6 +53,7 @@ class BST {
     result.emplace_back(node->key, node->count);
     inOrder(node->right, result);
   }
+
  public:
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
