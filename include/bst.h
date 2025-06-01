@@ -9,14 +9,13 @@
 
 template <typename T>
 class BST {
-private:
-
+ private:
     struct Node {
         T key;
         int count;
         Node* left;
         Node* right;
-        Node(T k) : key(std::move(k)), count(1), left(nullptr), right(nullptr) {}
+        explicit Node(T k) : key(std::move(k)), count(1), left(nullptr), right(nullptr) {}
     };
 
     Node* root;
@@ -61,8 +60,8 @@ private:
             symBypass(node->right, result);
         }
     }
-public:
 
+ public:
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
 
