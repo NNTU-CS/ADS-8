@@ -91,15 +91,3 @@ node->cnt++;
 }
 return node;
 }
-
-template<typename T>
-int BST<T>::search(const T& value) const {
-Node* foundNode = searchNode(root, value);
-return foundNode ? foundNode->cnt : 0;
-}
-
-template<typename T>
-int BST<T>::depth() const {
-/*if (!root) return 0;*/
-return calcDepth(root);
-}
