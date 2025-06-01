@@ -34,7 +34,7 @@ private:
         int lDepth = depth(node->lft);
         int rDepth = depth(node->rght);
         
-        return std::max(leftDepth, rightDepth) + 1;
+        return std::max(lDepth, rDepth) + 1;
     }
 
     Node* search(Node* node, T value) const {
