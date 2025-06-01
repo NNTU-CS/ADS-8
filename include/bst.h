@@ -63,14 +63,13 @@ private:
         inOrderRec(root, result);
         return result;
     }
-
  private:
     Node* searchNode(T value) const {
-        Node* current = root;
-        while (current) {
-            if (value == current->key) return current;
-            current = value < current->key ? current->left : current->right;
-        }
+    Node* current = root;
+    while (current) {
+        if (value == current->key) return current;
+        current = value < current->key ? current->left : current->right;
+    }
         return nullptr;
     }
 };
