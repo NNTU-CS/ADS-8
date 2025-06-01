@@ -25,7 +25,7 @@ class BST {
     } else if (key == node->key) {
       node->count++;
     } else {
-      key < node->key ? addEl(node->left, key) 
+      key < node->key ? addEl(node->left, key)
                      : addEl(node->right, key);
     }
   }
@@ -33,13 +33,13 @@ class BST {
   int findEl(const Knot* node, const T& key) const {
     if (!node) return 0;
     if (key == node->key) return node->count;
-    return findEl(key < node->key ? node->left.get() 
+    return findEl(key < node->key ? node->left.get()
                                 : node->right.get(), key);
   }
 
   int calcHeight(const Knot* node) const {
     if (!node) return -1;
-    return 1 + std::max(calcHeight(node->left.get()), 
+    return 1 + std::max(calcHeight(node->left.get()),
                        calcHeight(node->right.get()));
   }
 
