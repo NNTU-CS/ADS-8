@@ -11,7 +11,7 @@ TEST(lab8, test1_1) {
     makeTree(tree, filename);
 
     int height = tree.height();
-    ASSERT_NEAR(height, 35, 1);
+    ASSERT_NEAR(height, 35);
 }
 TEST(lab8, test1_2) {
     const char* filename = "/home/runner/work/ADS-8/ADS-8/build/test/war_peace.txt";
