@@ -67,8 +67,8 @@ Node* foundNode = searchNode(root, value);
 return foundNode ? foundNode->cnt : 0;
 }
 int depth() const {
-/*if (!root) return 0;*/
-return calcDepth(root);
+int calculatedNodeDepth = calcDepth(root);
+return (calculatedNodeDepth > 0) ? (calculatedNodeDepth - 1) : 0;
 }
 void clear() {clearTree(root); root = nullptr;}
 };
