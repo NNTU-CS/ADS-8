@@ -1,62 +1,59 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
-
 #include <iostream>
 #include <utility>
 #include <string>
 #include <algorithm>
 #include <vector>
-
 template <typename T>
 class BST {
-@@ -21,34 +21,44 @@ class BST {
-
+ private:
+    struct Node {
+        T val;
+        int ocCount;
+        Node* left;
+        Node* right;
+        explicit Node(const T& t) : val(t), ocCount(1), left(nullptr), right(nullptr) {}
+    };
     Node* root;
-
     Node* add(Node* n, const T& t) {
         if (!n) {
             return new Node(t);
         }
-
         if (t == n->val) {
             n->ocCount++;
             return n;
         }
 
         if (t < n->val) {
-            n->left = insert(n->left, t);
+            n->left = add(n->left, t);
         } else {
-            n->right = insert(n->right, t);
+            n->right = add(n->right, t);
         }
-        return node;
 
         return n;
     }
-
     int depthTree(Node* n) const {
         if (!n) return -1;
         int lDepth = depthTree(n->left);
         int rDepth = depthTree(n->right);
         return 1 + (lDepth > rDepth ? lDepth : rDepth);
     }
-
     void clear(Node* n) {
         if (!n) return;
         clear(n->left);
         clear(n->right);
         delete n;
     }
-
     void ord(Node* n, std::vector<std::pair<T, int>>& res) const {
         if (!n) return;
         inorder(n->left, res);
         res.push_back({n->data, n->count});
         inorder(n->right, res);
     }
-
  public:
- BST() : root(nullptr) {}
+    BST() : root(nullptr) {}
     ~BST() { clear(root); }
     void insert(const T& value) {
         root = add(root, value);
@@ -78,12 +75,10 @@ class BST {
     int depth() const {
         return depthTree(root);
     }
-
     std::vector<std::pair<T, int>> toVector() const {
       std::vector<std::pair<T, int>> res;
       ord(root, res);
       return res;
     }
 };
-
 #endif // INCLUDE_BST_H_
