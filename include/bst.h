@@ -52,6 +52,7 @@ class BST {
         clearRec(node->right);
         delete node;
     }
+
  public:
     BST() : root(nullptr) {}
     ~BST() { clearRec(root); }
