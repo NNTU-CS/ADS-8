@@ -16,6 +16,8 @@ template <typename T> class BST {
   };
   Node* root;
 
+  using Item = std::pair<T, int>;
+
   Node* addNode(Node* root, const T& word) {
     if (root == nullptr) {
       root = new Node;
@@ -117,7 +119,6 @@ template <typename T> class BST {
   }
 
  public:
-  using Item = std::pair<T, int>;
   BST() : root(nullptr) {}
   ~BST() { clear(); }
 
