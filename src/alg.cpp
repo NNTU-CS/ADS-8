@@ -33,8 +33,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         char ch = word[0];
         if (std::isalpha(ch)) {
             currentWord += ch;
-        }
-        else {
+        } else {
             if (!currentWord.empty()) {
                 tree.add(toLower(currentWord));
                 currentWord.clear();
