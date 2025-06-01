@@ -1,6 +1,4 @@
 // Copyright 2021 NNTU-CS
-#include  "bst.h"
-
 #include <iostream>
 #include <fstream>
 #include <locale>
@@ -9,6 +7,7 @@
 #include <cctype>
 #include <vector>
 #include <algorithm>
+#include  "bst.h"
 std::string toLower(const std::string& str) {
     std::string result = "";
     for (char c : str) {
@@ -16,11 +15,9 @@ std::string toLower(const std::string& str) {
     }
     return result;
 }
-
 bool isLetter(char c) {
     return std::isalpha(c);
 }
-
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
     if (!file) {
@@ -29,9 +26,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     }
 
     std::string word;
-    std::string currentWord;
     char ch;
-
     while (file.get(ch)) {
         if (isLetter(ch)) {
             word += std::tolower(ch);
@@ -40,17 +35,13 @@ void makeTree(BST<std::string>& tree, const char* filename) {
             word.clear();
         }
     }
-
     if (!word.empty()) {
         tree.insert(word);
     }
-
     file.close();
 }
-
 void printFreq(BST<std::string>& tree) {
     std::vector<std::pair<std::string, int>> frequencies = tree.getFrequencies();
-
     std::sort(frequencies.begin(), frequencies.end(), [](const auto& a, const auto& b) {
         return a.second > b.second;
         });
