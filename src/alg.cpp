@@ -3,7 +3,6 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
-#include <locale>
 #include <string>
 
 #include "bst.h"
@@ -20,7 +19,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   int ch;
 
   while ((ch = file.get()) != EOF) {
-    if (std::isalpha(ch)) {
+    if (std::isalpha(static_cast<unsigned char>(ch))) {
       word += static_cast<char>(std::tolower(ch));
     } else {
       if (!word.empty()) {
