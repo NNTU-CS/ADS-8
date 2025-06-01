@@ -50,7 +50,7 @@ private:
 public: 
     BST() = default;
     ~BST() = default;
-    void insert(const T& key) { addEl(root, key); }
+    void addEl(const T& key) { addEl(root, key); }
     
     int search(const T& key) const { 
         return findEl(root.get(), key); 
