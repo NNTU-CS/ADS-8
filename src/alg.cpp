@@ -2,6 +2,7 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
+#include <string>
 #include  "bst.h"
 #include <iostream>
 #include <vector>
@@ -20,8 +21,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         if (ch >= 'A' && ch <= 'Z') ch += 'a' - 'A';
         if (ch >= 'a' && ch <= 'z') {
             word += ch;
-        }
-        else {
+        } else {
             if (!word.empty()) {
                 tree.add(word);
             }
