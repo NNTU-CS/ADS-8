@@ -34,8 +34,14 @@ BST() : root(nullptr) {}
 ~BST() {clear();}
 void add(const T& value) { root = addNode(root, value);}
 void getSorted(std::vector<std::pair<T, int>>& result) const { inorderTraversal(root, result); }
-int search(const T& value) const;
-int depth() const;
+int search(const T& value) const {
+Node* foundNode = searchNode(root, value);
+return foundNode ? foundNode->cnt : 0;
+}
+int depth() const {
+/*if (!root) return 0;*/
+return calcDepth(root);
+}
 void clear() {clearTree(root); root = nullptr;}
 };
 #endif  // INCLUDE_BST_H_
