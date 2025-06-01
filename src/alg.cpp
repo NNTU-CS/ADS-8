@@ -18,7 +18,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     if (std::isalpha(static_cast<unsigned char>(ch))) {
       curWord.clear();
       do {
-        curWord += std::tolower(static_cast<unsigned char>(ch)));
+        curWord += std::tolower(static_cast<unsigned char>(ch));
       } while (file.get(ch) && std::isalpha(static_cast<unsigned char>(ch)));
       tree.addEl(curWord);
     }
