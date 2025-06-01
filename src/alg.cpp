@@ -26,7 +26,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         if (latinLetter(sm)) {
             curtWord += tolower(sm);
         } else if (!curtWord.empty()) {
-            tree.addNode(curtWord);
+            tree.insert(curtWord);
             curtWord.clear();
         }
     }
@@ -49,16 +49,29 @@ bool compareWordFreq(const WordFreq& a, const WordFreq& b) {
 
 void printFreq(BST<std::string>& tree) {
     std::vector<WordFreq> words;
-    
-    tree.inorder([&words](const BST<std::string>::Node* node) {
-        words.push_back({node->slovo, node->kol});
-    });
-    
-    std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
-        return a.kol > b.kol;
-    });
-    
+
+    auto collectWords = [&words](BST<std::string>::Node* node) {
+        WordFreq wf;
+        wf.word = node->slovo;
+        wf.kol = node->kol;
+        words.push_back(wf);
+    };
+
+    tree.inorder(collectWords);
+
+    std::sort(words.begin(), words.end(), compareWordFreq);
+
     for (const auto& wf : words) {
         std::cout << wf.word << ": " << wf.kol << std::endl;
+    }
+
+    std::ofstream outFile("result/freq.txt");
+    if (outFile) {
+        for (const auto& wf : words) {
+            outFile << wf.word << ": " << wf.kol << std::endl;
+        }
+        outFile.close();
+    } else {
+        std::cerr << "Unable << std::endl;
     }
 }
