@@ -73,9 +73,9 @@ class BST {
         return depth(root);
     }
 
-    std::pair<T, int>* search(const T& value) const {
+    int search(const T& value) const {
         Node* node = search(root, value);
-        return node ? &std::pair<T, int>{node->key, node->count} : nullptr;
+        return node ? node->count : 0;
     }
 
     std::vector<std::pair<T, int>> symBypass() const {
