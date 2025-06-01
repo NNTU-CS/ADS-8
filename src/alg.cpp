@@ -3,11 +3,10 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
-#include  "bst.h"
-
 #include <cctype>
 #include <vector>
 #include <algorithm>
+#include  "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
@@ -15,7 +14,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         std::cerr << "File error!" << std::endl;
         return;
     }
-
     std::string word;
     char ch;
     while (file.get(ch)) {
@@ -35,12 +33,10 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 void printFreq(BST<std::string>& tree) {
     std::vector<BST<std::string>::Node*> nodes;
     tree.inOrderTraversal(nodes);
-    
-    std::sort(nodes.begin(), nodes.end(), 
+    std::sort(nodes.begin(), nodes.end(),
         [](const auto& a, const auto& b) {
             return a->count > b->count;
         });
-    
     std::ofstream out("result/freq.txt");
     for (const auto& node : nodes) {
         std::cout << node->key << ": " << node->count << "\n";
