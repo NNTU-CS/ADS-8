@@ -4,50 +4,41 @@
 #include  <locale>
 #include  <cstdlib>
 #include  "bst.h"
+#include <cctype>
 #include <string>
-#include <algorithm>
+
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        std::cerr << "Error: Unable to open file!" << std::endl;
+  // поместите сюда свой код
+    std::ifstream inputFile(filename);
+    if (!inputFile.is_open()) {
+        std::cerr << "Error: Unable to open file \"" << filename << "\"." << std::endl;
         return;
     }
 
-    std::string word;
+    std::string currentWord;
     char ch;
-
-    while (file.get(ch)) {
+    while (inputFile.get(ch)) {
         if (std::isalpha(static_cast<unsigned char>(ch))) {
-            word += std::tolower(static_cast<unsigned char>(ch));
-        } else {
-            if (!word.empty()) {
-                tree.add(word);
-                word.clear();
-            }
+            currentWord += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+        } else if (!currentWord.empty()) {
+            tree.insert(currentWord);
+            currentWord.clear();
         }
     }
-    if (!word.empty()) {
-        tree.add(word);
+    if (!currentWord.empty()) {
+        tree.insert(currentWord);
     }
-    file.close();
 }
 
 void printFreq(BST<std::string>& tree) {
-    auto frequencies = tree.getFrequencies();
-    std::sort(frequencies.begin(), frequencies.end(),
-              [](const auto& a, const auto& b) {
-                  return a.second > b.second || (a.second == b.second && a.first < b.first);
-              });
-
-    std::ofstream output("result/freq.txt");
-    if (!output) {
-        std::cerr << "Error creating output file!" << std::endl;
+    const std::string outputPath = "result/freq.txt";
+    std::ofstream outputFile(outputPath);
+    if (!outputFile.is_open()) {
+        std::cerr << "Error: Could not open output file \"" << outputPath << "\"." << std::endl;
         return;
     }
 
-    for (const auto& entry : frequencies) {
-        output << entry.first << ": " << entry.second << "\n";
-    }
-    output.close();
+    tree.printFreq(outputFile);
+    tree.printFreq(std::cout);
 }
