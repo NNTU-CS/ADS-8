@@ -11,7 +11,9 @@
 
 template <typename T>
 class BST {
+
 private:
+
   struct Node {
     T data;
     Node* right;
@@ -26,11 +28,9 @@ private:
     }
     if (value < node->data) {
       node->left = addNode(node->left, value);
-    }
-    else if (value > node->data) {
+    } else if (value > node->data) {
       node->right = addNode(node->right, value);
-    }
-    else {
+    } else {
       node->count++;
     }
     return node;
@@ -48,11 +48,9 @@ private:
     }
     if (value == node->data) {
       return node;
-    }
-    else if (value < node->data) {
+    } else if (value < node->data) {
       return search(node->left, value);
-    }
-    else {
+    } else {
       return search(node->right, value);
     }
   }
@@ -69,6 +67,7 @@ private:
   }
 
 public:
+
   int search(const T& value) const {
     Node* node = search(root, value);
     return node ? node->count : 0;
