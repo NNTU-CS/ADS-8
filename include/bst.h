@@ -2,6 +2,7 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -52,7 +53,6 @@ class BST {
     result.emplace_back(node->key, node->count);
     inOrder(node->right, result);
   }
-
  public:
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
