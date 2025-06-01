@@ -11,15 +11,13 @@
 
 template <typename T>
 class BST {
-
-private:
-
+ private:
   struct Node {
     T data;
     Node* right;
     int count;
     Node* left;
-    Node(const T& value) : data(value), count(1), left(nullptr), right(nullptr) {}
+    explicitNode(const T& value) : data(value), count(1), left(nullptr), right(nullptr) {}
   };
   Node* root;
   Node* addNode(Node* node, const T& value) {
@@ -65,9 +63,7 @@ private:
     return !node ? -1 :
       1 + std::max(depth(node->left), depth(node->right));
   }
-
-public:
-
+ public:
   int search(const T& value) const {
     Node* node = search(root, value);
     return node ? node->count : 0;
