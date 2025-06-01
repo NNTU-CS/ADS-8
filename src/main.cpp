@@ -32,5 +32,7 @@ int main() {
     std::cout << "war: " << wordTree.getCount("war") << " occurrences\n";
     std::cout << "peace: " << wordTree.getCount("peace") << " occurrences\n";
 
+
+
     return 0;
 }
