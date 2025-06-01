@@ -1,5 +1,6 @@
-#ifndef BST_H
-#define BST_H
+// Copyright 2021 NNTU-CS
+#ifndef INCLUDE_BST_H_
+#define INCLUDE_BST_H_
 
 #include <iostream>
 #include <string>
@@ -27,9 +28,7 @@ private:
     }
 
     Node* insert(Node* node, const T& key) {
-        if (!node) {
-            return new Node(key);
-        }
+        if (!node) return new Node(key);
         if (key == node->key) {
             node->count++;
         } else if (key < node->key) {
@@ -82,4 +81,4 @@ public:
     }
 };
 
-#endif // BST_H
+#endif  // INCLUDE_BST_H_
