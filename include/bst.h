@@ -6,6 +6,7 @@
 #include <utility>
 
 template <typename T>
+
 class BST {
 private:
     struct Node {
@@ -13,7 +14,7 @@ private:
         int count;
         Node* left;
         Node* right;
-        Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
+        explicit Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
     };
 
     Node* root;
@@ -24,9 +25,9 @@ private:
             node->count++;
             return node;
         }
-        if (key < node->key) 
+        if (key < node->key)
             node->left = insert(node->left, key);
-        else 
+        else
             node->right = insert(node->right, key);
         return node;
     }
@@ -53,7 +54,6 @@ private:
         collectNodes(node->left, nodes);
         collectNodes(node->right, nodes);
     }
-
 public:
     BST() : root(nullptr) {}
     
