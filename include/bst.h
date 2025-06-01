@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <utility>
+#include <algorithm>
 
 template <typename T> class BST {
  private:
@@ -46,7 +47,7 @@ template <typename T> class BST {
     }
   }
 
-  void printTree(Node* root) const{
+  void printTree(Node* root) const {
     if (root == nullptr) {
       return;
     }
@@ -59,7 +60,7 @@ template <typename T> class BST {
 
   int depthTree(const Node* root) const {
     if (root == nullptr) {
-      return -1; 
+      return -1;
     }
     if (root->left == nullptr && root->right == nullptr) {
       return 0;   // Глубина листа 0
@@ -89,28 +90,28 @@ template <typename T> class BST {
       if (root->right == nullptr) {
         root = root->left;
       } else if (root->left == nullptr) {
-	root = root->right;
+        root = root->right;
       } else {
-	w = root->left;
-	if (w->right != nullptr) {
-	  while (w->right->right != nullptr) {
-	    w = w->right;
-	  }
-	  root->word = w->right->word;
-	  root->count = w->right->count;
-	  p = w->right;
-	  w->right = w->right->left;
-	  } else {
-	    root->word = w->word;
-	    root->count = w->count;
-	    p = w;
-	    root->left = root->left->left;
-	  }
-	}
-	delete p;
+        w = root->left;
+        if (w->right != nullptr) {
+          while (w->right->right != nullptr) {
+            w = w->right;
+          }
+          root->word = w->right->word;
+          root->count = w->right->count;
+          p = w->right;
+          w->right = w->right->left;
+          } else {
+            root->word = w->word;
+            root->count = w->count;
+            p = w;
+            root->left = root->left->left;
+          }
+        }
+        delete p;
     }
     return root;
-  }  
+  }
 
   void fillVector(Node* node, std::vector<Item>& result) const {
     if (!node) return;
@@ -127,15 +128,15 @@ template <typename T> class BST {
     root = addNode(root, word);
   }
 
-  int search(const T& word) const{
+  int search(const T& word) const {
     return searchNode(root, word);
   }
 
-  int depth() const{
+  int depth() const {
     return depthTree(root);
   }
 
-  void print() const{
+  void print() const {
     printTree(root);
   }
 
