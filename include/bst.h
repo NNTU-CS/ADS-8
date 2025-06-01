@@ -5,16 +5,17 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <utility>
 
 template <typename T>
 class BST {
- private:
+private:
     struct Node {
         T key;
         int count;
         Node* left;
         Node* right;
-        Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
+        explicit Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
     };
     Node* root;
     Node* insertRec(Node* node, T value) {
@@ -28,23 +29,15 @@ class BST {
         }
         return node;
     }
-    Node* searchRec(Node* node, T value) const {
-        if (!node || node->key == value)
-            return node;
-        if (value < node->key)
-            return searchRec(node->left, value);
-        else
-            return searchRec(node->right, value);
-    }
     int depthRec(Node* node) const {
         if (!node) return 0;
         return std::max(depthRec(node->left), depthRec(node->right)) + 1;
     }
-    void inOrderRec(Node* node, std::vector<Node*>& nodes) const {
+    void inOrderRec(Node* node, std::vector<std::pair<T, int>>& result) const {
         if (!node) return;
-        inOrderRec(node->left, nodes);
-        nodes.push_back(node);
-        inOrderRec(node->right, nodes);
+        inOrderRec(node->left, result);
+        result.emplace_back(node->key, node->count);
+        inOrderRec(node->right, result);
     }
     void clearRec(Node* node) {
         if (!node) return;
@@ -59,14 +52,26 @@ class BST {
     void insert(T value) {
         root = insertRec(root, value);
     }
-    Node* search(T value) const {
-        return searchRec(root, value);
+    bool search(T value) const {
+        return searchNode(value) != nullptr;
     }
     int depth() const {
         return depthRec(root);
     }
-    void inOrderTraversal(std::vector<Node*>& nodes) const {
-        inOrderRec(root, nodes);
+    std::vector<std::pair<T, int>> getItems() const {
+        std::vector<std::pair<T, int>> result;
+        inOrderRec(root, result);
+        return result;
+    }
+
+ private:
+    Node* searchNode(T value) const {
+        Node* current = root;
+        while (current) {
+            if (value == current->key) return current;
+            current = value < current->key ? current->left : current->right;
+        }
+        return nullptr;
     }
 };
 
