@@ -4,9 +4,7 @@
 #include  <locale>
 #include  <cstdlib>
 #include  "bst.h"
-#include <cctype>
-#include <algorithm>
-#include <string>
+
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
@@ -29,7 +27,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
 void printFreq(BST<std::string>& tree) {
     auto items = tree.getAll();
-    std::sort(items.begin(), items.end(), 
+    std::sort(items.begin(), items.end(),
         [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
             return a.second > b.second;
         });
