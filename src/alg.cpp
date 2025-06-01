@@ -11,7 +11,7 @@
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream fl(filename);
     if (!fl) {
-        std::cout << "ошибка" << std::endl;
+        std::cout << "File error!" << std::endl;
         return;
     }
 
