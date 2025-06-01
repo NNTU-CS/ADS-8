@@ -72,6 +72,6 @@ void printFreq(BST<std::string>& tree) {
         }
         outFile.close();
     } else {
-        std::cerr << "Unable << std::endl;
+        std::cerr << "Unable" << std::endl;
     }
 }
