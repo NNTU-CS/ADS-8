@@ -1,6 +1,17 @@
 // Copyright 2021 NNTU-CS
 #include "bst.h"
+#include <iostream>
 
 int main() {
-    return 0;
+  BST<std::string> tree;
+  const char* filename = "war_peace.txt";
+
+  makeTree(tree, filename);
+
+  std::cout << "Tree depth: " << tree.depth() << std::endl;
+  std::cout << "Printing frequency..." << std::endl;
+
+  printFreq(tree);
+
+  return 0;
 }
