@@ -68,7 +68,6 @@ class BST {
  public:
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
-  
   void add(const T& w) { insert(root, w); }
   std::vector<std::pair<T, int>> getFrequencies() const {
     std::vector<std::pair<T, int>> freqList;
