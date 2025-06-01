@@ -18,7 +18,7 @@ int main() {
     printFreq(wordTree);
 
     int kol = wordTree.search("in");
-    if (kol; > 0) {
+    if (kol > 0) {
         std::cout << "Word 'in' found with count: " << kol << std::endl;
     } else {
         std::cout << "Word 'in' not found" << std::endl;
