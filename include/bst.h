@@ -1,69 +1,99 @@
 // Copyright 2021 NNTU-CS
-#ifndef INCLUDE_BST_H_
-#define INCLUDE_BST_H_
-
-#include <iostream>
-#include <vector>
+#ifndef INCLUDE_UNIQUE bstH 
+#define INCLUDE_UNIQUE bstH 
+#include <memory>
 #include <utility>
+#include <vector>
+#include <cstdlib>
 
-template <typename T>
-struct Node {
-    T value;
-    int count;
-    Node<T>* left;
-    Node<T>* right;
-
-    explicit Node(const T& val) : value(val), count{1}, left{nullptr}, right{nullptr} {}
-};
-
-template <typename T>
-class BST {
-public:
-    BST() : root_{nullptr} {}
-    void insert(const T& value) {
-        root_ = insertRec(root_, value);
-    }
-    bool search(const T& value) const {
-        return searchRec(root_, value);
-    }
-    int depth() const {
-        return depthRec(root_);
-    }
-    void getWordsAndFrequencies(std::vector<std::pair<T, int>>& freqVec) const {
-        getWordsAndFrequenciesRec(root_, freqVec);
-    }
-
+template <class TT>
+class BSTree {
 private:
-    Node<T>* root_;
-    Node<T>* insertRec(Node<T>* node, const T& value) {
-        if (!node) return new Node<T>(value);
-        
-        if (value < node->value) 
-            node->left = insertRec(node->left, value);
-        else if (value > node->value)
-            node->right = insertRec(node->right, value);
-        else
-            node->count++;
-        return node;
+    class Node {
+    public:
+        TT data;
+        int cnt;
+        std::unique_ptr<Node> lptr;
+        std::unique_ptr<Node> rptr;
+
+        explicit Node(const TT& val) : data(val), cnt{1}, lptr{nullptr}, rptr{nullptr} {}
+
+        bool cmpLess(const TT& v) const { return data < v; }
+        bool isEqual(const TT& v) const { return data == v; }
+    };
+
+    std::unique_ptr<Node> root;
+    
+public:
+    BSTree() { }
+
+    void insert(const TT& value) {
+        if (!root) {
+            root = std::make_unique<Node>(value);
+            return;
+        }
+        Node* current = root.get();
+        while (true) {
+            if (current->isEqual(value)) {
+                current->cnt++;
+                return;
+            }
+            if (current->cmpLess(value)) {
+                if (current->rptr) { current = current->rptr.get(); }
+                else { current->rptr = std::make_unique<Node>(value); return; }
+            } else {
+                if (current->lptr) { current = current->lptr.get(); }
+                else { current->lptr = std::make_unique<Node>(value); return; }
+            }
+        }
     }
-    bool searchRec(const Node<T>* node, const T& value) const {
-        if (!node) return false;
-        if (value < node->value) 
-            return searchRec(node->left, value);
-        else if (value > node->value)
-            return searchRec(node->right, value);
-        return true;
+
+    int lookup(const TT& value) const {
+        const Node *curr = root.get();
+        while (curr) {
+            if (curr->isEqual(value)) return curr->cnt;
+            curr = (curr->data < value) ? curr->rptr.get() : curr->lptr.get();
+        }
+        return 0;
     }
-    int depthRec(const Node<T>* node) const {
-        if (!node) return 0;
-        return 1 + std::max(depthRec(node->left), depthRec(node->right));
+
+    int calcDepth() const {
+        int max_depth = 0;
+        std::vector<std::pair<const Node*, int>> stack;
+        if (root) stack.push_back({root.get(), 1});
+        while (!stack.empty()) {
+            const auto& pair = stack.back();
+            const Node* node = pair.first;
+            int current_depth = pair.second;
+            stack.pop_back();
+            if (current_depth > max_depth) max_depth = current_depth;
+            if (node->lptr) stack.push_back({node->lptr.get(), current_depth + 1});
+            if (node->rptr) stack.push_back({node->rptr.get(), current_depth + 1});
+        }
+        return max_depth - 1;
     }
-    void getWordsAndFrequenciesRec(const Node<T>* node, std::vector<std::pair<T, int>>& freqVec) const {
-        if (!node) return;
-        getWordsAndFrequenciesRec(node->left, freqVec);
-        freqVec.push_back({node->value, node->count});
-        getWordsAndFrequenciesRec(node->right, freqVec);
+
+    std::vector<std::pair<TT, int>> elements() const {
+        std::vector<std::pair<TT, int>> result;
+        if (!root) return result;
+
+        std::vector<std::pair<const Node*, bool>> stack;
+        stack.push_back({root.get(), false});
+        while (!stack.empty()) {
+            const auto& elem = stack.back();
+            const Node* node = elem.first;
+            bool visited = elem.second;
+            stack.pop_back();
+            if (visited) {
+                result.push_back({node->data, node->cnt});
+                continue;
+            }
+            if (node->rptr) stack.push_back({node->rptr.get(), false});
+            stack.push_back({node, true});
+            if (node->lptr) stack.push_back({node->lptr.get(), false});
+        }
+        return result;
     }
 };
 
-#endif  // INCLUDE_BST_H_
+#endif  // INCLUDE_UNIQUE bstH
