@@ -15,31 +15,37 @@ bool latinLetter(char sm) {
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
     if (!file) {
-        std::cout << "Error opening file!" << std::endl;
+        std::cout << "Error file!" << std::endl;
         return;
     }
 
-    std::string lastWord;
+    std::string prevWord;
     std::string curtWord;
     char sm;
+
+    std::vector<std::string> wordsList;
 
     while (file.get(sm)) {
         if (isalpha(sm)) {
             curtWord += tolower(sm);
         } else if (!curtWord.empty()) {
-            if (curtWord != lastWord) {
+            if (curtWord != prevWord) {
                 tree.insert(curtWord);
-                lastWord = curtWord;
+                wordsList.push_back(curtWord);
+                prevWord = curtWord;
             }
             curtWord.clear();
         }
     }
 
-    if (!curtWord.empty() && curtWord != lastWord) {
+    if (!curtWord.empty() && curtWord != prevWord) {
         tree.insert(curtWord);
+        wordsList.push_back(curtWord);
     }
 
     file.close();
+
+    std::cout << "Total unique words processed: " << wordsList.size() << std::endl;
 }
 
 struct WordFreq {
