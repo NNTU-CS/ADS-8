@@ -1,5 +1,5 @@
 // Copyright 2021 NNTU-CS
-#include  <iostream>
+#include <iostream>
 #include <fstream>
 #include <cctype>
 #include <string>
@@ -25,8 +25,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     if (!currentWord.empty()) {
         tree.insert(currentWord);
     }
-
-    inputFile.close();
 }
 
 void displayFrequency(BST<std::string>& tree) {
@@ -37,8 +35,6 @@ void displayFrequency(BST<std::string>& tree) {
         return;
     }
 
-    tree.printFreq(outputFile);
-    tree.printFreq(std::cout);
-
-    outputFile.close();
+    tree.displayFrequency(outputFile);
+    tree.displayFrequency(std::cout);
 }
