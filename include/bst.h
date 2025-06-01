@@ -1,91 +1,97 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
-
-#include <algorithm>
 #include <iostream>
 #include <string>
-template <typename T>
+#include <vector>
+#include <algorithm>
+
+template <typename KeyType>
 class BST {
  private:
-  struct TreeNode {
-    T dataValue;
-    int occurrenceCount;
-    TreeNode* leftChild;
-    TreeNode* rightChild;
-    explicit TreeNode(const T& val)
-        : dataValue(val), occurrenceCount(1),
-          leftChild(nullptr), rightChild(nullptr) {}
-  };
-  TreeNode* rootNode = nullptr;
-  TreeNode* addNode(TreeNode* currentNode, const T& keyData) {
-    if (!currentNode) {
-      return new TreeNode(keyData);
+    struct TreeNode {
+        KeyType data;
+        int frequency;
+        TreeNode* leftChild;
+        TreeNode* rightChild;
+        explicit TreeNode(const KeyType& key)
+            : data(key), frequency(1), leftChild(nullptr), rightChild(nullptr) {}
+    };
+    TreeNode* root_;
+    TreeNode* addNode(TreeNode* node, const KeyType& key) {
+        if (node == nullptr) {
+            return new TreeNode(key);
+        }
+        if (key == node->data) {
+            ++node->frequency;
+        } else if (key < node->data) {
+            node->leftChild = addNode(node->leftChild, key);
+        } else {
+            node->rightChild = addNode(node->rightChild, key);
+        }
+@@ -39,27 +39,27 @@
+    int calculateHeight(TreeNode* node) const {
+        if (node == nullptr) {
+            return -1;
+        }
+        int leftHeight = calculateHeight(node->leftChild);
+        int rightHeight = calculateHeight(node->rightChild);
+        return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
     }
-    if (keyData == currentNode->dataValue) {
-      currentNode->occurrenceCount++;
-      return currentNode;
+    void inorderTraversal(TreeNode* node, std::vector<std::pair<KeyType, int>>& container) const {
+        if (node == nullptr) return;
+        inorderTraversal(node->leftChild, container);
+        container.emplace_back(node->data, node->frequency);
+        inorderTraversal(node->rightChild, container);
     }
-    if (keyData < currentNode->dataValue) {
-      currentNode->leftChild = addNode(currentNode->leftChild, keyData);
-    } else {
-      currentNode->rightChild = addNode(currentNode->rightChild, keyData);
+    void destroyTree(TreeNode* node) {
+        if (node == nullptr) return;
+        destroyTree(node->leftChild);
+        destroyTree(node->rightChild);
+        delete node;
     }
-    return currentNode;
-  }
-  int computeDepth(TreeNode* nodePtr) const {
-    if (!nodePtr) {
-      return -1;
-    }
-    int leftDepth  = computeDepth(nodePtr->leftChild);
-    int rightDepth = computeDepth(nodePtr->rightChild);
-    return std::max(leftDepth, rightDepth) + 1;
-  }
-  TreeNode* findNode(TreeNode* nodePtr, const T& keyData) const {
-    if (!nodePtr || nodePtr->dataValue == keyData) {
-      return nodePtr;
-    }
-    if (keyData < nodePtr->dataValue) {
-      return findNode(nodePtr->leftChild, keyData);
-    }
-    return findNode(nodePtr->rightChild, keyData);
-  }
-  void traverseInOrder(TreeNode* nodePtr, std::ostream& output) const {
-    if (!nodePtr) return;
-    traverseInOrder(nodePtr->leftChild, output);
-    output << nodePtr->dataValue << ": " << nodePtr->occurrenceCount << std::endl;
-    traverseInOrder(nodePtr->rightChild, output);
-  }
-  void traverseReverseOrder(TreeNode* nodePtr, std::ostream& output) const {
-    if (!nodePtr) return;
-    traverseReverseOrder(nodePtr->rightChild, output);
-    output << nodePtr->dataValue << ": " << nodePtr->occurrenceCount << std::endl;
-    traverseReverseOrder(nodePtr->leftChild, output);
-  }
-  void deleteTree(TreeNode* nodePtr) {
-    if (!nodePtr) return;
-    deleteTree(nodePtr->leftChild);
-    deleteTree(nodePtr->rightChild);
-    delete nodePtr;
-  }
+
  public:
-  BST() = default;
-  ~BST() { deleteTree(rootNode); }
-  void insert(const T& keyData) {
-    rootNode = addNode(rootNode, keyData);
-  }
-  int depth() const {
-    return computeDepth(rootNode);
-  }
-  int search(const T& keyData) const {
-    TreeNode* found = findNode(rootNode, keyData);
-    return found ? found->occurrenceCount : 0;
-  }
-  void printInOrder(std::ostream& output = std::cout) const {
-    traverseInOrder(rootNode, output);
-  }
-  void printReverseInOrder(std::ostream& output = std::cout) const {
-    traverseReverseOrder(rootNode, output);
-  }
+    BST() : root_(nullptr) {}
+    ~BST() { destroyTree(root_); }
+
+    void insert(const KeyType& key) {
+        root_ = addNode(root_, key);
+    }
+    int findFrequency(const KeyType& key) const {
+        TreeNode* current = root_;
+        while (current != nullptr) {
+            if (key == current->data) {
+                return current->frequency;
+            }
+            current = (key < current->data) ? current->leftChild : current->rightChild;
+        }
+        return 0;
+    }
+    int height() const {
+        return calculateHeight(root_);
+    }
+    int depth() const {
+        return height();
+    }
+    int search(const KeyType& key) const {
+        return findFrequency(key);
+    }
+    void displayFrequency(std::ostream& os) const {
+        std::vector<std::pair<KeyType, int>> freqList;
+        inorderTraversal(root_, freqList);
+        std::sort(freqList.begin(), freqList.end(),
+                  [](const auto& lhs, const auto& rhs) {
+                      if (lhs.second != rhs.second)
+                          return lhs.second > rhs.second;
+                      return lhs.first < rhs.first;
+                  });
+        for (const auto& entry : freqList) {
+            os << entry.first << " " << entry.second << "\n";
+        }
+    }
+    bool empty() const {
+        return root_ == nullptr;
+    }
 };
 #endif  // INCLUDE_BST_H_
