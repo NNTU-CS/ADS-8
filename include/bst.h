@@ -78,6 +78,9 @@ class BST {
   void add(const T& value) {
     root = addNode(root, value);
   }
+  int depth() const {
+    return depth(root);
+  }
 };
 
 #endif  // INCLUDE_BST_H_
