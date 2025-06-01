@@ -7,7 +7,7 @@
 
 template <typename T>
 class BST {
-private:
+ private:
   struct node {
     T key;
     int count;
@@ -15,7 +15,7 @@ private:
     explicit node(const T& value) : key(value), count(1), right(nullptr), left(nullptr) {}
   };
   node* root;
-  node* addNode(node* root,const T& value) {
+  node* addNode(node* root, const T& value) {
     if (root == nullptr) {
       return new node(value);
     }
@@ -24,9 +24,9 @@ private:
       return root;
     }
     if (root->key > value) {
-      root->left=addNode(root->left, value);
+      root->left = addNode(root->left, value);
     } else {
-      root->right=addNode(root->right, value);
+      root->right = addNode(root->right, value);
     }
     return root;
   }
@@ -49,12 +49,13 @@ private:
     delete root;
   }
   void Order(node* root, std::vector<std::pair<T, int>>& res) const {
-    if (root==nullptr) return;
+    if (root == nullptr) return;
     Order(root->left, res);
     res.push_back({ root->key, root->count });
     Order(root->right, res);
   }
-public:
+
+ public:
   BST(): root(nullptr) {}
   ~BST() {
     clear(root);
@@ -66,7 +67,7 @@ public:
     return search_node(root, value);
   }
   int depth() {
-    return get_depth(root);
+    return get_depth(root)-1;
   }
   std::vector<std::pair<T, int>> array_words() const {
     std::vector<std::pair<T, int>> result;
