@@ -14,7 +14,7 @@ T element;
 int cnt;
 Node* left;
 Node* right; ///
-explicit Node(const T& elem) : element(elem), cnt(1), left(nullptr) right(nullptr) {}
+explicit Node(const T& elem) : element(elem), cnt(1), left(nullptr), right(nullptr) {}
 };
 Node* root = nullptr;
 Node* addNode(Node* node, const T& value);
