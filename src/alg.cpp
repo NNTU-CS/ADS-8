@@ -33,7 +33,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 }
 void printFreq(BST<std::string>& tree) {
     auto words = tree.symBypass();
-    std::sort(words.begin(), words.end(), 
+    std::sort(words.begin(), words.end(),
         [](const auto& a, const auto& b) {
             return a.second > b.second;
         });
