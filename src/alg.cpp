@@ -26,14 +26,11 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         }
       }
   }
- 
   if (!curWord.empty()) {
       tree.insert(curWord);
   }
-  
   file.close();
 }
-
 void printFreq(BST<std::string>& tree) {
     auto words = tree.symBypass();
     std::sort(words.begin(), words.end(), 
