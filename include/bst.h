@@ -117,8 +117,10 @@ void BST<T>::printTree(Node* root) {
 
 template <typename T>
 int BST<T>::getHeight(Node* root) {
-    if (!root) return 0;
-    return std::max(getHeight(root->left), getHeight(root->right)) + 1;
+    if (!node) return 0;
+    int left = getHeight(node->left);
+    int right = getHeight(node->right);
+    return std::max(left, right) + 1;
 }
 
 template <typename T>
