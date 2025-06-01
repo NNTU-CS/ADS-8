@@ -1,10 +1,10 @@
 // Copyright 2021 NNTU-CS
 #include "bst.h"
-void makeTree(BST&, const char*);
-void printPeriod(BST&);
+void makeTree(BST<std::string>&, const char* filename);
+void printPeriod(BST<std::string>& tree);
 
 int main() {
-    BST tree;
+    BST<std::string> tree;
     makeTree(tree, "war_peace.txt");
     printPeriod(tree);
     return 0;
