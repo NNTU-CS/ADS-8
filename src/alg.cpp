@@ -1,12 +1,12 @@
 // Copyright 2021 NNTU-CS
-#include  <iostream>
-#include  <fstream>
-#include  <locale>
-#include  <cstdlib>
-#include  <string>
-#include  <cctype>
-#include  <iomanip>
-#include  "bst.h"
+#include <iostream>
+#include <fstream>
+#include <locale>
+#include <cstdlib>
+#include <string>
+#include <cctype>
+#include <iomanip>
+#include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
@@ -18,8 +18,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     while (file.get(ch)) {
         if (std::isalpha(static_cast<unsigned char>(ch))) {
             word += static_cast<char>(std::tolower(ch));
-        }
-        else if (!word.empty()) {
+        } else if (!word.empty()) {
             tree.add(word);
             word.clear();
         }
