@@ -1,4 +1,5 @@
-
+#pragma once
+// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
@@ -52,7 +53,7 @@ class BST {
 
       max_depth = std::max(max_depth, current_depth);
 
-      if (node->left_pointer) {
+      if (node->left_point) {
         stack.push({node->left_point, current_depth + 1});
       }
       if (node->right_pointer) {
