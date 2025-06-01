@@ -16,7 +16,6 @@ void makeTree(BST& tree, const char* filename) {
     cerr << "Cannot open file: " << filename << "\n";
     return;
   }
-  
   MyString curWord;
   char ch;
   while (file.get(ch)) {
