@@ -3,16 +3,14 @@
 #include <fstream>
 #include <locale>
 #include <cstdlib>
-#include <cctype>
-#include <vector>
-#include <algorithm>
 #include <string>
+#include <algorithm>
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
-    if (!file) {
-        std::cout << "File error!" << std::endl;
+    if (!file.is_open()) {
+        std::cerr << "Error: Unable to open file!" << std::endl;
         return;
     }
 
@@ -20,42 +18,36 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     char ch;
 
     while (file.get(ch)) {
-        if (isalpha(ch)) {
-            word += tolower(ch);
-        } else if (!word.empty()) {
-            tree.add(word);
-            word.clear();
+        if (std::isalpha(static_cast<unsigned char>(ch))) {
+            word += std::tolower(static_cast<unsigned char>(ch));
+        } else {
+            if (!word.empty()) {
+                tree.add(word);
+                word.clear();
+            }
         }
     }
-
     if (!word.empty()) {
         tree.add(word);
     }
-
     file.close();
 }
 
 void printFreq(BST<std::string>& tree) {
-    std::vector<std::pair<std::string, int>> words;
-    tree.getAllWords(words);
+    auto frequencies = tree.getFrequencies();
+    std::sort(frequencies.begin(), frequencies.end(),
+              [](const auto& a, const auto& b) {
+                  return a.second > b.second || (a.second == b.second && a.first < b.first);
+              });
 
-    std::sort(words.begin(), words.end(),
-        [](const auto& a, const auto& b) {
-            if (a.second != b.second)
-                return a.second > b.second;
-            return a.first < b.first;
-        });
-
-    std::ofstream fout("result/freq.txt");
-    if (!fout) {
-        std::cout << "Cannot create output file" << std::endl;
+    std::ofstream output("result/freq.txt");
+    if (!output) {
+        std::cerr << "Error creating output file!" << std::endl;
         return;
     }
 
-    for (const auto& p : words) {
-        std::cout << p.first << " " << p.second << std::endl;
-        fout << p.first << " " << p.second << std::endl;
+    for (const auto& entry : frequencies) {
+        output << entry.first << ": " << entry.second << "\n";
     }
-
-    fout.close();
+    output.close();
 }
