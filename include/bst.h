@@ -19,19 +19,19 @@ class BST {
     };
  private:
   Node* root;
-  Node* addNode(Node* spot, T value) {
-    if (spot == nullptr) {
-      Node* newNode = new Node(value);
-      return newNode;
-    } else if (value < spot->slovo) {
-      spot->left = addNode(spot->left, value);
-    } else if (value > spot->slovo) {
-      spot->right = addNode(spot->right, value);
-    } else {
-      spot->kol++;
+  Node* addNode(Node* root, const T& value) {
+        if (root == nullptr) {
+            return new Node(value);
+        }
+        if (value < root->data) {
+            root->left = addNodeHelper(root->left, value);
+        } else if (value > root->data) {
+            root->right = addNodeHelper(root->right, value);
+        } else {
+            ++root->kol;
+        }
+        return root;
     }
-    return spot;
-  }
 
   int heightT(Node* root) {
     if (root == nullptr) {
