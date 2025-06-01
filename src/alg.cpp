@@ -10,12 +10,16 @@
 #include <algorithm>
 #include "bst.h"
 
-bool isAsciiLetter(char ch) {
-    return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
+bool isValid(char ch) {
+    return (ch >= 'a' && ch <= 'z');
 }
 
-char toLowerAscii(char ch) {
-    return (ch >= 'A' && ch <= 'Z') ? ch + 32 : ch;
+std::string toLower(const std::string& str) {
+    std::string result = "";
+    for (char c : str) {
+        result += std::tolower(c);
+    }
+    return result;
 }
 
 void makeTree(BST<std::string>& tree, const char* filename) {
@@ -23,22 +27,24 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     if (!file) {
         return;
     }
+    std::string word;
     std::string currentWord;
-    char ch;
-    auto storeWord = [&]() {
-        if (!currentWord.empty()) {
-            tree.add(currentWord);
-            currentWord.clear();
+    while (file.get(word[0])) {
+        char ch = word[0];
+        if (std::isalpha(ch)) {
+            currentWord += ch;
         }
-        };
-    while (file.get(ch)) {
-        if (isAsciiLetter(ch)) {
-            currentWord += toLowerAscii(ch);
-        } else {
-            storeWord();
+        else {
+            if (!currentWord.empty()) {
+                tree.add(toLower(currentWord));
+                currentWord.clear();
+            }
         }
     }
-    storeWord();
+    if (!currentWord.empty()) {
+        tree.add(toLower(currentWord));
+    }
+    file.close();
 }
 
 void printFreq(BST<std::string>& tree) {
