@@ -38,7 +38,7 @@ private:
 
     int calculateHeight(TreeNode* node) const {
         if (node == nullptr) {
-            return 0;
+            return -1;
         }
         int leftHeight = calculateHeight(node->leftChild);
         int rightHeight = calculateHeight(node->rightChild);
