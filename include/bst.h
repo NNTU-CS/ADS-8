@@ -3,16 +3,17 @@
 #define INCLUDE_BST_H_
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 template <typename T>
 class BST {
-private:
+ private:
     struct Node {
         T key;
         int cnt;
         Node* lft;
         Node* rght;
-        Node(T k) : key(k), cnt(1), lft(nullptr), rght(nullptr) {}
+        explicit Node(T k) : key(k), cnt(1), lft(nullptr), rght(nullptr) {}
     };
 
     Node* root;
@@ -33,7 +34,6 @@ private:
         if (!node) return 0;
         int lDepth = depth(node->lft);
         int rDepth = depth(node->rght);
-        
         return std::max(lDepth, rDepth) + 1;
     }
 
@@ -48,7 +48,8 @@ private:
         }
     }
 
-    void inOrd(Node* node, void (*visit)(Node*)) const {
+    template <typename Func>
+    void inOrd(Node* node, Func visit) const {
         if (!node) return;
         inOrd(node->lft, visit);
         visit(node);
@@ -62,7 +63,7 @@ private:
         delete node;
     }
 
-public:
+ public:
     using Node = struct Node;
     BST() : root(nullptr) {}
     ~BST() {
@@ -82,7 +83,8 @@ public:
         return found ? found->cnt : 0;
     }
 
-    void inOrd(void (*visit)(Node*)) const {
+    template <typename Func>
+    void inOrd(Func visit) const {
         inOrd(root, visit);
     }
 };
