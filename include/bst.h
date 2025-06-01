@@ -52,8 +52,9 @@ class BST {
     void insert(T value) {
         root = insertRec(root, value);
     }
-    bool search(T value) const {
-        return searchNode(value) != nullptr;
+    int search(T value) const {
+        Node* found = searchNode(value);
+        return found ? found->count : 0;
     }
     int depth() const {
         return depthRec(root);
