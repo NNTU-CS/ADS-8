@@ -2,92 +2,74 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <algorithm>
 #include <iostream>
-#include <string>
-#include <utility>
 #include <vector>
 
 template <typename T>
 class BST {
-private:
+ private:
   struct Node {
     T key;
     int count;
-    Node* left;
     Node* right;
-    explicit Node(T k) : key(std::move(k)), count(1), left(nullptr), right(nullptr) {}
+    Node* left;
+    explicit Node(const T& value)
+      : key(value), count(1), right(nullptr), left(nullptr) {
+    }
   };
   Node* root;
-  Node* insert(Node* node, const T& value) {
-    if (!node) {
-      return new Node(value);
-    }
-    if (value < node->key) {
-      node->left = insert(node->left, value);
-    } else if (value > node->key) {
-      node->right = insert(node->right, value);
-    } else {
-      node->count++;
-    }
-    return node;
-  }
-  int depth(Node* node) const {
-    if (!node) {
-      return 0;
-    }
-    return 1 + std::max(depth(node->left), depth(node->right));
-  }
-  Node* search(Node* node, const T& value) const {
-    if (!node || node->key == value) {
+  Node* addNode(Node* node, const T& value) {
+    if (!node) return new Node(value);
+    if (node->key == value) {
+      ++node->count;
       return node;
     }
     if (value < node->key) {
-      return search(node->left, value);
+      node->left = addNode(node->left, value);
     } else {
-      return search(node->right, value);
+      node->right = addNode(node->right, value);
     }
+    return node;
   }
-  void inOrder(Node* node, std::vector<std::pair<T, int>>& result) const {
-    if (node) {
-      inOrder(node->left, result);
-      result.emplace_back(node->key, node->count);
-      inOrder(node->right, result);
-    }
+  int getDepth(Node* node) const {
+    if (!node) return 0;
+    return std::max(getDepth(node->left), getDepth(node->right)) + 1;
+  }
+  int searchNode(Node* node, const T& value) const {
+    if (!node) return 0;
+    if (value == node->key) return node->count;
+    return searchNode(value < node->key ? node->left : node->right, value);
   }
   void clear(Node* node) {
-    if (node) {
-      clear(node->left);
-      clear(node->right);
-      delete node;
-    }
+    if (!node) return;
+    clear(node->left);
+    clear(node->right);
+    delete node;
+  }
+  void inOrder(Node* node, std::vector<std::pair<T, int>>& result) const {
+    if (!node) return;
+    inOrder(node->left, result);
+    result.emplace_back(node->key, node->count);
+    inOrder(node->right, result);
   }
 
  public:
   BST() : root(nullptr) {}
-  ~BST() {
-    clear(root);
+  ~BST() { clear(root); }
+  void add(const T& value) {
+    root = addNode(root, value);
   }
-  void insert(const T& value) {
-    root = insert(root, value);
+  int search(const T& value) const {
+    return searchNode(root, value);
   }
   int depth() const {
-    return depth(root);
+    return getDepth(root) - 1;
   }
-  bool search(const T& value) const {
-    return search(root, value) != nullptr;
-  }
-  int getCount(const T& value) const {
-    Node* node = search(root, value);
-    return node ? node->count : 0;
-  }
-  std::vector<std::pair<T, int>> inOrder() const {
+  std::vector<std::pair<T, int>> array_words() const {
     std::vector<std::pair<T, int>> result;
     inOrder(root, result);
     return result;
   }
 };
-void makeTree(BST<std::string>& tree, const char* filename);
-void printFreq(BST<std::string>& tree);
 
 #endif  // INCLUDE_BST_H_
