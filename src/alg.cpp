@@ -5,6 +5,7 @@
 #include  <cstdlib>
 #include <algorithm>
 #include  "bst.h"
+#include <string>
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
@@ -12,7 +13,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     std::cerr << "File error!" << std::endl;
     return;
   }
-  
   std::string word;
   char ch;
 
