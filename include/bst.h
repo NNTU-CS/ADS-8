@@ -8,7 +8,7 @@
 
 template<typename T>
 class BST {
-private:
+ private:
 struct Node {
 T element;
 int cnt;
@@ -28,7 +28,8 @@ clearTree(node->left);
 delete node;
 }
 }
-public:
+
+ public:
 BST() : root(nullptr) {}
 ~BST() {clear();}
 void add(const T& value) { root = addNode(root, value);}
