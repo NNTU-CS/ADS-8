@@ -13,8 +13,10 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         std::cerr << "File ERR" << std::endl;
         return;
     }
+
     std::string cword;
     char cch;
+
     while (file.get(cch)) {
         if (std::isalpha(cch)) {
             cword += std::tolower(cch);
@@ -23,11 +25,14 @@ void makeTree(BST<std::string>& tree, const char* filename) {
             cword.clear();
         }
     }
+
     if (!cword.empty()) {
         tree.insert(cword);
     }
+
     file.close();
 }
+
 void printFreq(BST<std::string>& tree) {
   auto wordsVec = tree.toVector();
   std::sort(wordsVec.begin(), wordsVec.end(),
