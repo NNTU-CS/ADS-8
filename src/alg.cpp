@@ -1,38 +1,34 @@
 // Copyright 2021 NNTU-CS
-#include  <iostream>
-#include  <fstream>
-#include  <locale>
-#include  <cstdlib>
+#include <iostream>
+#include <fstream>
+#include <locale>
+#include <cstdlib>
+#include <string>
 #include  "bst.h"
-using std::cerr;
-using std::cout;
-using std::ifstream;
-using std::sort;
-using std::string;
 
-void makeTree(BST& tree, const char* filename) {
-  ifstream file(filename);
+void makeTree(BST<std::string>& tree, const char* filename) {
+  std::ifstream file(filename);
   if (!file.is_open()) {
-    cerr << "Cannot open file: " << filename << "\n";
+    std::cerr << "Cannot open file: " << filename << "\n";
     return;
   }
-  MyString curWord;
+  std::string curWord;
   char ch;
   while (file.get(ch)) {
-    if (isalpha(static_cast<unsigned char>(ch))) {
+    if (std::isalpha(static_cast<unsigned char>(ch))) {
       curWord.clear();
       do {
-        curWord.append(tolower(static_cast<unsigned char>(ch)));
-      } while (file.get(ch) && isalpha(static_cast<unsigned char>(ch)));
+        curWord += std::tolower(static_cast<unsigned char>(ch)));
+      } while (file.get(ch) && std::isalpha(static_cast<unsigned char>(ch)));
       tree.addEl(curWord);
     }
   }
   file.close();
 }
 
-void printPeriod(BST& tree) {
+void printPeriod(BST<std::string>& tree) {
   auto words = tree.getAllEl();
-  sort(words.begin(), words.end(),
+  std::sort(words.begin(), words.end(),
       [](const auto& lhs, const auto& rhs) {
         if (lhs.second != rhs.second) {
           return lhs.second > rhs.second;
@@ -41,6 +37,6 @@ void printPeriod(BST& tree) {
         }
       });
   for (const auto& pair : words) {
-    cout << pair.first.c_str() << " " << pair.second << "\n";
+    std::cout << pair.first << " " << pair.second << "\n";
   }
 }
