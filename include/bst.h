@@ -23,9 +23,9 @@ class BST {
         if (root == nullptr) {
             return new Node(value);
         }
-        if (value < root->data) {
+        if (value < root->slovo) {
             root->left = addNode(root->left, value);
-        } else if (value > root->data) {
+        } else if (value > root->slovo) {
             root->right = addNode(root->right, value);
         } else {
             ++root->kol;
