@@ -10,13 +10,6 @@
 template <typename T>
 class BST {
  private:
-  struct Node {
-        T slovo;
-        int kol;
-        Node* left;
-        Node* right;
-        explicit Node(T s) : slovo(s), kol(1), left(nullptr), right(nullptr) {}
-  };
   Node* root;
   Node* addNode(Node* spot, T value) {
     if (spot == nullptr) {
@@ -70,6 +63,13 @@ class BST {
   }
 
  public:
+  struct Node {
+     T slovo;
+     int kol;
+     Node* left;
+     Node* right;
+     explicit Node(T s) : slovo(s), kol(1), left(nullptr), right(nullptr) {}
+  };
   BST() : root(nullptr) {}
   ~BST() { delet(root); }
 
