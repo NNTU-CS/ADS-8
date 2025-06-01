@@ -57,7 +57,7 @@ class BST {
         return found ? found->count : 0;
     }
     int depth() const {
-        return depthRec(root);
+        return depthRec(root)-1;
     }
     std::vector<std::pair<T, int>> getItems() const {
         std::vector<std::pair<T, int>> result;
