@@ -14,9 +14,11 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
     std::string currentWord;
     char ch;
-    while (file.get(ch)) {
+   while (file.get(ch)) {
         if (isalpha(ch)) {
-            currentWord += tolower(ch);
+            //currentWord += tolower(ch);
+            currentWord += tolower(static_cast<unsigned char>(ch));
+
         }
         else if (!currentWord.empty()) {
             tree.insert(currentWord);
@@ -24,12 +26,24 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         }
     }
 
+    while (file.get(ch)) {
+        if (isalpha(static_cast<unsigned char>(ch))) {  // Добавлено приведение типа
+            currentWord += tolower(static_cast<unsigned char>(ch));  // Гарантированное приведение к нижнему регистру
+        }
+        else if (!currentWord.empty()) {
+            tree.insert(currentWord);
+            currentWord.clear();
+        }
+    }
+
+
     if (!currentWord.empty()) {
         tree.insert(currentWord);
     }
 
     file.close();
 }
+
 
 void printFreq(BST<std::string>& tree) {
     std::vector<std::pair<std::string, int>> words;
@@ -48,4 +62,5 @@ void printFreq(BST<std::string>& tree) {
         std::cout << pair.first << ": " << pair.second << std::endl;
     }
 }
+
 
