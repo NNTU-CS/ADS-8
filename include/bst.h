@@ -57,13 +57,14 @@ template <typename T> class BST {
     printTree(root->right);
   }
 
-  int depthTree(Node* root) const{
+  int depthTree(const Node* root) const {
     if (root == nullptr) {
-      return 0;
+      return -1; 
     }
-    int left = depthTree(root->left);
-    int right = depthTree(root->right);
-    return std::max(left, right);
+    if (root->left == nullptr && root->right == nullptr) {
+      return 0;   // Глубина листа 0
+    }
+    return std::max(depthTree(root->left), depthTree(root->right)) + 1;
   }
 
   void delTree(Node* root) {
