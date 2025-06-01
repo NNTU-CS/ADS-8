@@ -21,6 +21,8 @@ private:
     Node* root;
 
     Node* insert(Node* node, T value) {
+       // pritf("%s", node);
+        //pritf("%s", value);
         if (!node) return new Node(value);
         if (value == node->key) {
             node->count++;
@@ -85,7 +87,9 @@ public:
     void inOrder(std::function<void(Node*)> visit) const {
         inOrder(root, visit);
     }
+
 };
+
 
 
 #endif  // INCLUDE_BST_H_
