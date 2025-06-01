@@ -53,7 +53,7 @@ int search(Node* node, const T& w) const {
     return node->count;
   }
 }
-int depth(Node* node) const {
+int calculateDepth(Node* node) const {
  if (!node) return -1;
  return 1 + std::max(depth(node->left), depth(node->right));
 }
@@ -67,15 +67,10 @@ int depth(Node* node) const {
     return freqList;
   }
   int depth() const {
-    return depth(root);
+    return calculateDepth(root);
   }
   int search(const T& w) const {
     return search(root, w);
-  }
- private:
-  int depth(Node* node) const {
-    if (!node) return 0;
-    return 1 + std::max(depth(node->left), depth(node->right));
   }
 };
 
