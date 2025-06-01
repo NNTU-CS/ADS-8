@@ -61,7 +61,6 @@ class BST {
         obhod(node->right, visit);
     }
   }
-  }
 
   void deleteT(Node* root) {
     if (root == nullptr)
@@ -74,7 +73,7 @@ class BST {
  public:
   struct Node;
   BST() : root(nullptr) {}
-  ~BST() { delet(root); }
+  ~BST() { deletT(root); }
 
   void insert(T value) {
     root = addNode(root, value);
