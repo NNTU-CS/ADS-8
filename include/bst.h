@@ -15,25 +15,22 @@ class BST {
     int count;
     std::unique_ptr<Knot> left;
     std::unique_ptr<Knot> right;
-    explicit Knot(const T& k) 
+    explicit Knot(const T& k)
         : key(k), count(1), left(nullptr), right(nullptr) {}
   };
+
  public:
   BST() = default;
   ~BST() = default;
-  
   void addEl(const T& key) {
     addEl(root, key);
   }
-  
   int search(const T& key) const {
     return findEl(root.get(), key);
   }
-  
   int depth() const {
     return calcHeight(root.get());
   }
-  
   std::vector<std::pair<T, int>> getAllEl() const {
     std::vector<std::pair<T, int>> elements;
     inorder(root.get(), elements);
@@ -42,7 +39,6 @@ class BST {
 
   BST(const BST&) = delete;
   BST& operator=(const BST&) = delete;
-  
   BST(BST&&) = default;
   BST& operator=(BST&&) = default;
 };
