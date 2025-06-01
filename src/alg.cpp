@@ -24,14 +24,14 @@ void makeTree(BST& tree, const char* filename) {
       do {
         curWord.append(tolower(static_cast<unsigned char>(ch)));
       } while (file.get(ch) && isalpha(static_cast<unsigned char>(ch)));
-      tree.insert(curWord);
+      tree.addEl(curWord);
     }
   }
   file.close();
 }
 
 void printPeriod(BST& tree) {
-  auto words = tree.getAll();
+  auto words = tree.getAllEl();
   sort(words.begin(), words.end(),
       [](const auto& lhs, const auto& rhs) {
         if (lhs.second != rhs.second) {
