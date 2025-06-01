@@ -32,7 +32,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     }
     fl.close();
 }
-\
 
 struct WrdFrq {
     std::string wrd;
