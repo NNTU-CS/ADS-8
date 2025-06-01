@@ -3,6 +3,7 @@
 #include <fstream>
 #include <locale>
 #include <cstdlib>
+#include <algorithm>
 #include <string>
 #include  "bst.h"
 
