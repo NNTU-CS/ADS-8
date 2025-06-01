@@ -12,30 +12,20 @@ bool latinLetter(char sm) {
     return (sm >= 'a' && sm <= 'z') || (sm >= 'A' && sm <= 'Z');
 }
 
-void makeTree(BST<std::string>& tree, const char* filename) {
-    std::ifstream file(filename);
-    if (!file) {
-        std::cout << "Error file!" << std::endl;
-        return;
-    }
-
-    std::string lastWord;
+void makeTree(BSTstd::string& tree, const char* filename) { std::ifstream file(filename); if (!file) { std::cout << "Error!" << std::endl; return; }
     std::string curtWord;
     char sm;
 
     while (file.get(sm)) {
-        if (isalpha(sm)) {
+        if (latinLetter(sm)) {
             curtWord += tolower(sm);
         } else if (!curtWord.empty()) {
-            if (curtWord != lastWord) {
-                tree.insert(curtWord);
-                lastWord = curtWord;
-            }
+            tree.insert(curtWord);
             curtWord.clear();
         }
     }
 
-    if (!curtWord.empty() && curtWord != lastWord) {
+    if (!curtWord.empty()) {
         tree.insert(curtWord);
     }
 
