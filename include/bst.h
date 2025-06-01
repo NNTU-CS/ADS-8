@@ -120,7 +120,7 @@ int BST<T>::getHeight(Node* root) {
     if (!root) return 0;
     int left = getHeight(root->left);
     int right = getHeight(root->right);
-    return std::max(left, right) + 1;
+    return 1 + (left > right ? left : right);
 }
 
 template <typename T>
