@@ -15,7 +15,7 @@ private:
         int count;
         std::unique_ptr<Knot> left;
         std::unique_ptr<Knot> right;
-        explicit Knot(const T& k) 
+        explicit Knot(const T& k)
             : key(k), count(1), left(nullptr), right(nullptr) {}
     };
     std::unique_ptr<Knot> root;
@@ -25,19 +25,19 @@ private:
         } else if (key == node->key) {
             node->count++;
         } else {
-            key < node->key ? addEl(node->left, key) 
+            key < node->key ? addEl(node->left, key)
                           : addEl(node->right, key);
         }
     }
     int findEl(const Knot* node, const T& key) const {
         if (!node) return 0;
         if (key == node->key) return node->count;
-        return findEl(key < node->key ? node->left.get() 
+        return findEl(key < node->key ? node->left.get()
                                     : node->right.get(), key);
     }
     int calcHeight(const Knot* node) const {
         if (!node) return -1;
-        return 1 + std::max(calcHeight(node->left.get()), 
+        return 1 + std::max(calcHeight(node->left.get()),
                           calcHeight(node->right.get()));
     }
     void inorder(const Knot* node, std::vector<std::pair<T, int>>& vec) const {
@@ -47,17 +47,17 @@ private:
         inorder(node->right.get(), vec);
     }
 
-public: 
+public:
     BST() = default;
     ~BST() = default;
     void addEl(const T& key) { addEl(root, key); }
     
-    int search(const T& key) const { 
-        return findEl(root.get(), key); 
+    int search(const T& key) const {
+        return findEl(root.get(), key);
     }
     
-    int depth() const { 
-        return calcHeight(root.get()); 
+    int depth() const {
+        return calcHeight(root.get());
     }
     
     std::vector<std::pair<T, int>> getAllEl() const {
