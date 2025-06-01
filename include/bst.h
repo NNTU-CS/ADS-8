@@ -63,7 +63,7 @@ template <typename T> class BST {
     }
     int left = depthTree(root->left);
     int right = depthTree(root->right);
-    return std::max(left, right) + 1;
+    return std::max(left, right);
   }
 
   void delTree(Node* root) {
