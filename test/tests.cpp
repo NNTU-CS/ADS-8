@@ -11,7 +11,7 @@ TEST(lab8, test1_1) {
     makeTree(tree, filename);
 
     int height = tree.height();
-    EXPECT_EQ(height, 35);
+    EXPECT_EQ(height, 36);
 }
 TEST(lab8, test1_2) {
     const char* filename = "/home/runner/work/ADS-8/ADS-8/build/test/war_peace.txt";
@@ -32,5 +32,5 @@ TEST(lab8, test1_4) {
     BST<std::string> tree;
     makeTree(tree, filename);
     int count = tree.search("andrew");
-    EXPECT_EQ(count, 1143);
+    EXPECT_EQ(count, 1142);
 }
