@@ -34,7 +34,7 @@ template <typename T> class BST {
     return root;
   }
 
-  int searchNode(Node* root, const T& word) {
+  int searchNode(Node* root, const T& word) const {
     if (root == nullptr) {
       return 0;
     } else if (word > root->word) {
