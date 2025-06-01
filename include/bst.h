@@ -2,68 +2,92 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
-#include <utility>
-
-template <typename T>
-struct Node {
-    T value;
-    int count;
-    Node<T>* left;
-    Node<T>* right;
-
-    explicit Node(const T& val) : value(val), count{1}, left{nullptr}, right{nullptr} {}
-};
 
 template <typename T>
 class BST {
-public:
-    BST() : root_{nullptr} {}
-    void insert(const T& value) {
-        root_ = insertRec(root_, value);
-    }
-    bool search(const T& value) const {
-        return searchRec(root_, value);
-    }
-    int depth() const {
-        return depthRec(root_);
-    }
-    void getWordsAndFrequencies(std::vector<std::pair<T, int>>& freqVec) const {
-        getWordsAndFrequenciesRec(root_, freqVec);
-    }
+ private:
+  struct Node {
+    T key;
+    int count;
+    Node* right;
+    Node* left;
+    Node(const T& value) : key(value), count(1), right(nullptr), left(nullptr) {}
+  };
+  Node* root;
 
-private:
-    Node<T>* root_;
-    Node<T>* insertRec(Node<T>* node, const T& value) {
-        if (!node) return new Node<T>(value);
-        
-        if (value < node->value) 
-            node->left = insertRec(node->left, value);
-        else if (value > node->value)
-            node->right = insertRec(node->right, value);
-        else
-            node->count++;
-        return node;
+  Node* addNode(Node*& node, const T& value) {
+    if (node == nullptr) {
+      node = new Node(value);
+      return node;
     }
-    bool searchRec(const Node<T>* node, const T& value) const {
-        if (!node) return false;
-        if (value < node->value) 
-            return searchRec(node->left, value);
-        else if (value > node->value)
-            return searchRec(node->right, value);
-        return true;
+    if (node->key == value) {
+      ++node->count;
+      return node;
     }
-    int depthRec(const Node<T>* node) const {
-        if (!node) return 0;
-        return 1 + std::max(depthRec(node->left), depthRec(node->right));
+    if (value < node->key) {
+      return addNode(node->left, value);
+    } else {
+      return addNode(node->right, value);
     }
-    void getWordsAndFrequenciesRec(const Node<T>* node, std::vector<std::pair<T, int>>& freqVec) const {
-        if (!node) return;
-        getWordsAndFrequenciesRec(node->left, freqVec);
-        freqVec.push_back({node->value, node->count});
-        getWordsAndFrequenciesRec(node->right, freqVec);
+  }
+
+  int getDepth(const Node* node) const {
+    if (node == nullptr) return 0;
+    int leftDepth = getDepth(node->left);
+    int rightDepth = getDepth(node->right);
+    return (leftDepth > rightDepth ? leftDepth : rightDepth) + 1;
+  }
+
+  int searchNode(const Node* node, const T& value) const {
+    if (node == nullptr) return 0;
+    if (value == node->key) return node->count;
+    if (value < node->key) {
+      return searchNode(node->left, value);
+    } else {
+      return searchNode(node->right, value);
     }
+  }
+
+  void clear(Node* node) {
+    if (node != nullptr) {
+      clear(node->left);
+      clear(node->right);
+      delete node;
+    }
+  }
+
+  void inOrder(const Node* node, std::vector<std::pair<T, int>>& result) const {
+    if (node != nullptr) {
+      inOrder(node->left, result);
+      result.push_back({node->key, node->count});
+      inOrder(node->right, result);
+    }
+  }
+
+ public:
+  BST() : root(nullptr) {}
+  ~BST() { clear(root); }
+
+  void add(const T& value) {
+    addNode(root, value);
+  }
+
+  int search(const T& value) const {
+    return searchNode(root, value);
+  }
+
+  int depth() const {
+    return getDepth(root) - 1;
+  }
+
+  std::vector<std::pair<T, int>> array_words() const {
+    std::vector<std::pair<T, int>> result;
+    inOrder(root, result);
+    return result;
+  }
 };
 
 #endif  // INCLUDE_BST_H_
