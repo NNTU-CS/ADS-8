@@ -2,42 +2,51 @@
 #include <iostream>
 #include <fstream>
 #include <cctype>
+#include <algorithm>
 #include "bst.h"
-
-extern const std::string RESULT_FILE = "result/freq.txt";
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cerr << "Error: File not found" << std::endl;
+        std::cerr << "Ошибка: не удалось открыть файл " << filename << std::endl;
         return;
     }
-    std::string buffer;
-    while (file >> buffer) {
-        std::string word;
-        for (char c : buffer) {
-            char lower = std::tolower(c);
-            if (std::isalpha(lower))
-                word += lower;
+
+    std::string current_word;
+    file.get();
+    char ch;
+    while (file.get(ch)) {
+        if (std::isalpha(ch)) {
+            current_word += std::tolower(ch);
+        } else {
+            if (!current_word.empty()) {
+                tree.insert(current_word);
+                current_word.clear();
+            }
         }
-        if (!word.empty())
-            tree.insert(word);
     }
+    if (!current_word.empty()) {
+        tree.insert(current_word);
+    }
+    file.close();
 }
 void printFreq(BST<std::string>& tree) {
-    std::vector<std::pair<std::string, int>> freq_data;
-    tree.getWordsAndFrequencies(freq_data);
-    std::sort(freq_data.begin(), freq_data.end(),
+    std::vector<std::pair<std::string, int>> freqVec;
+    tree.getWordsAndFrequencies(freqVec);
+    std::sort(freqVec.begin(), freqVec.end(), 
         [](const auto& a, const auto& b) {
-            return a.second != b.second ? a.second > b.second : a.first < b.first;
+            return a.second > b.second || (a.second == b.second && a.first < b.first);
         });
-    for (const auto& [word, count] : freq_data) {
-        std::cout << word << ": " << count << std::endl;
+    for (const auto& item : freqVec) {
+        std::cout << item.first << ": " << item.second << std::endl;
     }
-    std::ofstream fout(RESULT_FILE);
-    if (fout.is_open()) {
-        for (const auto& [word, count] : freq_data) {
-            fout << word << ": " << count << std::endl;
+    std::ofstream outfile("result/freq.txt");
+    if (outfile) {
+        for (const auto& item : freqVec) {
+            outfile << item.first << ": " << item.second << std::endl;
         }
+    }
+    else {
+        std::cerr << "Не могу открыть файл result/freq.txt для записи." << std::endl;
     }
 }
