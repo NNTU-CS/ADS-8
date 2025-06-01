@@ -16,7 +16,8 @@ class BST {
         Node* left;
         Node* right;
         explicit Node(T s) : slovo(s), kol(1), left(nullptr), right(nullptr) {}
-    };
+  };
+
  private:
   Node* root;
   Node* addNode(Node* root, const T& value) {
