@@ -47,9 +47,9 @@ private:
     }
 
     int depth(Node* node) const {
-        if (!node) return 0;
+        if (!node) return -1;
         return 1 + std::max(depth(node->left), depth(node->right));
-    }
+}
 
     template<typename Func>
     void inorder(Node* node, Func f) const {
