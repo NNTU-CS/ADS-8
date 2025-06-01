@@ -1,9 +1,11 @@
 // Copyright 2021 NNTU-CS
+#include <algorithm>
 #include <cctype>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "bst.h"
 
@@ -11,7 +13,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
 
   if (!file) {
-    std::cerr << "File error!" << std::endl;
+    std::cerr << "Ошибка открытия файла!" << std::endl;
     return;
   }
 
@@ -36,4 +38,17 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   file.close();
 }
 
-void printFreq(BST<std::string>& tree) { tree.printToFileAndConsole(); }
+void printFreq(BST<std::string>& tree) {
+  std::vector<std::pair<std::string, int>> list;
+  tree.getFrequencyList(list);
+
+  std::sort(list.begin(), list.end(),
+            [](const auto& a, const auto& b) { return b.second < a.second; });
+
+  std::ofstream out("result/freq.txt");
+  for (const auto& [w, f] : list) {
+    out << w << " " << f << "\n";
+    std::cout << w << " " << f << "\n";
+  }
+  out.close();
+}
