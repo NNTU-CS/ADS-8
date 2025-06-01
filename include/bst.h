@@ -21,14 +21,13 @@ class BST {
   };
   Node* root;
   Node* addNode(Node* node, const T& value) {
-    if (!node) {
+    if (!node)
       return new Node(value);
-    }
-    if (value < node->data) {
+    if (value < node->data)
       node->left = addNode(node->left, value);
-    } else if (value > node->data) {
+    else if (value > node->data)
       node->right = addNode(node->right, value);
-    } else
+    else
       node->count++;
     return node;
   }
@@ -40,14 +39,13 @@ class BST {
     }
   }
   Node* search(Node* node, const T& value) const {
-    if (!node) {
+    if (!node)
       return nullptr;
-    }
-    if (value == node->data) {
+    if (value == node->data)
       return node;
-    } else if (value < node->data) {
+    else if (value < node->data)
       return search(node->left, value);
-    } else
+    else
       return search(node->right, value);
   }
   void clear(Node* node) {
