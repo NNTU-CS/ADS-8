@@ -1,39 +1,60 @@
 // Copyright 2021 NNTU-CS
-#include "bst.h"
 #include <fstream>
+#include <iostream>
 #include <cctype>
-#include <string>
-#include <algorithm>
 #include <vector>
+#include <algorithm>
+#include <string>
+#include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
     if (!file) {
-        std::cout << "File error!" << std::endl;
+        std::cerr << "File error!" << std::endl;
         return;
     }
 
-    std::string currentWord;
-    while (!file.eof()) {
-        char ch = file.get();
-        if (isalpha(ch)) {
-            currentWord += tolower(ch);
+    std::string word;
+    char ch;
+    while (file.get(ch)) {
+        if (std::isalpha(static_cast<unsigned char>(ch))) {
+            word += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
         } else {
-            if (!currentWord.empty()) {
-                tree.insert(currentWord);
-                currentWord.clear();
+            if (!word.empty()) {
+                tree.insert(word);
+                word.clear();
             }
         }
     }
+    if (!word.empty()) {
+        tree.insert(word);
+    }
+
     file.close();
 }
 
 void printFreq(BST<std::string>& tree) {
-    auto nodes = tree.getAllNodes();
-    std::sort(nodes.begin(), nodes.end(), [](const auto& a, const auto& b) {
+    std::vector<std::pair<std::string, int>> freq;
+
+    tree.inorder([&freq](auto node) {
+        freq.emplace_back(node->key, node->count);
+    });
+
+    std::sort(freq.begin(), freq.end(), [](const auto& a, const auto& b) {
         return a.second > b.second;
     });
-    for (const auto& pair : nodes) {
-        std::cout << pair.first << " " << pair.second << std::endl;
+
+    std::ofstream outFile("result/freq.txt");
+    if (!outFile) {
+        std::cerr << "Cannot open output file result/freq.txt" << std::endl;
+        return;
     }
+
+    for (const auto& p : freq) {
+        std::cout << p.first << " " << p.second << std::endl;
+        outFile << p.first << " " << p.second << std::endl;
+    }
+
+    outFile.close();
 }
+
