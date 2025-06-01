@@ -44,6 +44,16 @@ private:
         clear(node->right);
         delete node;
     }
+    int search(Node* node, const T& w) const {
+        if (!node) return 0;
+        if (w < node->word) {
+            return search(node->left, w);
+        } else if (w > node->word) {
+            return search(node->right, w);
+        } else {
+            return node->count;
+        }
+    }
 public:
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
@@ -55,6 +65,9 @@ public:
     }
     int depth() const {
         return depth(root);
+    }
+    int search(const T& w) const {
+        return search(root, w);
     }
 private:
     int depth(Node* node) const {
