@@ -63,6 +63,7 @@ private:
     }
 
 public:
+    using Node = struct Node;
     BST() : root(nullptr) {}
     ~BST() {
         clear(root);
