@@ -48,7 +48,7 @@ class BST {
 
   void inorder(Node* node, std::ofstream& out) const {
     if (node) {
-      inorder(node->right, out);  // обратный порядок для убывания
+      inorder(node->right, out);
       out << node->key << " " << node->count << "\n";
       std::cout << node->key << " " << node->count << "\n";
       inorder(node->left, out);
