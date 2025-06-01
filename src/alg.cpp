@@ -17,8 +17,7 @@ while (file.get(c)) {
 unsigned char uc = static_cast<unsigned char>(c);
 if (std::isalpha(uc)) {
 crntWordChars.push_back(static_cast<char>(std::tolower(uc)));
-}
-else {
+} else {
 if (!crntWordChars.empty()) {
 tree.add(std::string(crntWordChars.begin(), crntWordChars.end()));
 crntWordChars.clear();
