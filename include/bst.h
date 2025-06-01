@@ -1,5 +1,89 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
+#include <iostream>
+#include <string>
+
+template <typename T>
+class BST {
+private:
+    struct Node {
+        T key;
+        int cnt;
+        Node* lft;
+        Node* rght;
+        Node(T k) : key(k), cnt(1), lft(nullptr), rght(nullptr) {}
+    };
+
+    Node* root;
+
+    Node* insrt(Node* node, T value) {
+        if (!node) return new Node(value);
+        if (value == node->key) {
+            node->cnt++;
+        } else if (value < node->key) {
+            node->lft = insrt(node->lft, value);
+        } else {
+            node->rght = insrt(node->rght, value);
+        }
+        return node;
+    }
+
+    int depth(Node* node) const {
+        if (!node) return 0;
+        int lDepth = depth(node->lft);
+        int rDepth = depth(node->rght);
+        
+        return std::max(leftDepth, rightDepth) + 1;
+    }
+
+    Node* search(Node* node, T value) const {
+        if (!node || node->key == value) {
+            return node;
+        }
+        if (value < node->key) {
+            return search(node->lft, value);
+        } else {
+            return search(node->rght, value);
+        }
+    }
+
+    void inOrd(Node* node, void (*visit)(Node*)) const {
+        if (!node) return;
+        inOrder(node->lft, visit);
+        visit(node);
+        inOrder(node->rght, visit);
+    }
+
+    void clear(Node* node) {
+        if (!node) return;
+        clear(node->lft);
+        clear(node->rght);
+        delete node;
+    }
+
+public:
+    BST() : root(nullptr) {}
+    ~BST() {
+        clear(root);
+    }
+
+    void insrt(T value) {
+        root = insert(root, value);
+    }
+
+    int depth() const {
+        return depth(root);
+    }
+
+    int search(T value) const {
+        Node* found = search(root, value);
+        return found ? found->cnt : 0;
+    }
+
+    void inOrd(void (*visit)(Node*)) const {
+        inOrder(root, visit);
+    }
+};
 
 #endif  // INCLUDE_BST_H_
