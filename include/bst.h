@@ -9,7 +9,7 @@
 
 template <typename T>
 class BST {
- private:
+ public:
   struct Node {
         T slovo;
         int kol;
@@ -17,6 +17,7 @@ class BST {
         Node* right;
         explicit Node(T s) : slovo(s), kol(1), left(nullptr), right(nullptr) {}
     };
+ private:
   Node* root;
   Node* addNode(Node* spot, T value) {
     if (spot == nullptr) {
@@ -62,7 +63,7 @@ class BST {
   }
   }
 
-  void delet(Node* root) {
+  void deleteT(Node* root) {
     if (root == nullptr)
       return;
     delet(root->left);
@@ -75,20 +76,20 @@ class BST {
   BST() : root(nullptr) {}
   ~BST() { delet(root); }
 
-  void addNode(T value) {
+  void insert(T value) {
     root = addNode(root, value);
   }
 
-  int heightT() const {
+  int height() const {
       return heightT(root);
   }
 
-  int searchNode(T value) const {
+  int search(T value) const {
       return searchNode(root, value);
   }
 
   template <typename Visitor>
-  void obhod(Visitor visit) const {
+  void inorder(Visitor visit) const {
       obhod(root, visit);
   }
 };
