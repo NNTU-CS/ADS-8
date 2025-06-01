@@ -63,6 +63,7 @@ class BST {
     return !node ? -1 :
       1 + std::max(depth(node->left), depth(node->right));
   }
+
  public:
   int search(const T& value) const {
     Node* node = search(root, value);
