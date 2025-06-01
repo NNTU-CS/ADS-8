@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include <iostream>
 #include <utility>
 #include "bst.h"
