@@ -8,7 +8,7 @@
 
 template <typename T>
 class BST {
-private:
+ private:
     struct Node {
         T data;
         int count;
@@ -25,7 +25,7 @@ private:
     int getHeight(Node* root);
     void toVector(Node* node, std::vector<std::pair<T, int>>& vec);
 
-public:
+ public:
     explicit BST() : root(nullptr) {}
     ~BST();
     void add(T value);
@@ -42,14 +42,11 @@ typename BST<T>::Node* BST<T>::addNode(Node* root, T value) {
     if (root == nullptr) {
         root = new Node(value);
         return root;
-    }
-    else if (value < root->data) {
+    } else if (value < root->data) {
         root->left = addNode(root->left, value);
-    }
-    else if (value > root->data) {
+    } else if (value > root->data) {
         root->right = addNode(root->right, value);
-    }
-    else {
+    } else {
         root->count++;
     }
     return root;
@@ -60,22 +57,17 @@ typename BST<T>::Node* BST<T>::delNode(Node* root, T value) {
     Node* p, * v;
     if (root == nullptr) {
         return root;
-    }
-    else if (value < root->value) {
+    } else if (value < root->value) {
         root->left = delNode(root->left, value);
-    }
-    else if (value > root->value) {
+    } else if (value > root->value) {
         root->right = delNode(root->right, value);
-    }
-    else {
+    } else {
         p = root;
         if (root->right == nullptr) {
             root = root->left;
-        }
-        else if (root->left == nullptr) {
+        } else if (root->left == nullptr) {
             root = root->right;
-        }
-        else {
+        } else {
             v = root->left;
             if (v->right) {
                 while (v->right->right)
@@ -84,8 +76,7 @@ typename BST<T>::Node* BST<T>::delNode(Node* root, T value) {
                 root->count = v->right->count;
                 p = v->right;
                 v->right = v->right->left;
-            }
-            else {
+            } else {
                 root->value = v->value;
                 root->count = v->count;
                 p = v;
@@ -110,11 +101,9 @@ int BST<T>::searchNode(Node* root, T value) {
     if (!root) return 0;
     if (value < root->data) {
         return searchNode(root->left, value);
-    }
-    else if (value > root->data) {
+    } else if (value > root->data) {
         return searchNode(root->right, value);
-    }
-    else {
+    } else {
         return root->count;
     }
 }
