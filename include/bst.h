@@ -3,95 +3,120 @@
 #define INCLUDE_BST_H_
 #include <iostream>
 #include <string>
-#include <vector>
 #include <algorithm>
-
-template <typename KeyType>
+#include <vector>
+template <typename T>
 class BST {
  private:
-    struct TreeNode {
-        KeyType data;
-        int frequency;
-        TreeNode* leftChild;
-        TreeNode* rightChild;
-        explicit TreeNode(const KeyType& key)
-            : data(key), frequency(1), leftChild(nullptr), rightChild(nullptr) {}
+    struct Node {
+        T data;
+        int count;
+        Node* left;
+        Node* right;
+
+        explicit Node(const T& data) : data(data), count(1), left(nullptr), right(nullptr) {}
     };
-    TreeNode* root_;
-    TreeNode* addNode(TreeNode* node, const KeyType& key) {
-        if (node == nullptr) {
-            return new TreeNode(key);
-        }
-        if (key == node->data) {
-            ++node->frequency;
-        } else if (key < node->data) {
-            node->leftChild = addNode(node->leftChild, key);
-        } else {
-            node->rightChild = addNode(node->rightChild, key);
-        }
-@@ -39,27 +39,27 @@
-    int calculateHeight(TreeNode* node) const {
-        if (node == nullptr) {
-            return -1;
-        }
-        int leftHeight = calculateHeight(node->leftChild);
-        int rightHeight = calculateHeight(node->rightChild);
-        return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
-    }
-    void inorderTraversal(TreeNode* node, std::vector<std::pair<KeyType, int>>& container) const {
-        if (node == nullptr) return;
-        inorderTraversal(node->leftChild, container);
-        container.emplace_back(node->data, node->frequency);
-        inorderTraversal(node->rightChild, container);
-    }
-    void destroyTree(TreeNode* node) {
-        if (node == nullptr) return;
-        destroyTree(node->leftChild);
-        destroyTree(node->rightChild);
+
+    Node* root;
+    void insert(Node*& node, const T& data);
+    int depth(Node* node) const;
+    Node* search(Node* node, const T& value);
+    void printInOrder(Node* node) const;
+    void collectFrequencies(Node* node, std::vector<std::pair<T, int>>& frequencies) const;
+    void freeMemory(Node* node);
+ public:
+    BST() : root(nullptr) {}
+    ~BST();
+    void insert(const T& data);
+    int depth() const;
+    int search(const T& value);
+    void printInOrder() const;
+    std::vector<std::pair<T, int>> getFrequencies() const;
+};
+template <typename T>
+BST<T>::~BST() {
+    freeMemory(root);
+}
+template <typename T>
+void BST<T>::freeMemory(Node* node) {
+    if (node) {
+        freeMemory(node->left);
+        freeMemory(node->right);
         delete node;
     }
-
- public:
-    BST() : root_(nullptr) {}
-    ~BST() { destroyTree(root_); }
-
-    void insert(const KeyType& key) {
-        root_ = addNode(root_, key);
+}
+template <typename T>
+void BST<T>::insert(const T& data) {
+    insert(root, data);
+}
+template <typename T>
+void BST<T>::insert(Node*& node, const T& data) {
+    if (node == nullptr) {
+        node = new Node(data);
+    } else if (data < node->data) {
+        insert(node->left, data);
+    } else if (data > node->data) {
+        insert(node->right, data);
+    } else {
+        node->count++;
     }
-    int findFrequency(const KeyType& key) const {
-        TreeNode* current = root_;
-        while (current != nullptr) {
-            if (key == current->data) {
-                return current->frequency;
-            }
-            current = (key < current->data) ? current->leftChild : current->rightChild;
-        }
+}
+template <typename T>
+int BST<T>::depth() const {
+    return depth(root)-1;
+}
+template <typename T>
+int BST<T>::depth(Node* node) const {
+    if (node == nullptr) {
         return 0;
+    } else {
+        int leftDepth = depth(node->left);
+        int rightDepth = depth(node->right);
+        return std::max(leftDepth, rightDepth)+1;
     }
-    int height() const {
-        return calculateHeight(root_);
+}
+template <typename T>
+int BST<T>::search(const T& value) {
+    Node* result = search(root, value);
+    return result ? result->count : 0;
+}
+template <typename T>
+typename BST<T>::Node* BST<T>::search(Node* node, const T& value) {
+    if (node == nullptr) {
+        return nullptr;
     }
-    int depth() const {
-        return height();
+    if (value == node->data) {
+        return node;
+    } else if (value < node->data) {
+        return search(node->left, value);
+    } else {
+        return search(node->right, value);
     }
-    int search(const KeyType& key) const {
-        return findFrequency(key);
+}
+template <typename T>
+void BST<T>::printInOrder() const {
+    printInOrder(root);
+}
+template <typename T>
+void BST<T>::printInOrder(Node* node) const {
+    if (node != nullptr) {
+        printInOrder(node->left);
+        std::cout << node->data << " (" << node->count << ")" << std::endl;
+        printInOrder(node->right);
     }
-    void displayFrequency(std::ostream& os) const {
-        std::vector<std::pair<KeyType, int>> freqList;
-        inorderTraversal(root_, freqList);
-        std::sort(freqList.begin(), freqList.end(),
-                  [](const auto& lhs, const auto& rhs) {
-                      if (lhs.second != rhs.second)
-                          return lhs.second > rhs.second;
-                      return lhs.first < rhs.first;
-                  });
-        for (const auto& entry : freqList) {
-            os << entry.first << " " << entry.second << "\n";
-        }
+}
+template <typename T>
+std::vector<std::pair<T, int>> BST<T>::getFrequencies() const {
+    std::vector<std::pair<T, int>> frequencies;
+    collectFrequencies(root, frequencies);
+    return frequencies;
+}
+template <typename T>
+void BST<T>::collectFrequencies(Node* node, std::vector<std::pair<T, int>>& frequencies) const {
+    if (node != nullptr) {
+        collectFrequencies(node->left, frequencies);
+        frequencies.push_back({ node->data, node->count });
+        collectFrequencies(node->right, frequencies);
     }
-    bool empty() const {
-        return root_ == nullptr;
-    }
-};
+}
 #endif  // INCLUDE_BST_H_
