@@ -2,18 +2,20 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 #include <iostream>
+#include <algorithm>
 #include <string>
+#include <vector>
 #include <utility>
 
 template <typename T>
 class BST {
+
 private:
     struct Node {
         T key;
         int count;
         Node* left;
         Node* right;
-        
         Node(T k) : key(std::move(k)), count(1), left(nullptr), right(nullptr) {}
     };
 
@@ -21,7 +23,6 @@ private:
 
     Node* insert(Node* node, T value) {
         if (!node) return new Node(std::move(value));
-        
         if (value == node->key) {
             node->count++;
         } else if (value < node->key) {
@@ -29,7 +30,7 @@ private:
         } else {
             node->right = insert(node->right, std::move(value));
         }
-        
+
         return node;
     }
 
@@ -62,6 +63,7 @@ private:
     }
 
 public:
+
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
 
