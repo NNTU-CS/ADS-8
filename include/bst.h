@@ -12,9 +12,9 @@ class BST {
 struct Node {
 T element;
 int cnt;
-Node* right; ///
 Node* left;
-explicit Node(const T& elem) : element(elem), cnt(1), right(nullptr), left(nullptr) {}
+Node* right; ///
+explicit Node(const T& elem) : element(elem), cnt(1), left(nullptr) right(nullptr) {}
 };
 Node* root = nullptr;
 Node* addNode(Node* node, const T& value);
@@ -23,8 +23,8 @@ void inorderTraversal(Node* node, std::vector<std::pair<T, int>>& result) const;
 int calcDepth(Node* node) const;
 void clearTree(Node* node) {
 if (node) {
-clearTree(node->right); ///
 clearTree(node->left);
+clearTree(node->right); ///
 delete node;
 }
 }
