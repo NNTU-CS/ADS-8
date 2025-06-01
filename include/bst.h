@@ -24,9 +24,9 @@ class BST {
             return new Node(value);
         }
         if (value < root->data) {
-            root->left = addNodeHelper(root->left, value);
+            root->left = addNode(root->left, value);
         } else if (value > root->data) {
-            root->right = addNodeHelper(root->right, value);
+            root->right = addNode(root->right, value);
         } else {
             ++root->kol;
         }
