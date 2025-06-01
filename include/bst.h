@@ -25,13 +25,11 @@ class BST {
             n->ocCount++;
             return n;
         }
-
         if (t < n->val) {
             n->left = add(n->left, t);
         } else {
             n->right = add(n->right, t);
         }
-
         return n;
     }
     int depthTree(Node* n) const {
@@ -46,12 +44,14 @@ class BST {
         clear(n->right);
         delete n;
     }
+
     void ord(Node* n, std::vector<std::pair<T, int>>& res) const {
         if (!n) return;
-        inorder(n->left, res);
-        res.push_back({n->data, n->count});
-        inorder(n->right, res);
+        ord(n->left, res);
+        res.push_back({n->val, n->ocCount});
+        ord(n->right, res);
     }
+
  public:
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
