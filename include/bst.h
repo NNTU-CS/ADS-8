@@ -1,93 +1,85 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
-
-#include <iostream>
 #include <string>
 #include <vector>
+#include <utility>
 #include <algorithm>
 
 template <typename T>
 class BST {
  private:
-    struct Node {
-        T word;
-        int count;
-        Node* left;
-        Node* right;
-
-        explicit Node(const T& value) : word(value), count(1), left(nullptr), right(nullptr) {}
-    };
-    Node* root;
-
-    Node* insertNode(Node* node, const T& value) {
-        if (!node)
-            return new Node(value);
-        if (value < node->word)
-            node->left = insertNode(node->left, value);
-        else if (value > node->word)
-            node->right = insertNode(node->right, value);
-        else
-            node->count++;
-        return node;
+  struct Node {
+    T word;
+    int count;
+    Node* left;
+    Node* right;
+    explicit Node(const T& w) : word(w), count(1), left(nullptr), right(nullptr) {}
+  };
+  Node* root;
+  void insert(Node*& node, const T& w) {
+    if (!node) {
+      node = new Node(w);
+      return;
     }
-
-    Node* findNode(Node* node, const T& value) const {
-        if (!node)
-            return nullptr;
-        if (value == node->word)
-            return node;
-        else if (value < node->word)
-            return findNode(node->left, value);
-        else
-            return findNode(node->right, value);
+    if (w < node->word) {
+      insert(node->left, w);
+    } else if (w > node->word) {
+      insert(node->right, w);
+    } else {
+      node->count++;
     }
-
-    int calculateDepth(Node* node) const {
-        if (!node)
-            return -1;
-        int leftDepth = calculateDepth(node->left);
-        int rightDepth = calculateDepth(node->right);
-        return 1 + std::max(leftDepth, rightDepth);
+  }
+  void collect(Node* node, std::vector<std::pair<T, int>>& freqList) const {
+    if (!node) {
+      return;
     }
-
-    void inOrderTraversal(Node* node, std::vector<std::pair<T, int>>& result) const {
-        if (node) {
-            inOrderTraversal(node->left, result);
-            result.emplace_back(node->word, node->count);
-            inOrderTraversal(node->right, result);
-        }
+    collect(node->left, freqList);
+    freqList.emplace_back(node->word, node->count);
+    collect(node->right, freqList);
+  }
+  void clear(Node* node) {
+    if (!node) {
+      return;
     }
-
-    void deleteTree(Node* node) {
-        if (node) {
-            deleteTree(node->left);
-            deleteTree(node->right);
-            delete node;
-        }
+    clear(node->left);
+    clear(node->right);
+    delete node;
+  }
+  int search(Node* node, const T& w) const {
+    if (!node) {
+      return 0;
     }
+    if (w < node->word) {
+      return search(node->left, w);
+    } else if (w > node->word) {
+      return search(node->right, w);
+    } else {
+      return node->count;
+    }
+  }
+  int calculateDepth(Node* node) const {
+    if (!node) {
+      return -1;
+    }
+    return 1 + std::max(calculateDepth(node->left), calculateDepth(node->right));
+  }
 
  public:
-    BST() : root(nullptr) {}
-    ~BST() {
-        deleteTree(root);
-    }
-
-    void add(const T& value) {
-        root = insertNode(root, value);
-    }
-
-    bool search(const T& value) const {
-        return findNode(root, value) != nullptr;
-    }
-
-    int depth() const {
-        return calculateDepth(root);
-    }
-
-    void getAllWords(std::vector<std::pair<T, int>>& result) const {
-        inOrderTraversal(root, result);
-    }
+  BST() : root(nullptr) {}
+  ~BST() { clear(root); }
+  void add(const T& w) { insert(root, w); }
+  std::vector<std::pair<T, int>> getFrequencies() const {
+    std::vector<std::pair<T, int>> freqList;
+    collect(root, freqList);
+    return freqList;
+  }
+  int depth() const {
+    return calculateDepth(root);
+  }
+  int search(const T& w) const {
+    return search(root, w);
+  }
 };
 
 #endif  // INCLUDE_BST_H_
