@@ -1,84 +1,112 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
+#include <iostream>
 #include <string>
 #include <vector>
-#include <utility>
 #include <algorithm>
 
-template <typename T>
+template <typename KeyType>
 class BST {
  private:
-  struct Node {
-    T word;
-    int count;
-    Node* left;
-    Node* right;
-    explicit Node(const T& w) : word(w), count(1), left(nullptr), right(nullptr) {}
-  };
-  Node* root;
-  void insert(Node*& node, const T& w) {
-    if (!node) {
-      node = new Node(w);
-      return;
+    struct TreeNode {
+        KeyType data;
+        int frequency;
+        TreeNode* leftChild;
+        TreeNode* rightChild;
+
+        explicit TreeNode(const KeyType& key)
+            : data(key), frequency(1), leftChild(nullptr), rightChild(nullptr) {}
+    };
+
+    TreeNode* root_;
+
+    TreeNode* addNode(TreeNode* node, const KeyType& key) {
+        if (node == nullptr) {
+            return new TreeNode(key);
+        }
+        if (key == node->data) {
+            ++node->frequency;
+        } else if (key < node->data) {
+            node->leftChild = addNode(node->leftChild, key);
+        } else {
+            node->rightChild = addNode(node->rightChild, key);
+        }
+        return node;
     }
-    if (w < node->word) {
-      insert(node->left, w);
-    } else if (w > node->word) {
-      insert(node->right, w);
-    } else {
-      node->count++;
+
+    int calculateHeight(TreeNode* node) const {
+        if (node == nullptr) {
+            return -1;
+        }
+        int leftHeight = calculateHeight(node->leftChild);
+        int rightHeight = calculateHeight(node->rightChild);
+        return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
     }
-  }
-  void collect(Node* node, std::vector<std::pair<T, int>>& freqList) const {
-    if (!node) {
-      return;
+
+    void inorderTraversal(TreeNode* node, std::vector<std::pair<KeyType, int>>& container) const {
+        if (node == nullptr) return;
+        inorderTraversal(node->leftChild, container);
+        container.emplace_back(node->data, node->frequency);
+        inorderTraversal(node->rightChild, container);
     }
-    collect(node->left, freqList);
-    freqList.emplace_back(node->word, node->count);
-    collect(node->right, freqList);
-  }
-  void clear(Node* node) {
-    if (!node) {
-      return;
+
+    void destroyTree(TreeNode* node) {
+        if (node == nullptr) return;
+        destroyTree(node->leftChild);
+        destroyTree(node->rightChild);
+        delete node;
     }
-    clear(node->left);
-    clear(node->right);
-    delete node;
-  }
-  int search(Node* node, const T& w) const {
-    if (!node) {
-      return 0;
-    }
-    if (w < node->word) {
-      return search(node->left, w);
-    } else if (w > node->word) {
-      return search(node->right, w);
-    } else {
-      return node->count;
-    }
-  }
-  int calculateDepth(Node* node) const {
-    if (!node) {
-      return -1;
-    }
-    return 1 + std::max(calculateDepth(node->left), calculateDepth(node->right));
-  }
 
  public:
-  BST() : root(nullptr) {}
-  ~BST() { clear(root); }
-  void add(const T& w) { insert(root, w); }
-  std::vector<std::pair<T, int>> getFrequencies() const {
-    std::vector<std::pair<T, int>> freqList;
-    collect(root, freqList);
-    return freqList;
-  }
-  int depth() const {
-    return calculateDepth(root);
-  }
-  int search(const T& w) const {
-    return search(root, w);
-  }
+    BST() : root_(nullptr) {}
+    ~BST() { destroyTree(root_); }
+
+    void insert(const KeyType& key) {
+        root_ = addNode(root_, key);
+    }
+
+    int findFrequency(const KeyType& key) const {
+        TreeNode* current = root_;
+        while (current != nullptr) {
+            if (key == current->data) {
+                return current->frequency;
+            }
+            current = (key < current->data) ? current->leftChild : current->rightChild;
+        }
+        return 0;
+    }
+
+    int height() const {
+        return calculateHeight(root_);
+    }
+
+    int depth() const {
+        return height();
+    }
+
+    int search(const KeyType& key) const {
+        return findFrequency(key);
+    }
+
+    void displayFrequency(std::ostream& os) const {
+        std::vector<std::pair<KeyType, int>> freqList;
+        inorderTraversal(root_, freqList);
+
+        std::sort(freqList.begin(), freqList.end(),
+                  [](const auto& lhs, const auto& rhs) {
+                      if (lhs.second != rhs.second)
+                          return lhs.second > rhs.second;
+                      return lhs.first < rhs.first;
+                  });
+
+        for (const auto& entry : freqList) {
+            os << entry.first << " " << entry.second << "\n";
+        }
+    }
+
+    bool empty() const {
+        return root_ == nullptr;
+    }
 };
 #endif  // INCLUDE_BST_H_
