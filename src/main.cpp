@@ -1,7 +1,7 @@
 // Copyright 2021 NNTU-CS
-#include "bst.h"
 #include <iostream>
 #include <string>
+#include "bst.h"
 void makeTree(BST<std::string>&, const char* filename);
 void printPeriod(BST<std::string>& tree);
 
