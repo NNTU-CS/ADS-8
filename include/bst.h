@@ -31,7 +31,7 @@ class BST {
     }
 
     int depth(Node* node) const {
-        if (!node) return 0;
+        if (!node) return -1;
         int lDepth = depth(node->lft);
         int rDepth = depth(node->rght);
         return std::max(lDepth, rDepth) + 1;
