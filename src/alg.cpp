@@ -19,7 +19,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     char ch;
     while (file.get(ch)) {
         if (std::isalpha(static_cast<unsigned char>(ch))) {
-            word += std::tolower(static_cast<unsigned char>(ch));
+            word += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
         } else if (!word.empty()) {
             tree.insert(word);
             word.clear();
@@ -32,16 +32,14 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 }
 
 void printFreq(BST<std::string>& tree) {
-    std::vector<BST<std::string>::Node*> nodes;
-    tree.inOrderTraversal(nodes);
-    std::sort(nodes.begin(), nodes.end(),
+    auto items = tree.getItems();
+    std::sort(items.begin(), items.end(),
         [](const auto& a, const auto& b) {
-            return a->count > b->count;
+            return a.second > b.second;
         });
     std::ofstream out("result/freq.txt");
-    for (const auto& node : nodes) {
-        std::cout << node->key << ": " << node->count << "\n";
-        out << node->key << ": " << node->count << "\n";
+    for (const auto& [word, count] : items) {
+        out << word << ": " << count << "\n";
     }
     out.close();
 }
