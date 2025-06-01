@@ -73,7 +73,7 @@ public:
     }
 
     int depth() const {
-        return depth(root);
+        return depth(root)-1;
     }
 
     bool search(T value) const {
