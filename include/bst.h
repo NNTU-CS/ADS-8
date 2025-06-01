@@ -73,7 +73,7 @@ class BST {
  public:
   struct Node;
   BST() : root(nullptr) {}
-  ~BST() { deletT(root); }
+  ~BST() { deleteT(root); }
 
   void insert(T value) {
     root = addNode(root, value);
