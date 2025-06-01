@@ -12,30 +12,30 @@
 
 void processFile(BST<std::string>& tree, std::ifstream& file) {
 char c;
-std::string currentWord;
+std::string crntWord;
 while (file.get(c)) {
 unsigned char uc = static_cast<unsigned char>(c);
 if (std::isalpha(uc)) {
-currentWord += static_cast<char>(std::tolower(uc));
+crntWord += static_cast<char>(std::tolower(uc));
 } else {
-if (!currentWord.empty()) {
-tree.add(currentWord);
-currentWord.clear();
+if (!crntWord.empty()) {
+tree.add(crntWord);
+crntWord.clear();
 }
 }
 }
-if (!currentWord.empty()) {
-tree.add(currentWord);
+if (!crntWord.empty()) {
+tree.add(crntWord);
 }
 }
 
 void makeTree(BST<std::string>& tree, const char* filename) {
 std::ifstream file(filename);
-if (!file.is_open()) {
+if (!file) {
 std::cout << "Error" << std::endl;
 return;
 }
-if (file.is_open()) {
+if (file) {
 processFile(tree, file);
 file.close();
 } else {
