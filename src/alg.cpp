@@ -32,7 +32,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     }
 
     if (!curtWord.empty()) {
-        tree.addNode(curtWord);
+        tree.insert(curtWord);
     }
 
     file.close();
