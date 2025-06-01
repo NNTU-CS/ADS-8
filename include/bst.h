@@ -64,6 +64,7 @@ class BST {
     }
     return 1 + std::max(calculateDepth(node->left), calculateDepth(node->right));
   }
+
  public:
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
