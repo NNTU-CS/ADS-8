@@ -29,7 +29,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     inputFile.close();
 }
 
-void printFreq(BST<std::string>& tree) {
+void displayFrequency(BST<std::string>& tree) {
     const std::string outputPath = "result/freq.txt";
     std::ofstream outputFile(outputPath);
     if (!outputFile.is_open()) {
