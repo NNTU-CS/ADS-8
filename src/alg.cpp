@@ -2,7 +2,7 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
-#include  "BST.h"
+#include  "bst.h"
 #include <iostream>
 #include <vector>
 #include <algorithm>
