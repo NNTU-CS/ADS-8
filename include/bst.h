@@ -40,29 +40,10 @@ class BST {
     }
   }
 
-  int depth(Node<T>* root) const {
-    if (!root) return 0;
-
-    std::stack<std::pair<Node<T>*, int>> stack;
-    stack.push({root, 1});
-    int max_depth = 1;
-
-    while (!stack.empty()) {
-      auto [node, current_depth] = stack.top();
-      stack.pop();
-
-      max_depth = std::max(max_depth, current_depth);
-
-      if (node->left_point) {
-        stack.push({node->left_point, current_depth + 1});
-      }
-      if (node->right_pointer) {
-        stack.push({node->right_pointer, current_depth + 1});
-      }
-    }
-
-    return max_depth;
-  }
+int depth(Node<T>* node) const {
+  if (!node) return -1;
+  return 1 + std::max(depth(node->left_point), depth(node->right_pointer));
+}
 
   int search(Node<T>* node, T word) const {
     if (node == nullptr) return 0;
