@@ -1,7 +1,7 @@
 // Copyright 2021 NNTU-CS
-#include "bst.h"
 #include <iostream>
 #include <string>
+#include "bst.h"
 
 extern void makeTree(BST<std::string>& tree, const char* filename);
 extern void displayFrequency(BST<std::string>& tree);
