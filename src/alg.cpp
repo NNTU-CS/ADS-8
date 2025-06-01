@@ -52,7 +52,7 @@ void printFreq(BST<std::string>& tree) {
     for (const auto& wf : wrds) {
         std::cout << wf.wrd << " - " << wf.cnt << std::endl;
     }
-    
+
     std::ofstream out("result/freq.txt");
     for (const auto& wf : wrds) {
         out << wf.wrd << " - " << wf.cnt << std::endl;
