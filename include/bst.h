@@ -28,9 +28,8 @@ class BST {
       node->left = addNode(node->left, value);
     } else if (value > node->data) {
       node->right = addNode(node->right, value);
-    } else {
+    } else
       node->count++;
-    }
     return node;
   }
   void Travel(Node* node, std::vector<std::pair<T, int>>& result) const {
@@ -48,9 +47,8 @@ class BST {
       return node;
     } else if (value < node->data) {
       return search(node->left, value);
-    } else {
+    } else
       return search(node->right, value);
-    }
   }
   void clear(Node* node) {
     if (node) {
