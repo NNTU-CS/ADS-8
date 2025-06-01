@@ -12,6 +12,16 @@ bool latinLetter(char sm) {
     return (sm >= 'a' && sm <= 'z') || (sm >= 'A' && sm <= 'Z');
 }
 
+void randomizeInsertions(BST<std::string>& tree, const std::vector<std::string>& words) {
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(words.begin(), words.end(), g);
+
+    for (const auto& word : words) {
+        tree.insert(word);
+    }
+}
+
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
     if (!file) {
@@ -30,7 +40,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
             curtWord += tolower(sm);
         } else if (!curtWord.empty()) {
             if (curtWord != prevWord) {
-                tree.insert(curtWord);
                 wordsList.push_back(curtWord);
                 prevWord = curtWord;
             }
@@ -39,11 +48,12 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     }
 
     if (!curtWord.empty() && curtWord != prevWord) {
-        tree.insert(curtWord);
         wordsList.push_back(curtWord);
     }
 
     file.close();
+
+    randomizeInsertions(tree, wordsList);
 
     std::cout << "Total unique words processed: " << wordsList.size() << std::endl;
 }
