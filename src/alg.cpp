@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <vector>
 #include  <cstdlib>
+#include <random>
 #include  "bst.h"
 
 bool latinLetter(char sm) {
