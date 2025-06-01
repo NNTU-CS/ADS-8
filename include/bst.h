@@ -9,7 +9,7 @@
 
 template <typename KeyType>
 class BST {
-private:
+ private:
     struct TreeNode {
         KeyType data;
         int frequency;
@@ -59,7 +59,7 @@ private:
         delete node;
     }
 
-public:
+ public:
     BST() : root_(nullptr) {}
     ~BST() { destroyTree(root_); }
 
