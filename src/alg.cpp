@@ -33,3 +33,17 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   
   file.close();
 }
+
+void printFreq(BST<std::string>& tree) {
+    auto words = tree.symBypass();
+    std::sort(words.begin(), words.end(), 
+        [](const auto& a, const auto& b) {
+            return a.second > b.second;
+        });
+    std::ofstream out("result/freq.txt");
+    for (const auto& pair : words) {
+        std::cout << pair.first << " " << pair.second << std::endl;
+        out << pair.first << " " << pair.second << std::endl;
+    }
+    out.close();
+}
