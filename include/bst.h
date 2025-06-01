@@ -25,8 +25,8 @@ class BST {
     int getHeight(Node* root);
     void toVector(Node* node, std::vector<std::pair<T, int>>& vec);
 
-public:
-    BST() : root(nullptr) {}
+ public:
+    explicit BST() : root(nullptr) {}
     ~BST();
     void add(T value);
     void del(T value);
@@ -44,11 +44,9 @@ typename BST<T>::Node* BST<T>::addNode(Node* root, T value) {
     }
     if (value < root->data) {
         root->left = addNode(root->left, value);
-    }
-    else if (value > root->data) {
+    } else if (value > root->data) {
         root->right = addNode(root->right, value);
-    }
-    else {
+    } else {
         root->count++;
     }
     return root;
@@ -57,35 +55,28 @@ typename BST<T>::Node* BST<T>::addNode(Node* root, T value) {
 template <typename T>
 typename BST<T>::Node* BST<T>::delNode(Node* root, T value) {
     if (root == nullptr) return nullptr;
-
     if (value < root->data) {
         root->left = delNode(root->left, value);
-    }
-    else if (value > root->data) {
+    } else if (value > root->data) {
         root->right = delNode(root->right, value);
-    }
-    else {
+    } else {
         if (root->count > 1) {
             root->count--;
             return root;
         }
-
         if (root->left == nullptr) {
             Node* temp = root->right;
             delete root;
             return temp;
-        }
-        else if (root->right == nullptr) {
+        } else if (root->right == nullptr) {
             Node* temp = root->left;
             delete root;
             return temp;
         }
-
         Node* successor = root->right;
         while (successor->left != nullptr) {
             successor = successor->left;
         }
-
         root->data = successor->data;
         root->count = successor->count;
         successor->count = 1;
@@ -107,11 +98,9 @@ int BST<T>::searchNode(Node* root, T value) {
     if (!root) return 0;
     if (value < root->data) {
         return searchNode(root->left, value);
-    }
-    else if (value > root->data) {
+    } else if (value > root->data) {
         return searchNode(root->right, value);
-    }
-    else {
+    } else {
         return root->count;
     }
 }
