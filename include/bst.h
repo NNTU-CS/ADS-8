@@ -68,7 +68,7 @@ class BST {
   int depth() {
     return getDepth(root)-1;
   }
-  std::vector<std::pair<T, int>> array_words() const {
+  std::vector<std::pair<T, int>> words() const {
     std::vector<std::pair<T, int>> result;
     Order(root, result);
     return result;
