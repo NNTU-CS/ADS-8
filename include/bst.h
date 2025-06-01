@@ -9,7 +9,7 @@
 
 template <typename T>
 class BST {
-private:
+ private:
     struct Node {
         T key;
         int count;
@@ -63,6 +63,7 @@ private:
         inOrderRec(root, result);
         return result;
     }
+
  private:
     Node* searchNode(T value) const {
     Node* current = root;
