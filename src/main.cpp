@@ -16,7 +16,7 @@ int main() {
 
     int kol = wordTree.searchNode("in");
     if (ko; > 0) {
-        std::cout << "Word 'in' found with count: " << count << std::endl;
+        std::cout << "Word 'in' found with count: " << kol << std::endl;
     } else {
         std::cout << "Word 'in' not found" << std::endl;
     }
