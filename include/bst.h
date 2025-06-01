@@ -16,7 +16,7 @@ class BST {
     Node* left;
     Node* right;
     Node(const T& w) : word(w), count(1), left(nullptr), right(nullptr) {}
-};
+  };
 Node* root;
 void insert(Node*& node, const T& w) {
   if (!node) {
@@ -53,6 +53,10 @@ int search(Node* node, const T& w) const {
     return node->count;
   }
 }
+int depth(Node* node) const {
+ if (!node) return -1;
+ return 1 + std::max(depth(node->left), depth(node->right));
+}
  public:
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
@@ -71,7 +75,7 @@ int search(Node* node, const T& w) const {
  private:
   int depth(Node* node) const {
     if (!node) return 0;
-      return 1 + std::max(depth(node->left), depth(node->right));
+    return 1 + std::max(depth(node->left), depth(node->right));
   }
 };
 
