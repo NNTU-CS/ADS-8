@@ -22,8 +22,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
       if (std::isalpha(static_cast<unsigned char>(c))) {
         word += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
         in_word = true;
-      }
-      else if (in_word) {
+      } else if (in_word) {
         if (!word.empty()) {
           tree.add(word);
           word.clear();
@@ -53,8 +52,7 @@ void printFreq(BST<std::string>& tree) {
         fout << p.first << " " << p.second << "\n";
       }
       fout.close();
-    }
-    else {
+    } else {
       std::cerr << "Cant create output file\n";
     }
 }
