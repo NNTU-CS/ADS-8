@@ -32,7 +32,7 @@ class BST {
   }
 
   int measureDepth(Node* node) const {
-    if (!node) return 0;
+    if (!node) return -1;
     int left = measureDepth(node->left);
     int right = measureDepth(node->right);
     return 1 + (left > right ? left : right);
