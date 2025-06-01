@@ -19,7 +19,7 @@ int main() {
     // 3. Выводим информацию о дереве
     std::cout << "Binary Search Tree Statistics:\n";
     std::cout << "----------------------------\n";
-    std::cout << "Tree depth: " << wordTree.depth() - 1 << std::endl;
+    std::cout << "Tree depth: " << wordTree.depth() << std::endl;
 
     // 4. Выводим частоту слов
     std::cout << "\nWord Frequencies (sorted by count):\n";
