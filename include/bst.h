@@ -19,9 +19,9 @@ private:
             : key(k), count(1), left(nullptr), right(nullptr) {}
     };
     std::unique_ptr<Knot> root;
-    void addEl(Knot*& node, const T& key) {
+    void addEl(std::make_unique<Knot>& node, const T& key) {
         if (!node) {
-            node = new Knot(key);
+            node = std::make_unique<Knot>(key);
         } else if (key == node->key) {
             node->count++;
         } else {
