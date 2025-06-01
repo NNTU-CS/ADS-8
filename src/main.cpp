@@ -1,19 +1,15 @@
 // Copyright 2021 NNTU-CS
-#include <cstdlib>
-#include <fstream>
+#include <iostream>
 #include <string>
 #include "bst.h"
 
-void makeTree(BST<std::string>& tree, const char* filename);
-void printFreq(BST<std::string>& tree);
+extern void makeTree(BST<std::string>& tree, const char* filename);
+extern void displayFrequency(BST<std::string>& tree);
 int main() {
-  BST<std::string> tree;
-  const char* filename = "war_peace.txt";
-  makeTree(tree, filename);
-  std::ofstream outFile("result/freq.txt");
-  if (!outFile) {
-    return EXIT_FAILURE;
-  }
-  tree.printReverseInOrder(outFile);
-  return EXIT_SUCCESS;
+    BST<std::string> wordTree;
+    const char* inputFile = "src/war_peace.txt";
+    makeTree(wordTree, inputFile);
+    displayFrequency(wordTree);
+    std::cout << "Depth of the BST: " << wordTree.height() << std::endl;
+    return 0;
 }
