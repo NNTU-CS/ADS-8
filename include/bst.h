@@ -29,7 +29,7 @@ node->cnt++;
 return node;
 }
 
-Node* searchNode(Node* node, const T& value) const{
+Node* searchNode(Node* node, const T& value) const {
 if (!node || node->element == value) {
 return node;
 }
