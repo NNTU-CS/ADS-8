@@ -4,92 +4,74 @@
 
 #include <iostream>
 #include <string>
-#include <functional> // для std::function
+#include <functional>
 
 template <typename T>
 class BST {
-public:  // Сделали Node публичным, чтобы была возможность использовать вне класса
+public:
     struct Node {
         T key;
         int count;
         Node* left;
         Node* right;
-        Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
+        Node(T value) : key(value), count(1), left(nullptr), right(nullptr) {}
     };
 
 private:
-    Node* root;
+    Node* rootNode;
 
-    Node* insert(Node* node, T value) {
-       // pritf("%s", node);
-        //pritf("%s", value);
-        if (!node) return new Node(value);
-        if (value == node->key) {
-            node->count++;
+    Node* insert(Node* currentNode, T value) {
+        if (!currentNode) return new Node(value);
+        if (value == currentNode->key) {
+            currentNode->count++;
         }
-        else if (value < node->key) {
-            node->left = insert(node->left, value);
+        else if (value < currentNode->key) {
+            currentNode->left = insert(currentNode->left, value);
         }
         else {
-            node->right = insert(node->right, value);
+            currentNode->right = insert(currentNode->right, value);
         }
-        return node;
+        return currentNode;
     }
 
-    Node* search(Node* node, T value) const {
-          if (!node || node->key == value) return node;
-        if (value < node->key) return search(node->left, value);
-        return search(node->right, value);
+    Node* search(Node* currentNode, T value) const {
+        if (!currentNode || currentNode->key == value) return currentNode;
+        if (value < currentNode->key) return search(currentNode->left, value);
+        return search(currentNode->right, value);
     }
 
-    int depth(Node* node) const {
-        if (!node) return 0;
-        int leftDepth = depth(node->left);
-        int rightDepth = depth(node->right);
-        return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
+    int depth(Node* currentNode) const {
+        if (!currentNode) return 0;
+        int leftSubtree = depth(currentNode->left);
+        int rightSubtree = depth(currentNode->right);
+        return 1 + (leftSubtree > rightSubtree ? leftSubtree : rightSubtree);
     }
 
-
-    void inOrder(Node* node, std::function<void(Node*)> visit) const {
-        if (!node) return;
-        inOrder(node->left, visit);
-        visit(node);
-        inOrder(node->right, visit);
-    }
-
-    void clear(Node* node) {
-        if (!node) return;
-        clear(node->left);
-        clear(node->right);
-        delete node;
+    void inOrder(Node* currentNode, std::function<void(Node*)> visit) const {
+        if (!currentNode) return;
+        inOrder(currentNode->left, visit);
+        visit(currentNode);
+        inOrder(currentNode->right, visit);
     }
 
 public:
-    BST() : root(nullptr) {}
-    ~BST() { clear(root); }
+    BST() : rootNode(nullptr) {}
 
     void insert(T value) {
-        root = insert(root, value);
-    }
-
-    int depth() const {
-        return depth(root)-1;
-    }
-
-    bool search(T value) const {
-        return search(root, value) != nullptr;
+        rootNode = insert(rootNode, value);
     }
 
     int getCount(T value) const {
-        Node* node = search(root, value);
-        return node ? node->count : 0;
+        Node* foundNode = search(rootNode, value);
+        return foundNode ? foundNode->count : 0;
+    }
+
+    int depth() const {
+        return depth(rootNode)-1;
     }
 
     void inOrder(std::function<void(Node*)> visit) const {
-        inOrder(root, visit);
+        inOrder(rootNode, visit);
     }
-
 };
-
-
 #endif  // INCLUDE_BST_H_
