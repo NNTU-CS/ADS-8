@@ -9,8 +9,8 @@
 
 template <typename T>
 class BST {
-
 private:
+
     struct Node {
         T key;
         int count;
@@ -61,7 +61,6 @@ private:
             symBypass(node->right, result);
         }
     }
-
 public:
 
     BST() : root(nullptr) {}
