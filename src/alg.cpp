@@ -1,33 +1,44 @@
 // Copyright 2021 NNTU-CS
 #include  <iostream>
-#include  <fstream>
-#include  <locale>
+#include <fstream>
+#include <cctype>
 #include <string>
-#include  <cstdlib>
-#include  "bst.h"
+#include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-  std::ifstream file(filename);
-    if (!file) {
-        std::cout << "File error!" << std::endl;
+    std::ifstream inputFile(filename);
+    if (!inputFile.is_open()) {
+        std::cerr << "Error: Unable to open file \"" << filename << "\"." << std::endl;
         return;
     }
 
-    std::string word;
+    std::string currentWord;
     char ch;
-
-    while (file.get(ch)) {
+    while (inputFile.get(ch)) {
         if (std::isalpha(static_cast<unsigned char>(ch))) {
-            word += std::tolower(static_cast<unsigned char>(ch));
-        } else {
-            if (!word.empty()) {
-                tree.insert(word);
-                word.clear();
-            }
+            currentWord += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+        } else if (!currentWord.empty()) {
+            tree.insert(currentWord);
+            currentWord.clear();
         }
     }
-    if (!word.empty()) {
-        tree.insert(word);
+    if (!currentWord.empty()) {
+        tree.insert(currentWord);
     }
-    file.close();
+
+    inputFile.close();
+}
+
+void printFreq(BST<std::string>& tree) {
+    const std::string outputPath = "result/freq.txt";
+    std::ofstream outputFile(outputPath);
+    if (!outputFile.is_open()) {
+        std::cerr << "Error: Could not open output file \"" << outputPath << "\"." << std::endl;
+        return;
+    }
+
+    tree.printFreq(outputFile);
+    tree.printFreq(std::cout);
+
+    outputFile.close();
 }
