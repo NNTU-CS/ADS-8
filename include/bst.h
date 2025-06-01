@@ -34,10 +34,21 @@ private:
         return currentNode;
     }
 
-    Node* search(Node* currentNode, T value) const {
-        if (!currentNode || currentNode->key == value) return currentNode;
-        if (value < currentNode->key) return search(currentNode->left, value);
-        return search(currentNode->right, value);
+    // Теперь search принимает только T value и работает через итерацию (не рекурсию)
+    Node* findNode(T value) const {
+        Node* currentNode = rootNode;
+        while (currentNode) {
+            if (value == currentNode->key) {
+                return currentNode;
+            }
+            else if (value < currentNode->key) {
+                currentNode = currentNode->left;
+            }
+            else {
+                currentNode = currentNode->right;
+            }
+        }
+        return nullptr;
     }
 
     int depth(Node* currentNode) const {
@@ -61,13 +72,17 @@ public:
         rootNode = insert(rootNode, value);
     }
 
+    bool search(T value) const {
+        return findNode(value) != nullptr;  // Используем приватный search(T)
+    }
+
     int getCount(T value) const {
-        Node* foundNode = search(rootNode, value);
+        Node* foundNode = findNode(value);  // Используем приватный search(T)
         return foundNode ? foundNode->count : 0;
     }
 
     int depth() const {
-        return depth(rootNode)-1;
+        return depth(rootNode) - 1;
     }
 
     void inOrder(std::function<void(Node*)> visit) const {
