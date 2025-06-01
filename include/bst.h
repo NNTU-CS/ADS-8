@@ -49,6 +49,7 @@ private:
         return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
     }
 
+
     void inOrder(Node* node, std::function<void(Node*)> visit) const {
         if (!node) return;
         inOrder(node->left, visit);
@@ -89,7 +90,6 @@ public:
     }
 
 };
-
 
 
 #endif  // INCLUDE_BST_H_
