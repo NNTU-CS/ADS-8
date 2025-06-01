@@ -1,23 +1,22 @@
 // Copyright 2021 NNTU-CS
-#ifndef BST_H
-#define BST_H
+#ifndef INCLUDE_BST_H_
+#define INCLUDE_BST_H_
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
-#include <algorithm>
 
 template <typename T>
 class BST {
- private:
+private:
   struct Node {
     T key;
     int count;
     Node* left;
     Node* right;
-
-    Node(T k) : key(std::move(k)), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(T k) : key(std::move(k)), count(1), left(nullptr), right(nullptr) {}
   };
   Node* root;
   Node* insert(Node* node, const T& value) {
@@ -91,4 +90,4 @@ class BST {
 void makeTree(BST<std::string>& tree, const char* filename);
 void printFreq(BST<std::string>& tree);
 
-#endif // BST_H
+#endif  // INCLUDE_BST_H_
