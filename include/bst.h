@@ -8,7 +8,7 @@
 template <typename T>
 
 class BST {
-private:
+ private:
     struct Node {
         T key;
         int count;
@@ -54,9 +54,10 @@ private:
         collectNodes(node->left, nodes);
         collectNodes(node->right, nodes);
     }
-public:
+
+ public:
     BST() : root(nullptr) {}
-    
+
     void insert(T key) {
         root = insert(root, key);
     }
