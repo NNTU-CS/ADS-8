@@ -51,7 +51,10 @@ void printFreq(BST<std::string>& tree) {
     std::vector<WordFreq> words;
 
     auto collectWords = [&words](typename BST<std::string>::Node* node) {
-        words.push_back({node->slovo, node->kol});
+        WordFreq wf;
+        wf.word = node->slovo;
+        wf.kol = node->kol;
+        words.push_back(wf);
     };
 
     tree.obhod(collectWords);
