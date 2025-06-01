@@ -8,7 +8,7 @@
 
 template <typename T>
 class BST {
- private:
+private:
     struct Node {
         T data;
         int count;
@@ -25,7 +25,7 @@ class BST {
     int getHeight(Node* root);
     void toVector(Node* node, std::vector<std::pair<T, int>>& vec);
 
- public:
+public:
     explicit BST() : root(nullptr) {}
     ~BST();
     void add(T value);
@@ -37,16 +37,19 @@ class BST {
     void toVector(std::vector<std::pair<T, int>>& vec);
 };
 
-template <typename T>
+template<typename T>
 typename BST<T>::Node* BST<T>::addNode(Node* root, T value) {
     if (root == nullptr) {
-        return new Node(value);
+        root = new Node(value);
+        return root;
     }
-    if (value < root->data) {
+    else if (value < root->data) {
         root->left = addNode(root->left, value);
-    } else if (value > root->data) {
+    }
+    else if (value > root->data) {
         root->right = addNode(root->right, value);
-    } else {
+    }
+    else {
         root->count++;
     }
     return root;
@@ -54,33 +57,42 @@ typename BST<T>::Node* BST<T>::addNode(Node* root, T value) {
 
 template <typename T>
 typename BST<T>::Node* BST<T>::delNode(Node* root, T value) {
-    if (root == nullptr) return nullptr;
-    if (value < root->data) {
+    Node* p, * v;
+    if (root == nullptr) {
+        return root;
+    }
+    else if (value < root->value) {
         root->left = delNode(root->left, value);
-    } else if (value > root->data) {
+    }
+    else if (value > root->value) {
         root->right = delNode(root->right, value);
-    } else {
-        if (root->count > 1) {
-            root->count--;
-            return root;
+    }
+    else {
+        p = root;
+        if (root->right == nullptr) {
+            root = root->left;
         }
-        if (root->left == nullptr) {
-            Node* temp = root->right;
-            delete root;
-            return temp;
-        } else if (root->right == nullptr) {
-            Node* temp = root->left;
-            delete root;
-            return temp;
+        else if (root->left == nullptr) {
+            root = root->right;
         }
-        Node* successor = root->right;
-        while (successor->left != nullptr) {
-            successor = successor->left;
+        else {
+            v = root->left;
+            if (v->right) {
+                while (v->right->right)
+                    v = v->right;
+                root->value = v->right->value;
+                root->count = v->right->count;
+                p = v->right;
+                v->right = v->right->left;
+            }
+            else {
+                root->value = v->value;
+                root->count = v->count;
+                p = v;
+                root->left = root->left->left;
+            }
         }
-        root->data = successor->data;
-        root->count = successor->count;
-        successor->count = 1;
-        root->right = delNode(root->right, successor->data);
+        delete p;
     }
     return root;
 }
@@ -98,9 +110,11 @@ int BST<T>::searchNode(Node* root, T value) {
     if (!root) return 0;
     if (value < root->data) {
         return searchNode(root->left, value);
-    } else if (value > root->data) {
+    }
+    else if (value > root->data) {
         return searchNode(root->right, value);
-    } else {
+    }
+    else {
         return root->count;
     }
 }
@@ -117,10 +131,13 @@ void BST<T>::printTree(Node* root) {
 
 template <typename T>
 int BST<T>::getHeight(Node* root) {
-    if (!root) return 0;
-    int left = getHeight(root->left);
-    int right = getHeight(root->right);
-    return 1 + (left > right ? left : right);
+    if (root == nullptr)
+        return 0;
+    if (root->left == nullptr && root->right == nullptr)
+        return 0;
+    int lefth = getHeight(root->left);
+    int righth = getHeight(root->right);
+    return std::max(lefth, righth) + 1;
 }
 
 template <typename T>
