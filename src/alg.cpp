@@ -40,8 +40,8 @@ void printFreq(const BST<std::string>& tree) {
         return;
     }
     for (const auto& pair : words) {
-        std::cout << pair.first << ": " << pair.second << '\n';
-        file << pair.first << ": " << pair.second << '\n';
+        std::cout << pair.first << "-" << pair.second << '\n';
+        file << pair.first << "-" << pair.second << '\n';
     }
     file.close();
 }
