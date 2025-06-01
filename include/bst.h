@@ -1,64 +1,61 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
-
 #include <fstream>
-#include <iostream>
 #include <string>
+#include <vector>
 
 template <typename T>
 class BST {
  private:
   struct Node {
-    T key;
-    int count;
+    T word;
+    int freq;
     Node* left;
     Node* right;
 
-    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+    Node(const T& w) : word(w), freq(1), left(nullptr), right(nullptr) {}
   };
 
   Node* root;
 
-  Node* insert(Node* node, const T& key) {
-    if (!node) return new Node(key);
-    if (key < node->key)
-      node->left = insert(node->left, key);
-    else if (key > node->key)
-      node->right = insert(node->right, key);
-    else
-      node->count++;
-    return node;
-  }
-
-  Node* search(Node* node, const T& key) const {
-    if (!node || node->key == key) return node;
-    if (key < node->key)
-      return search(node->left, key);
-    else
-      return search(node->right, key);
-  }
-
-  int depth(Node* node) const {
-    if (!node) return 0;
-    int left_depth = depth(node->left);
-    int right_depth = depth(node->right);
-    return 1 + (left_depth > right_depth ? left_depth : right_depth);
-  }
-
-  void inorder(Node* node, std::ofstream& out) const {
-    if (node) {
-      inorder(node->right, out);
-      out << node->key << " " << node->count << "\n";
-      std::cout << node->key << " " << node->count << "\n";
-      inorder(node->left, out);
+  void insertNode(Node*& node, const T& word) {
+    if (!node) {
+      node = new Node(word);
+    } else if (word == node->word) {
+      node->freq++;
+    } else if (word < node->word) {
+      insertNode(node->left, word);
+    } else {
+      insertNode(node->right, word);
     }
   }
 
-  void clear(Node* node) {
+  int measureDepth(Node* node) const {
+    if (!node) return 0;
+    int left = measureDepth(node->left);
+    int right = measureDepth(node->right);
+    return 1 + (left > right ? left : right);
+  }
+
+  Node* find(Node* node, const T& word) const {
+    if (!node) return nullptr;
+    if (word == node->word) return node;
+    return (word < node->word) ? find(node->left, word)
+                               : find(node->right, word);
+  }
+
+  void collectWords(Node* node, std::vector<std::pair<T, int>>& list) const {
+    if (!node) return;
+    collectWords(node->left, list);
+    list.push_back({node->word, node->freq});
+    collectWords(node->right, list);
+  }
+
+  void free(Node* node) {
     if (node) {
-      clear(node->left);
-      clear(node->right);
+      free(node->left);
+      free(node->right);
       delete node;
     }
   }
@@ -66,19 +63,19 @@ class BST {
  public:
   BST() : root(nullptr) {}
 
-  ~BST() { clear(root); }
+  ~BST() { free(root); }
 
-  void insert(const T& key) { root = insert(root, key); }
+  void insert(const T& word) { insertNode(root, word); }
 
-  bool search(const T& key) const { return search(root, key) != nullptr; }
+  int depth() const { return measureDepth(root); }
 
-  int depth() const { return depth(root); }
+  int search(const T& word) const {
+    Node* node = find(root, word);
+    return node ? node->freq : 0;
+  }
 
-  void printToFileAndConsole() const {
-    std::ofstream out("result/freq.txt");
-    inorder(root, out);
-    out.close();
+  void getFrequencyList(std::vector<std::pair<T, int>>& list) const {
+    collectWords(root, list);
   }
 };
-
 #endif  // INCLUDE_BST_H_
