@@ -47,31 +47,18 @@ bool compareWordFreq(const WordFreq& a, const WordFreq& b) {
     return a.kol > b.kol;
 }
 
-void printFreq(BST<std::string>& tree) {
-    std::vector<WordFreq> words;
+void printFreq(const BST<std::string>& tree) {
+    std::vector<BST<std::string>::Node*> nodes;
 
-    auto collectWords = [&words](BST<std::string>::Node* node) {
-        WordFreq wf;
-        wf.word = node->slovo;
-        wf.kol = node->kol;
-        words.push_back(wf);
-    };
+    tree.inorder([&nodes](auto* node) {
+        nodes.push_back(node);
+    });
 
-    tree.inorder(collectWords);
+    std::sort(nodes.begin(), nodes.end(), [](auto n1, auto n2) {
+        return n1->kol > n2->kol;
+    });
 
-    std::sort(words.begin(), words.end(), compareWordFreq);
-
-    for (const auto& wf : words) {
-        std::cout << wf.word << ": " << wf.kol << std::endl;
-    }
-
-    std::ofstream outFile("result/freq.txt");
-    if (outFile) {
-        for (const auto& wf : words) {
-            outFile << wf.word << ": " << wf.kol << std::endl;
-        }
-        outFile.close();
-    } else {
-        std::cerr << "Unable" << std::endl;
+    for (auto* node : nodes) {
+        std::cout << node->slovo << ": " << node->kol << "\n";
     }
 }
