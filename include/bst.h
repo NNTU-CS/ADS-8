@@ -82,6 +82,14 @@ public:
         return calculateHeight(root_);
     }
 
+    int depth() const {
+        return height();
+    }
+
+    int search(const KeyType& key) const {
+        return findFrequency(key);
+    }
+
     void displayFrequency(std::ostream& os) const {
         std::vector<std::pair<KeyType, int>> freqList;
         inorderTraversal(root_, freqList);
