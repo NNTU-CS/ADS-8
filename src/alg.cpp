@@ -7,11 +7,12 @@
 #include  <cctype>
 #include  <algorithm>
 #include  <string>
+#include  <cstring>
 #include  "bst.h"
 
 template<typename T>
 typename BST<T>::Node* BST<T>::searchNode(Node* node, const T& value) const {
- if (!node || node->element == value) { 
+if (!node || node->element == value) {
 return node;
 }
 return value < node->element ? searchNode(node->left, value) : searchNode(node->right, value);
