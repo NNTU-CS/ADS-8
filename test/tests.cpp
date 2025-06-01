@@ -9,7 +9,7 @@ TEST(lab8, test1_1) {
     const char* filename = "/home/runner/work/ADS-8/ADS-8/build/test/war_peace.txt";
     BST<std::string> tree;
     makeTree(tree, filename);
-   int height = tree.height();
+    int height = tree.height();
     EXPECT_EQ(height, 35);
 }
 TEST(lab8, test1_2) {
