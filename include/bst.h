@@ -50,9 +50,9 @@ private:
 
     void inOrd(Node* node, void (*visit)(Node*)) const {
         if (!node) return;
-        inOrder(node->lft, visit);
+        inOrd(node->lft, visit);
         visit(node);
-        inOrder(node->rght, visit);
+        inOrd(node->rght, visit);
     }
 
     void clear(Node* node) {
@@ -69,7 +69,7 @@ public:
     }
 
     void insrt(T value) {
-        root = insert(root, value);
+        root = insrt(root, value);
     }
 
     int depth() const {
@@ -82,7 +82,7 @@ public:
     }
 
     void inOrd(void (*visit)(Node*)) const {
-        inOrder(root, visit);
+        inOrd(root, visit);
     }
 };
 
