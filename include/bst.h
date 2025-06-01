@@ -33,7 +33,7 @@ class BST {
         return root;
     }
 
-  int heightT(Node* root) {
+  int heightT(Node* root) const {
     if (root == nullptr) {
       return 0;
     }
@@ -65,8 +65,8 @@ class BST {
   void deleteT(Node* root) {
     if (root == nullptr)
       return;
-    delet(root->left);
-    delet(root->right);
+    deleteT(root->left);
+    deleteT(root->right);
     delete root;
   }
 
