@@ -34,8 +34,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     while (file.get(ch)) {
         if (isAsciiLetter(ch)) {
             currentWord += toLowerAscii(ch);
-        }
-        else {
+        } else {
             storeWord();
         }
     }
