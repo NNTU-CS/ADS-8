@@ -12,20 +12,21 @@
 
 void processFile(BST<std::string>& tree, std::ifstream& file) {
 char c;
-std::string crntWord;
+std::vector<char> crntWordChars;
 while (file.get(c)) {
 unsigned char uc = static_cast<unsigned char>(c);
 if (std::isalpha(uc)) {
-crntWord += static_cast<char>(std::tolower(uc));
-} else {
-if (!crntWord.empty()) {
-tree.add(crntWord);
-crntWord.clear();
+crntWordChars.push_back(static_cast<char>(std::tolower(uc)));
+}
+else {
+if (!crntWordChars.empty()) {
+tree.add(std::string(crntWordChars.begin(), crntWordChars.end()));
+crntWordChars.clear();
 }
 }
 }
-if (!crntWord.empty()) {
-tree.add(crntWord);
+if (!crntWordChars.empty()) {
+tree.add(std::string(crntWordChars.begin(), crntWordChars.end()));
 }
 }
 
