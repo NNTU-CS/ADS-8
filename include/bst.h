@@ -14,7 +14,6 @@ class BST {
     int count;
     Node* left;
     Node* right;
-    
     explicit Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
 
@@ -22,7 +21,6 @@ class BST {
 
   Node* insert(Node* node, T value) {
     if (!node) return new Node(value);
-    
     if (value == node->key) {
       node->count++;
     } else if (value < node->key) {
@@ -30,7 +28,6 @@ class BST {
     } else {
       node->right = insert(node->right, value);
     }
-    
     return node;
   }
 
@@ -67,7 +64,6 @@ class BST {
   void insert(T value) {
     root = insert(root, value);
   }
-
   int depth() const {
     return depth(root);
   }
