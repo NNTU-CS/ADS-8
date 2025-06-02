@@ -2,4 +2,99 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
+#include <string>
+#include <algorithm>
+#include <vector>
+#include <stack>
+
+template <typename T>
+class BST {
+private:
+	struct Node {
+		T value;
+		int count;
+		Node* left;
+		Node* right;
+		Node(const T& value): count(1), left(nullptr), right(nullptr), value(value){}
+	};
+	Node* root;
+	Node* addNode(Node*, T);
+	void delTree(Node*);
+public:
+	BST();
+	~BST();
+	int depth(TreeNode* node) const;
+	bool search(const T& value) const;
+};
+
+template<typename T>
+BST<T>::BST() :root(nullptr) {}
+template<typename T>
+BST<T>::~BST()
+{
+	if (root)
+		delTree(root);
+}
+
+template<typename T>
+typename BST<T>::Node* BST<T>::addNode(Node* root, T value) {
+	if (root == nullptr) {
+		return new Node(value);
+	} else if (value == root->value) {
+		root->count++;
+	} else if (value < node->value) {
+		root->left = addNode(root->left, value);
+	} else {
+		root->right = addNode(root->right, value);
+	}
+		
+	return root;
+}
+
+template<typename T>
+void BST<T>::delTree(Node* root)
+{
+	if (root == nullptr) {
+		return;
+	} else {
+		delTree(root->left);
+		delTree(root->right);
+		delete root;
+	}
+}
+template<typename T>
+void BST<T>::clear() {
+	if (root) {
+		delTree(root);
+		root = nullptr;
+	}
+}
+
+template<typename T>
+int BST<T>::depth(TreeNode* root) const {
+	if (root == nullptr) {
+		return 0;
+	}
+	return 1 + max(depth(root->left), depth(root->right));
+}
+
+template<typename T>
+bool BST<T>::search(const T& value) const {
+	Node* current = root;
+	while (current != nullptr) {
+		if (value == current->value) {
+			return true;
+		} else if (value < current->value) {
+			current = current->left;
+		} else {
+			current = current->right;
+		}
+	}
+	return false;
+}
+
+
+
+
 #endif  // INCLUDE_BST_H_
+
