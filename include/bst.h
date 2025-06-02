@@ -54,7 +54,7 @@ class BST {
         printFreqX(node->right, freqList);
     }
   }
- 
+
  public:
   BST() : root(nullptr) {}
   ~BST() { delTree(root); }
@@ -65,7 +65,8 @@ class BST {
     return depth(root);
   }
   bool search(T value) const {
-    return search(root, value) != nullptr;
+    Node* found = search(root, value);
+    return found ? found->count : 0;
   }
   int getCount(T value) const {
     Node* found = search(root, value);
@@ -74,7 +75,7 @@ class BST {
   void printFreq(std::ostream& out = std::cout) const {
     std::vector<std::pair<T, int>> freqList;
     printFreqX(root, freqList);
-    std::sort(freqList.begin(), freqList.end(), 
+    std::sort(freqList.begin(), freqList.end(),
         [](const auto& a, const auto& b) { return a.second > b.second; });
     for (const auto& entry : freqList) {
       out << entry.first << ": " << entry.second << std::endl;
