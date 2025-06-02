@@ -6,7 +6,7 @@
 #include <cctype>
 #include <algorithm>
 #include <string>
-#include  "bst.h"
+#include "bst.h"
 
 
 void makeTree(BST<std::string>& tree, const char* filename) {
@@ -31,7 +31,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     file.close();
 }
 
-void printFreq(BST<std::string>& tree) {
+void printFreq(const BST<std::string>& tree) {
   auto words = tree.inOrder();
   std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
     return a.second > b.second;
