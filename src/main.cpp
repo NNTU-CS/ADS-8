@@ -1,7 +1,7 @@
 // Copyright 2021 NNTU-CS
-#include "bst.h"
 #include <iostream>
 #include <string>
+#include "bst.h"
 
 int main() {
     BST<std::string> tree;
