@@ -7,7 +7,6 @@
 
 template <typename T>
 class BST {
-  
   private:
     struct Node {
       T key;
@@ -61,7 +60,7 @@ class BST {
       clear(node->right);
       delete node;
     }
-   
+
   public:
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
