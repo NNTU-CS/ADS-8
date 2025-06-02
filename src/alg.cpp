@@ -18,8 +18,8 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   std::string currentWord;
     char ch;
     while (file.get(ch)) {
-      if (isalpha(ch)) {
-        currentWord += tolower(ch);
+      if (isalpha(static_cast<unsigned char>(ch))) {
+        currentWord += tolower(static_cast<unsigned char>(ch));
       } else if (!currentWord.empty()) {
         tree.insert(currentWord);
         currentWord.clear();
