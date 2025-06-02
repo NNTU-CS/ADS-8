@@ -61,7 +61,7 @@ class BST {
     }
 
     int search(const T& value) {
-     return search_node(root, value);
+     return inOrder(root, value);
     }
 
     int depth() const {
