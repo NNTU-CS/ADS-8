@@ -46,7 +46,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     std::function<void(int, int)> balancedInsert = [&](int start, int end) {
       if (start > end) {
         return;
-      }  
+      }
       int mid = start + (end - start) / 2;
       for (int i = 0; i < wordCounts[mid].second; ++i) {
         tree.insert(wordCounts[mid].first);
