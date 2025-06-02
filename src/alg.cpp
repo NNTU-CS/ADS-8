@@ -1,6 +1,6 @@
 // Copyright 2021 NNTU-CS
+#include "bst.h"
 #include <iostream>
-#include  "bst.h"
 #include <algorithm>
 #include <cctype>
 #include <fstream>
@@ -10,14 +10,16 @@
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
   if (!file) {
-    std::cout << "File error!" << std::endl;
+    std::cerr << "File error!" << std::endl;
     return;
   }
-
+  
   std::string currentWord;
-  while (!file.eof()) {
+  while (true) {
     int ch = file.get();
-    
+    if (ch == EOF) {
+      break;
+    }
     if (isalpha(ch)) {
       currentWord += tolower(ch);
     } else if (!currentWord.empty()) {
@@ -36,7 +38,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 struct WordFreq {
   std::string word;
   int count;
-  
   bool operator<(const WordFreq& other) const {
     return count > other.count;
   }
@@ -50,7 +51,6 @@ void printFreq(BST<std::string>& tree) {
   };
   
   tree.inOrder(collect);
-  
   std::sort(words.begin(), words.end());
   
   for (const auto& wf : words) {
@@ -58,8 +58,14 @@ void printFreq(BST<std::string>& tree) {
   }
   
   std::ofstream out("result/freq.txt");
+  if (!out) {
+    std::cerr << "Error opening output file!" << std::endl;
+    return;
+  }
+  
   for (const auto& wf : words) {
     out << wf.word << ": " << wf.count << std::endl;
   }
+  
   out.close();
 }
