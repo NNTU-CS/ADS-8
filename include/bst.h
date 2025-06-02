@@ -3,6 +3,8 @@
 #define INCLUDE_BST_H_
 #include <iostream>
 #include <string>
+#include <vector>
+#include <algorithm>
 
 template <typename T>
 class BST {
@@ -12,7 +14,7 @@ class BST {
     int count;
     Node* left;
     Node* right;
-    Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
   Node* root;
   Node* insert(Node* node, T value) {
@@ -45,13 +47,14 @@ class BST {
       delete node;
     }
   }
-  void printFreqX(Node* node, std::ostream& out) const {
+  void printFreqX(Node* node, std::vector<std::pair<T, int>>& freqList) const {
     if (node) {
-      printFreqX(node->right, out);
-      out << node->key << ": " << node->count << std::endl;
-      printFreqX(node->left, out);
+        printFreqX(node->left, freqList);
+        freqList.emplace_back(node->key, node->count);
+        printFreqX(node->right, freqList);
     }
   }
+ 
  public:
   BST() : root(nullptr) {}
   ~BST() { delTree(root); }
@@ -69,7 +72,13 @@ class BST {
     return found ? found->count : 0;
   }
   void printFreq(std::ostream& out = std::cout) const {
-    printFreqX(root, out);
+    std::vector<std::pair<T, int>> freqList;
+    printFreqX(root, freqList);
+    std::sort(freqList.begin(), freqList.end(), 
+        [](const auto& a, const auto& b) { return a.second > b.second; });
+    for (const auto& entry : freqList) {
+      out << entry.first << ": " << entry.second << std::endl;
+    }
   }
 };
 
