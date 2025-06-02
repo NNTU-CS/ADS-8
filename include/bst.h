@@ -20,6 +20,7 @@ private:
 	Node* root;
 	Node* addNode(Node*, T);
 	void delTree(Node*);
+	Node* getRoot() const { return root; }
 public:
 	BST();
 	~BST();
