@@ -20,14 +20,15 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     while (file.get(ch)) {
       if (isalpha(static_cast<unsigned char>(ch))) {
         currentWord += tolower(static_cast<unsigned char>(ch));
-      } else if (!currentWord.empty() && currentWord.length() > 1) {
+      } else if (!currentWord.empty() {
         tree.insert(currentWord);
         currentWord.clear();
       }
     }
-    if (!currentWord.empty() && currentWord.length() > 1) {
+    if (!currentWord.empty()) {
       tree.insert(currentWord);
     }
+    file.close();
 }
 
 void printFreq(const BST<std::string>& tree) {
