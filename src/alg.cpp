@@ -2,9 +2,9 @@
 #include  <iostream>
 #include  <fstream>
 #include  <locale>
+#include <string>
 #include  <cstdlib>
 #include  "bst.h"
-
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
   if (!file) {
@@ -26,7 +26,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   }
   file.close();
 }
-
 void printFreq(BST<std::string>& tree) {
   tree.printFreq();
   std::ofstream outFile("freq.txt");
