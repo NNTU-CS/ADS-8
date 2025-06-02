@@ -5,6 +5,8 @@
 #include  <cstdlib>
 #include <cctype>
 #include <algorithm>
+#include <string>
+#include <utility>
 #include  "bst.h"
 
 
@@ -32,7 +34,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
 void printFreq(BST<std::string>& tree) {
   auto words = tree.inOrder();
-  std::sort(words.begin(), words.end(),[](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
+  std::sort(words.begin(), words.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
     return a.second > b.second;
   });
   std::ofstream outFile("result/freq.txt");
