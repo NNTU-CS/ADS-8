@@ -8,7 +8,7 @@
 
 template <typename T>
 class BST {
- private:
+public:
   struct Node {
     T key;
     int count;
@@ -16,6 +16,8 @@ class BST {
     Node* right;
     explicit Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
+  using NodeVisitor = void (*)(const Node*);
+private:
   Node* root;
   Node* insert(Node* node, T value) {
     if (!node) return new Node(value);
@@ -27,6 +29,12 @@ class BST {
       node->right = insert(node->right, value);
     }
     return node;
+  }
+  void inOrder(Node* node, NodeVisitor visit) const {
+   if(!node) return;
+   inOrder(node->left, visit);
+   visit(node);
+   inOrder(nod->right, visit);
   }
   int depth(Node* node) const {
     if (!node) return 0;
@@ -50,11 +58,12 @@ class BST {
     clear(node->right);
     delete node;
   }
-
- public:
+public:
+  void inOrder (NodeVisitor visist) const {
+   inOrder(root, visit);
+  }
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
-
   void insert(T value) {
     root = insert(root, value);
   }
@@ -67,9 +76,6 @@ class BST {
   }
   void inOrder(void (*visit)(const Node*)) const {
     inOrder(root, visit);
-  }
-  static void printNode(const Node* node) {
-    std::cout << node->key << ": " << node->count << std::endl;
   }
 };
 
