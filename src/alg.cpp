@@ -4,7 +4,44 @@
 #include  <locale>
 #include  <cstdlib>
 #include  "bst.h"
+#include <cctype>
+#include <algorithm>
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-  // поместите сюда свой код
+  std::ifstream file(filename);
+  if (!file) {
+    std::cout << "File error!" << std::endl;
+    return;
+  }
+  std::string currentWord;
+    char ch;
+    while (file.get(ch)) {
+      if (isalpha(ch)) {
+        currentWord += tolower(ch);
+      } else if (!currentWord.empty()) {
+        tree.insert(currentWord);
+        currentWord.clear();
+      }
+    }
+    if (!currentWord.empty()) {
+      tree.insert(currentWord);
+    }
+    file.close();
+}
+
+void printFreq(BST<std::string>& tree) {
+  auto words = tree.inOrder();
+  std::sort(words.begin(), words.end(),[](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
+    return a.second > b.second;
+  });
+  std::ofstream outFile("result/freq.txt");
+  if (!outFile) {
+    std::cout << "Cannot create output file!" << std::endl;
+    return;
+  }
+  for (const auto& pair : words) {
+    std::cout << pair.first << " - " << pair.second << std::endl;
+    outFile << pair.first << " - " << pair.second << std::endl;
+  }
+  outFile.close();
 }
