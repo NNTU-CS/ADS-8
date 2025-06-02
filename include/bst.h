@@ -61,7 +61,7 @@ class BST {
       delete node;
     }
 
-   public:
+  public:
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
     void insert(const T& key) {
