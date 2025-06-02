@@ -28,12 +28,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     if (!currentWord.empty() && currentWord.length() > 1) {
       tree.insert(currentWord);
     }
-    file.close();
-    std::sort(words.begin(), words.end());
-    words.erase(std::unique(words.begin(), words.end()), words.end());
-    for (const auto& word : words) {
-      tree.insert(word);
-    }
 }
 
 void printFreq(const BST<std::string>& tree) {
