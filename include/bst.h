@@ -56,6 +56,14 @@ class BST {
         root = insert(root, key);
     }
 
+    void add(const T& value) {
+     root = addNode(root, value);
+    }
+
+    int search(const T& value) {
+     return search_node(root, value);
+    }
+
     int depth() const {
         return depth(root);
     }
