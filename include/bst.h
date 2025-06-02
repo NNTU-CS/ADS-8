@@ -9,48 +9,52 @@
 
 template <typename T>
 class BST {
- private:
+private:
     struct Node {
         T value;
-	int count;
-	Node* left;
-	Node* right;
-	Node(const T& value): count(1), left(nullptr), right(nullptr), value(value){}
+        int count;
+        Node* left;
+        Node* right;
+        Node(const T& value): count(1), left(nullptr), right(nullptr), value(value) {}
     };
     Node* root;
-    Node* addNode(Node*, T);
+    
+    Node* addNode(Node*, const T&);
     void delTree(Node*);
+    int depth(const Node*) const;
     void collectNodes(Node*, std::vector<std::pair<T, int>>&) const;
- public:
+    
+public:
     BST();
     ~BST();
     void add(const T&);
-    int depth(TreeNode* node) const;
-    bool search(const T& value) const;
+    void clear();
+    int depth() const;
+    bool search(const T&) const;
     std::vector<std::pair<T, int>> getWordsWithCounts() const;
 };
 
 template<typename T>
-BST<T>::BST() :root(nullptr) {}
+BST<T>::BST() : root(nullptr) {}
 
 template<typename T>
 BST<T>::~BST() {
-    if (root)
-        delTree(root);
+    clear();
 }
 
 template<typename T>
-typename BST<T>::Node* BST<T>::addNode(Node* root, T value) {
-    if (root == nullptr) {
-	return new Node(value);
-    } else if (value == root->value) {
-	root->count++;
-    } else if (value < root->value) {
-	root->left = addNode(root->left, value);
-    } else {
-	root->right = addNode(root->right, value);
+typename BST<T>::Node* BST<T>::addNode(Node* node, const T& value) {
+    if (node == nullptr) {
+        return new Node(value);
     }
-    return root;
+    if (value == node->value) {
+        node->count++;
+    } else if (value < node->value) {
+        node->left = addNode(node->left, value);
+    } else {
+        node->right = addNode(node->right, value);
+    }
+    return node;
 }
 
 template<typename T>
@@ -59,42 +63,43 @@ void BST<T>::add(const T& value) {
 }
 
 template<typename T>
-void BST<T>::delTree(Node* root) {
-    if (root == nullptr) {
-	return;
-    } else {
-	delTree(root->left);
-	delTree(root->right);
-	delete root;
-    }
-}
-template<typename T>
-void BST<T>::clear() {
-    if (root) {
-	delTree(root);
-	root = nullptr;
+void BST<T>::delTree(Node* node) {
+    if (node) {
+        delTree(node->left);
+        delTree(node->right);
+        delete node;
     }
 }
 
 template<typename T>
-int BST<T>::depth(Node* root) const {
-    if (root == nullptr) {
-	return 0;
-    }
-    return 1 + max(depth(root->left), depth(root->right));
+void BST<T>::clear() {
+    delTree(root);
+    root = nullptr;
+}
+
+template<typename T>
+int BST<T>::depth(const Node* node) const {
+    if (!node) return 0;
+    return 1 + std::max(depth(node->left), depth(node->right));
+}
+
+template<typename T>
+int BST<T>::depth() const {
+    return depth(root);
 }
 
 template<typename T>
 bool BST<T>::search(const T& value) const {
     Node* current = root;
-    while (current != nullptr) {
+    while (current) {
         if (value == current->value) {
-	    return true;
-	} else if (value < current->value) {
-	    current = current->left;
-	} else {
-	    current = current->right;
-	}
+            return true;
+        }
+        if (value < current->value) {
+            current = current->left;
+        } else {
+            current = current->right;
+        }
     }
     return false;
 }
@@ -108,7 +113,7 @@ std::vector<std::pair<T, int>> BST<T>::getWordsWithCounts() const {
 
 template<typename T>
 void BST<T>::collectNodes(Node* node, std::vector<std::pair<T, int>>& result) const {
-    if (node == nullptr) return;
+    if (!node) return;
     collectNodes(node->left, result);
     result.emplace_back(node->value, node->count);
     collectNodes(node->right, result);
