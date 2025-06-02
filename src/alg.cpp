@@ -12,7 +12,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   if (!file) {
     std::cerr << "File error!" << std::endl;
     return;
-  } 
+  }
   std::string currentWord;
   while (true) {
     int ch = file.get();
@@ -38,12 +38,11 @@ struct WordFreq {
     return count > other.count;
   }
 };
-
 void printFreq(BST<std::string>& tree) {
   std::vector<WordFreq> words;
-  auto collect = [&words](const typename BST<std::string>::Node* node) {
+  BTS<std::string>::NodeVisitor collect = [&words](const BST<std::string>::Node* node) {
     words.push_back({node->key, node->count});
-  };
+  }
   tree.inOrder(collect);
   std::sort(words.begin(), words.end());
   for (const auto& wf : words) {
