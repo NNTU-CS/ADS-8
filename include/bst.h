@@ -64,7 +64,7 @@ class BST {
   int depth() const {
     return depth(root);
   }
-  bool search(T value) const {
+  int search(T value) const {
     Node* found = search(root, value);
     return found ? found->count : 0;
   }
