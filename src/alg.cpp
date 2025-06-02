@@ -12,11 +12,11 @@
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
-  if (!file.is_open) {
+  if (!file) {
     std::cout << "File error!" << std::endl;
     return;
   }
-  std::vector<std::string> words;
+  std::vector<std::pair<std::string, int>> words;
   std::string currentWord;
     char ch;
     while (file.get(ch)) {
