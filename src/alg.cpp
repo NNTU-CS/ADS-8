@@ -25,7 +25,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         currentWord.clear();
       }
     }
-    if (!currentWord.empty()) {
+    if (!currentWord.empty() && currentWord.length() > 1) {
       tree.insert(currentWord);
     }
     file.close();
