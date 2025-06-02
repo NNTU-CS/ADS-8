@@ -5,7 +5,7 @@
 #include <vector>
 #include <algorithm>
 
-emplate <typename T>
+template <typename T>
 class BST {
  private:
     struct Node {
