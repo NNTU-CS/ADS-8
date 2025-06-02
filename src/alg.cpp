@@ -16,39 +16,33 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         std::cout << "File error!" << std::endl;
         return;
     }
-
-    std::string currentWord;
-    char ch;
-    while (file.get(ch)) {
-        if (isalpha(static_cast<unsigned char>(ch))) {
-            currentWord += tolower(static_cast<unsigned char>(ch));
+    std::string word;
+    while (!file.eof()) {
+        char ch = file.get();
+        if (ch >= 'A' && ch <= 'Z') ch += 'a' - 'A';
+        if (ch >= 'a' && ch <= 'z') {
+            word += ch;
         } else {
-            if (!currentWord.empty() && currentWord.length() > 1) {
-                tree.insert(currentWord);
+            if (!word.empty()) {
+                tree.add(word);
             }
-            currentWord.clear();
+            word.clear();
         }
-    }
-    if (!currentWord.empty() && currentWord.length() > 1) {
-        tree.insert(currentWord);
     }
     file.close();
 }
 
 void printFreq(const BST<std::string>& tree) {
-    auto words = tree.inOrder();
-    std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
-            if (a.second != b.second) return a.second > b.second;
-            return a.first < b.first;
-        });
-    std::ofstream outFile("result/freq.txt");
-    if (!outFile) {
-        std::cout << "Cannot create output file!" << std::endl;
+    std::vector<std::pair<std::string, int>> words = tree.array_words();
+    std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) { return a.second > b.second; });
+    std::ofstream file("result/freq.txt");
+    if (!file.is_open()) {
+        std::cerr << "File is not open!" << std::endl;
         return;
     }
     for (const auto& pair : words) {
-        std::cout << pair.first << " - " << pair.second << std::endl;
-        outFile << pair.first << " - " << pair.second << std::endl;
+        std::cout << pair.first << "-" << pair.second << '\n';
+        file << pair.first << "-" << pair.second << '\n';
     }
-    outFile.close();
+    file.close();
 }
