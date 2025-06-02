@@ -37,7 +37,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
 void printFreq(const BST<std::string>& tree) {
     auto words = tree.inOrder();
-    
     std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
             if (a.second != b.second) return a.second > b.second;
             return a.first < b.first;
