@@ -16,9 +16,7 @@ class BST {
     Node* right;
     explicit Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
-
   Node* root;
-
   Node* insert(Node* node, T value) {
     if (!node) return new Node(value);
     if (value == node->key) {
@@ -30,26 +28,22 @@ class BST {
     }
     return node;
   }
-
   int depth(Node* node) const {
     if (!node) return 0;
     return 1 + std::max(depth(node->left), depth(node->right));
   }
-
   Node* search(Node* node, T value) const {
     if (!node) return nullptr;
     if (value == node->key) return node;
     if (value < node->key) return search(node->left, value);
     return search(node->right, value);
   }
-
   void inOrder(Node* node, void (*visit)(const Node*)) const {
     if (!node) return;
     inOrder(node->left, visit);
     visit(node);
     inOrder(node->right, visit);
   }
-
   void clear(Node* node) {
     if (!node) return;
     clear(node->left);
@@ -67,14 +61,15 @@ class BST {
   int depth() const {
     return depth(root);
   }
-
   int search(T value) const {
     Node* node = search(root, value);
     return node ? node->count : 0;
   }
-
   void inOrder(void (*visit)(const Node*)) const {
     inOrder(root, visit);
+  }
+  static void printNode(const Node* node) {
+    std::cout << node->key << ": " << node->count << std::endl;
   }
 };
 
