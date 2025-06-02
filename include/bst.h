@@ -20,12 +20,14 @@ class BST {
     Node* root;
     Node* addNode(Node*, T);
     void delTree(Node*);
-    Node* getRoot() const { return root; }
+    void collectNodes(Node*, std::vector<std::pair<T, int>>&) const;
  public:
     BST();
     ~BST();
+    void add(const T&);
     int depth(TreeNode* node) const;
     bool search(const T& value) const;
+    std::vector<std::pair<T, int>> getWordsWithCounts() const;
 };
 
 template<typename T>
@@ -43,12 +45,17 @@ typename BST<T>::Node* BST<T>::addNode(Node* root, T value) {
 	return new Node(value);
     } else if (value == root->value) {
 	root->count++;
-    } else if (value < node->value) {
+    } else if (value < root->value) {
 	root->left = addNode(root->left, value);
     } else {
 	root->right = addNode(root->right, value);
     }
     return root;
+}
+
+template<typename T>
+void BST<T>::add(const T& value) {
+    root = addNode(root, value);
 }
 
 template<typename T>
@@ -70,7 +77,7 @@ void BST<T>::clear() {
 }
 
 template<typename T>
-int BST<T>::depth(TreeNode* root) const {
+int BST<T>::depth(Node* root) const {
     if (root == nullptr) {
 	return 0;
     }
@@ -90,6 +97,21 @@ bool BST<T>::search(const T& value) const {
 	}
     }
     return false;
+}
+
+template<typename T>
+std::vector<std::pair<T, int>> BST<T>::getWordsWithCounts() const {
+    std::vector<std::pair<T, int>> result;
+    collectNodes(root, result);
+    return result;
+}
+
+template<typename T>
+void BST<T>::collectNodes(Node* node, std::vector<std::pair<T, int>>& result) const {
+    if (node == nullptr) return;
+    collectNodes(node->left, result);
+    result.emplace_back(node->value, node->count);
+    collectNodes(node->right, result);
 }
 
 #endif  // INCLUDE_BST_H_
