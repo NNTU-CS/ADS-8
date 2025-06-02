@@ -4,17 +4,18 @@
 
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 template <typename T>
 class BST {
-private:
+ private:
   struct Node {
     T key;
     int count;
     Node* left;
     Node* right;
     
-    Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
 
   Node* root;
@@ -45,7 +46,7 @@ private:
     return search(node->right, value);
   }
 
-  void inOrder(Node* node, void (*visit)(Node*)) const {
+  void inOrder(Node* node, void (*visit)(const Node*)) const {
     if (!node) return;
     inOrder(node->left, visit);
     visit(node);
@@ -59,7 +60,7 @@ private:
     delete node;
   }
 
-public:
+ public:
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
 
@@ -76,7 +77,7 @@ public:
     return node ? node->count : 0;
   }
 
-  void inOrder(void (*visit)(Node*)) const {
+  void inOrder(void (*visit)(const Node*)) const {
     inOrder(root, visit);
   }
 };
