@@ -7,39 +7,32 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <functional>
 #include "bst.h"
-
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
-  if (!file) {
+  if (!file.is_open) {
     std::cout << "File error!" << std::endl;
     return;
   }
+  std::vector<std::string> words;
   std::string currentWord;
     char ch;
     while (file.get(ch)) {
       if (isalpha(static_cast<unsigned char>(ch))) {
         currentWord += tolower(static_cast<unsigned char>(ch));
       } else {
-          if (!currentWord.empty() && currentWord.length() > 1) {
-            auto it = std::find_if(wordCounts.begin(), wordCounts.end(), [&](const auto& pair) { return pair.first == currentWord; });
-            if (it != wordCounts.end()) {
-              it->second++;
-            } else {
-              wordCounts.emplace_back(currentWord, 1);
+          if (!currentWord.empty()) {
+            if (currentWord.length > 1) {
+              words.push_back(currentWord);
             }
-          }
         currentWord.clear();
-      }
+          }
+        }
     }
     if (!currentWord.empty() && currentWord.length() > 1) {
-      auto it = std::find_if(wordCounts.begin(), wordCounts.end(), [&](const auto& pair) { return pair.first == currentWord; });
-      if (it != wordCounts.end()) {
-        it->second++;
-      } else {
       wordCounts.emplace_back(currentWord, 1);
-      }
     }
     file.close();
     std::sort(wordCounts.begin(), wordCounts.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
