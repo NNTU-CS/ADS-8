@@ -3,9 +3,10 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
-#include  "bst.h"
 #include <cctype>
 #include <algorithm>
+#include  "bst.h"
+
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
