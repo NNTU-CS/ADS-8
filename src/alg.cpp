@@ -6,6 +6,7 @@
 #include <cctype>
 #include <algorithm>
 #include <string>
+#include <vector>
 #include "bst.h"
 
 
@@ -15,20 +16,26 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     std::cout << "File error!" << std::endl;
     return;
   }
+  std::vector<std::string> words;
   std::string currentWord;
     char ch;
     while (file.get(ch)) {
       if (isalpha(static_cast<unsigned char>(ch))) {
         currentWord += tolower(static_cast<unsigned char>(ch));
-      } else if (!currentWord.empty()) {
+      } else if (!currentWord.empty() && currentWord.length() > 1) {
         tree.insert(currentWord);
         currentWord.clear();
       }
     }
     if (!currentWord.empty() && currentWord.length() > 1) {
-      tree.insert(currentWord);
+      words.push_back(currentWord);
     }
     file.close();
+    std::sort(words.begin(), words.end());
+    words.erase(std::unique(words.begin(), words.end()), words.end());
+    for (const auto& word : words) {
+      tree.insert(word);
+    }
 }
 
 void printFreq(const BST<std::string>& tree) {
