@@ -34,7 +34,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 }
 
 void printFreq(BST<std::string>& tree) {
-  std::vector<std::pair<std::string, int>> words = tree.array_words();
+  std::vector<std::pair<std::string, int>> words = tree.inOrder();
   std::sort(words.begin(), words.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
     return a.second > b.second;
   });
