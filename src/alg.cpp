@@ -1,9 +1,10 @@
 // Copyright 2021 NNTU-CS
 #include <iostream>
-#include  <fstream>
 #include  "bst.h"
 #include <algorithm>
 #include <cctype>
+#include <fstream>
+#include <string>
 #include <vector>
 
 void makeTree(BST<std::string>& tree, const char* filename) {
@@ -44,7 +45,7 @@ struct WordFreq {
 void printFreq(BST<std::string>& tree) {
   std::vector<WordFreq> words;
   
-  auto collect = [&words](typename BST<std::string>::Node* node) {
+  auto collect = [&words](const typename BST<std::string>::Node* node) {
     words.push_back({node->key, node->count});
   };
   
