@@ -7,20 +7,22 @@
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
-    if (!file.is_open()) return;
-
-    char ch;
-    std::string currentWord;
-    while (file.get(ch)) {
-        if (std::isalpha(static_cast<unsigned char>(ch))) {
-            currentWord += std::tolower(static_cast<unsigned char>(ch));
-        } else if (!currentWord.empty()) {
-            tree.insert(currentWord);
-            currentWord.clear();
-        }
+    if (!file.is_open()) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return;
     }
-    if (!currentWord.empty()) {
-        tree.insert(currentWord);
+
+    std::string word;
+    while (file >> word) {
+        std::string cleaned;
+        for (char c : word) {
+            if (std::isalpha(static_cast<unsigned char>(c))) {
+                cleaned += std::tolower(static_cast<unsigned char>(c));
+            }
+        }
+        if (!cleaned.empty()) {
+            tree.insert(cleaned);
+        }
     }
 }
 
