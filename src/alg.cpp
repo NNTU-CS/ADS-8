@@ -1,6 +1,4 @@
 // Copyright 2021 NNTU-CS
-#include "bst.h"
-
 #include <cctype>
 
 #include <algorithm>
@@ -9,6 +7,9 @@
 #include <string>
 #include <utility>
 #include <vector>
+
+#include "bst.h"
+
 
 void makeTree(BST<std::string>& tree, const char* filePath) {
   std::ifstream inputStream(filePath);
