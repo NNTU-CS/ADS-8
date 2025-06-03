@@ -37,8 +37,8 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 void printFreq(BST<std::string>& tree) {
   std::vector<std::pair<std::string, int>> words;
 
-  auto collect = [&words](typename BST<std::string>::NodePtr node) {
-    words.push_back(BST<std::string>::getNodeData(node));
+  auto collect = [&words](BST<std::string>::NodePtr node) {
+    words.emplace_back(node->key, node->count);
   };
 
   tree.inOrder(collect);
