@@ -1,88 +1,85 @@
-#ifndef BST_H
-#define BST_H
+// Copyright 2023 Your Name
 
+#ifndef INCLUDE_BST_H_
+#define INCLUDE_BST_H_
+
+#include <algorithm>
 #include <iostream>
 #include <string>
 
 template <typename T>
 class BST {
-private:
-    struct Node {
-        T key;
-        int count;
-        Node* left;
-        Node* right;
-        
-        Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
-    };
+ private:
+  struct Node {
+    T key;
+    int count;
+    Node* left;
+    Node* right;
 
-    Node* root;
+    explicit Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
+  };
 
-    Node* insert(Node* node, T value) {
-        if (!node) return new Node(value);
-        
-        if (value == node->key) {
-            node->count++;
-        } else if (value < node->key) {
-            node->left = insert(node->left, value);
-        } else {
-            node->right = insert(node->right, value);
-        }
-        
-        return node;
+  Node* root;
+
+  Node* insert(Node* node, T value) {
+    if (!node) return new Node(value);
+
+    if (value == node->key) {
+      node->count++;
+    } else if (value < node->key) {
+      node->left = insert(node->left, value);
+    } else {
+      node->right = insert(node->right, value);
     }
 
-    Node* search(Node* node, T value) const {
-        if (!node || node->key == value) {
-            return node;
-        }
-        
-        if (value < node->key) {
-            return search(node->left, value);
-        } else {
-            return search(node->right, value);
-        }
+    return node;
+  }
+
+  Node* search(Node* node, T value) const {
+    if (!node || node->key == value) {
+      return node;
     }
 
-    int depth(Node* node) const {
-        if (!node) return 0;
-        return 1 + std::max(depth(node->left), depth(node->right));
+    if (value < node->key) {
+      return search(node->left, value);
+    } else {
+      return search(node->right, value);
     }
+  }
 
-    void inOrder(Node* node, void (*visit)(Node*)) const {
-        if (!node) return;
-        inOrder(node->left, visit);
-        visit(node);
-        inOrder(node->right, visit);
-    }
+  int depth(Node* node) const {
+    if (!node) return 0;
+    return 1 + std::max(depth(node->left), depth(node->right));
+  }
 
-    void clear(Node* node) {
-        if (!node) return;
-        clear(node->left);
-        clear(node->right);
-        delete node;
-    }
+  void inOrder(Node* node, void (*visit)(Node*)) const {
+    if (!node) return;
+    inOrder(node->left, visit);
+    visit(node);
+    inOrder(node->right, visit);
+  }
 
-public:
-    BST() : root(nullptr) {}
-    ~BST() { clear(root); }
+  void clear(Node* node) {
+    if (!node) return;
+    clear(node->left);
+    clear(node->right);
+    delete node;
+  }
 
-    void insert(T value) {
-        root = insert(root, value);
-    }
+ public:
+  BST() : root(nullptr) {}
+  ~BST() { clear(root); }
 
-    int search(T value) const {
-        Node* node = search(root, value);
-        return node ? node->count : 0;
-    }
+  void insert(T value) { root = insert(root, value); }
 
-    int depth() const {
-        return depth(root);
-    }
+  int search(T value) const {
+    Node* node = search(root, value);
+    return node ? node->count : 0;
+  }
 
-    void inOrder(void (*visit)(Node*)) const {
-        inOrder(root, visit);
-    }
+  int depth() const { return depth(root); }
+
+  void inOrder(void (*visit)(Node*)) const { inOrder(root, visit); }
 };
 
-#endif // BST_H
+#endif  // INCLUDE_BST_H_
