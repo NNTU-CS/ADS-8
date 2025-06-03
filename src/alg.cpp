@@ -1,10 +1,13 @@
 // Copyright 2021 NNTU-CS
 #include "bst.h"
-#include <fstream>
-#include <cctype>
-#include <vector>
+
 #include <algorithm>
+#include <cctype>
+#include <fstream>
+#include <iostream>
+#include <string>
 #include <unordered_map>
+#include <vector>
 
 void makeTree(BST<std::string>& tree, const char* filePath) {
   std::ifstream inputStream(filePath);
@@ -18,8 +21,7 @@ char character;
 while (inputStream.get(character)) {
   if (isalpha(character)) {
     wordBuffer += tolower(static_cast<unsigned char>(character));
-  }
-  else if (!wordBuffer.empty()) {
+  } else if (!wordBuffer.empty()) {
     tree.insert(wordBuffer);
     wordBuffer.clear();
   }
