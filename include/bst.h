@@ -61,6 +61,7 @@ private:
             Node* temp = findMin(node->right);
             node->key = temp->key;
             node->count = temp->count;
+            temp->count = 1;  // Reset count before deletion
             node->right = removeHelper(node->right, temp->key);
         }
         return node;
@@ -75,8 +76,9 @@ private:
         return searchHelper(node->right, key);
     }
 
+    // Corrected depth calculation
     int depthHelper(Node* node) const {
-        if (!node) return 0;
+        if (!node) return -1;
         return 1 + std::max(depthHelper(node->left), depthHelper(node->right));
     }
 
@@ -157,6 +159,20 @@ public:
         inOrderHelper(root, result);
         return result;
     }
-};
 
+    // Method to get word count
+    int getCount(const Key& key) const {
+        Node* node = root;
+        while (node) {
+            if (key < node->key) {
+                node = node->left;
+            } else if (key > node->key) {
+                node = node->right;
+            } else {
+                return node->count;
+            }
+        }
+        return 0;
+    }
+};
 #endif  // INCLUDE_BST_H_
