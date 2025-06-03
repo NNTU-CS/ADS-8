@@ -1,6 +1,7 @@
 // Copyright 2021 NNTU-CS
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 #include <locale>
 #include <cstdlib>
 #include <algorithm>
@@ -50,7 +51,7 @@ void printFreq(BST<std::string>& tree) {
       return a.first < b.first;
     });
 
-  (void)system("mkdir -p result");
+  std::filesystem::create_directories("result");
 
   std::ofstream outFile("result/freq.txt");
   if (!outFile) {
