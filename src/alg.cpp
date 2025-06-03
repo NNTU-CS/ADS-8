@@ -50,14 +50,13 @@ void printFreq(BST<std::string>& tree) {
       return a.first < b.first;
     });
 
-  system("mkdir -p result");
+  (void)system("mkdir -p result");
 
   std::ofstream outFile("result/freq.txt");
   if (!outFile) {
     std::cerr << "Error creating output file!" << std::endl;
     return;
   }
-  
   for (const auto& pair : elements) {
     std::cout << pair.first << " " << pair.second << std::endl;
     outFile << pair.first << " " << pair.second << std::endl;
