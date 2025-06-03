@@ -9,22 +9,20 @@
 
 template <typename T>
 class BST {
-private:
+ private:
     struct Node {
         T value;
         int count;
         Node* left;
         Node* right;
-        Node(const T& value): count(1), left(nullptr), right(nullptr), value(value) {}
+        expliced Node(const T& value): count(1), left(nullptr), right(nullptr), value(value) {}
     };
-    Node* root;
-    
+    Node* root; 
     Node* addNode(Node*, const T&);
     void delTree(Node*);
     int depth(const Node*) const;
     void collectNodes(Node*, std::vector<std::pair<T, int>>&) const;
-    
-public:
+ public:
     BST();
     ~BST();
     void add(const T&);
