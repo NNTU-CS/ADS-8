@@ -3,6 +3,7 @@
 #define INCLUDE_BST_H_
 #include <algorithm>
 #include <utility>
+#include <vector>
 
 template <typename Key>
 class BST {
