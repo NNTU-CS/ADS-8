@@ -71,7 +71,7 @@ public:
     rootNode = insert(rootNode, value);
   }
 
-  bool search(T value) const {
+  int search(T value) const {
     return findNode(value) != nullptr;
   }
 
