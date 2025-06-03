@@ -8,7 +8,7 @@
 
 template <typename T>
 class BST {
-public:
+ public:
   struct Node {
     T key;
     int count;
@@ -17,18 +17,16 @@ public:
     Node(T value) : key(value), count(1), left(nullptr), right(nullptr) {}
   };
 
-private:
+ private:
   Node* rootNode;
 
   Node* insert(Node* currentNode, T value) {
       if (!currentNode) return new Node(value);
       if (value == currentNode->key) {
         currentNode->count++;
-      }
-      else if (value < currentNode->key) {
+      } else if (value < currentNode->key) {
         currentNode->left = insert(currentNode->left, value);
-      }
-      else {
+      } else {
         currentNode->right = insert(currentNode->right, value);
       }
       return currentNode;
@@ -39,11 +37,9 @@ private:
     while (currentNode) {
       if (value == currentNode->key) {
         return currentNode;
-      }
-      else if (value < currentNode->key) {
+      } else if (value < currentNode->key) {
         currentNode = currentNode->left;
-      }
-      else {
+      } else {
         currentNode = currentNode->right;
       }
     }
@@ -64,7 +60,7 @@ private:
     inOrder(currentNode->right, visit);
   }
 
-public:
+ public:
   BST() : rootNode(nullptr) {}
 
   void insert(T value) {
