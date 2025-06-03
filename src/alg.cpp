@@ -4,6 +4,9 @@
 #include  <locale>
 #include  <cstdlib>
 #include  "bst.h"
+#include <string>
+#include <cctype>
+#include <vector>
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
