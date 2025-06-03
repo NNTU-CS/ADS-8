@@ -80,7 +80,7 @@ void BST<T>::clear() {
 template<typename T>
 int BST<T>::depth(const Node* node) const {
     if (!node) return 0;
-    return 1 + std::max(depth(node->left), depth(node->right));
+    return std::max(depth(node->left), depth(node->right)) + 1;
 }
 
 template<typename T>
@@ -89,11 +89,11 @@ int BST<T>::depth() const {
 }
 
 template<typename T>
-bool BST<T>::search(const T& value) const {
+int BST<T>::search(const T& value) const {
     Node* current = root;
     while (current) {
         if (value == current->value) {
-            return true;
+            return current->count;
         }
         if (value < current->value) {
             current = current->left;
@@ -101,7 +101,7 @@ bool BST<T>::search(const T& value) const {
             current = current->right;
         }
     }
-    return false;
+    return 0;
 }
 
 template<typename T>
