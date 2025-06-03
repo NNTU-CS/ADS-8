@@ -6,172 +6,128 @@
 #include <utility>
 #include <iostream>  // Для отладки
 
-template <typename Key>
+#include <algorithm>
+#include <vector>
+#include <utility>
+#include <iostream>
+
+template <typename KeyType>
 class BST {
 private:
     struct Node {
-        Key key;
-        int count;
-        Node* left;
-        Node* right;
-        Node(const Key& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+        KeyType value;
+        int frequency;
+        Node* left_child;
+        Node* right_child;
+
+        explicit Node(const KeyType& val)
+            : value(val), frequency(1), left_child(nullptr), right_child(nullptr) {}
     };
+    Node* root_node;
+    Node* insertNode(Node* current_node, const KeyType& new_value) {
+        if (!current_node) return new Node(new_value);
 
-    Node* root;
-
-    Node* insertHelper(Node* node, const Key& key) {
-        if (!node) return new Node(key);
-        if (key < node->key) {
-            node->left = insertHelper(node->left, key);
-        } else if (key > node->key) {
-            node->right = insertHelper(node->right, key);
+        if (new_value == current_node->value) {
+            current_node->frequency++;
+        } else if (new_value < current_node->value) {
+            current_node->left_child = insertNode(current_node->left_child, new_value);
         } else {
-            node->count++;
+            current_node->right_child = insertNode(current_node->right_child, new_value);
         }
-        return node;
+        return current_node;
     }
-
-    Node* findMin(Node* node) const {
-        while (node && node->left) {
-            node = node->left;
-        }
-        return node;
-    }
-
-    Node* removeHelper(Node* node, const Key& key) {
-        if (!node) return nullptr;
-        
-        if (key < node->key) {
-            node->left = removeHelper(node->left, key);
-        } else if (key > node->key) {
-            node->right = removeHelper(node->right, key);
-        } else {
-            if (node->count > 1) {
-                node->count--;
-                return node;
-            }
-            if (!node->left) {
-                Node* temp = node->right;
-                delete node;
-                return temp;
-            } else if (!node->right) {
-                Node* temp = node->left;
-                delete node;
-                return temp;
-            }
-            Node* temp = findMin(node->right);
-            node->key = temp->key;
-            node->count = temp->count;
-            // Удаляем минимальный узел без сброса счетчика
-            node->right = removeHelper(node->right, temp->key);
-        }
-        return node;
-    }
-
-    bool searchHelper(Node* node, const Key& key) const {
-        if (!node) return false;
-        if (key == node->key) return true;
-        if (key < node->key) {
-            return searchHelper(node->left, key);
-        }
-        return searchHelper(node->right, key);
-    }
-
-    int depthHelper(Node* node) const {
+    int calculateHeight(Node* node) const {
         if (!node) return -1;
-        return 1 + std::max(depthHelper(node->left), depthHelper(node->right));
+        int left_height = calculateHeight(node->left_child);
+        int right_height = calculateHeight(node->right_child);
+        return 1 + std::max(left_height, right_height);
     }
-
-    Node* copyTree(Node* node) const {
-        if (!node) return nullptr;
-        Node* newNode = new Node(node->key);
-        newNode->count = node->count;
-        newNode->left = copyTree(node->left);
-        newNode->right = copyTree(node->right);
-        return newNode;
+    int findFrequency(Node* node, const KeyType& search_value) const {
+        if (!node) return 0;
+        if (search_value == node->value) return node->frequency;
+        return search_value < node->value 
+            ? findFrequency(node->left_child, search_value) 
+            : findFrequency(node->right_child, search_value);
     }
-
-    void clear(Node* node) {
-        if (node) {
-            clear(node->left);
-            clear(node->right);
-            delete node;
-        }
-    }
-
-    void inOrderHelper(Node* node, std::vector<std::pair<Key, int>>& vec) const {
+    void deleteTree(Node* node) {
         if (!node) return;
-        inOrderHelper(node->left, vec);
-        vec.push_back(std::make_pair(node->key, node->count));
-        inOrderHelper(node->right, vec);
+        deleteTree(node->left_child);
+        deleteTree(node->right_child);
+        delete node;
+    }
+    void traverseInOrder(Node* node, std::vector<std::pair<KeyType, int>>& result) const {
+        if (!node) return;
+        traverseInOrder(node->left_child, result);
+        result.emplace_back(node->value, node->frequency);
+        traverseInOrder(node->right_child, result);
     }
 
+    Node* copySubtree(Node* node) const {
+        if (!node) return nullptr;
+        Node* new_node = new Node(node->value);
+        new_node->frequency = node->frequency;
+        new_node->left_child = copySubtree(node->left_child);
+        new_node->right_child = copySubtree(node->right_child);
+        return new_node;
+    }
 public:
-    BST() : root(nullptr) {}
-    
+    BST() : root_node(nullptr) {}
     BST(const BST& other) {
-        root = copyTree(other.root);
+        root_node = copySubtree(other.root_node);
     }
     
-    BST(BST&& other) noexcept : root(other.root) {
-        other.root = nullptr;
+    BST(BST&& other) noexcept : root_node(other.root_node) {
+        other.root_node = nullptr;
     }
     
     ~BST() {
-        clear(root);
+        deleteTree(root_node);
     }
     
     BST& operator=(const BST& other) {
         if (this != &other) {
-            clear(root);
-            root = copyTree(other.root);
+            deleteTree(root_node);
+            root_node = copySubtree(other.root_node);
         }
         return *this;
     }
     
     BST& operator=(BST&& other) noexcept {
         if (this != &other) {
-            clear(root);
-            root = other.root;
-            other.root = nullptr;
+            deleteTree(root_node);
+            root_node = other.root_node;
+            other.root_node = nullptr;
         }
         return *this;
     }
-    
-    void insert(const Key& value) {
-        root = insertHelper(root, value);
-    }
-    
-    void remove(const Key& value) {
-        root = removeHelper(root, value);
-    }
-    
-    bool search(const Key& value) const {
-        return searchHelper(root, value);
-    }
-    
-    int depth() const {
-        return depthHelper(root);
-    }
-    
-    std::vector<std::pair<Key, int>> inOrder() const {
-        std::vector<std::pair<Key, int>> result;
-        inOrderHelper(root, result);
-        return result;
+
+    void insert(const KeyType& value) {
+        root_node = insertNode(root_node, value);
     }
 
-    int getCount(const Key& key) const {
-        Node* node = root;
-        while (node) {
-            if (key < node->key) {
-                node = node->left;
-            } else if (key > node->key) {
-                node = node->right;
-            } else {
-                return node->count;
-            }
+    bool contains(const KeyType& value) const {
+        Node* current = root_node;
+        while (current) {
+            if (value == current->value) return true;
+            if (value < current->value) current = current->left_child;
+            else current = current->right_child;
         }
-        return 0;
+        return false;
+    }
+
+    int depth() const {
+        return calculateHeight(root_node);
+    }
+
+    int getFrequency(const KeyType& value) const {
+        return findFrequency(root_node, value);
+    }
+
+    std::vector<std::pair<KeyType, int>> getAllEntries() const {
+        std::vector<std::pair<KeyType, int>> result;
+        traverseInOrder(root_node, result);
+        return result;
     }
 };
+
 #endif  // INCLUDE_BST_H_
