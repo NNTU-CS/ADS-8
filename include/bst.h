@@ -30,7 +30,7 @@ public:
     void add(const T&);
     void clear();
     int depth() const;
-    bool search(const T&) const;
+    int search(const T&) const;
     std::vector<std::pair<T, int>> getWordsWithCounts() const;
 };
 
