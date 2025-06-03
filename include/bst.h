@@ -2,8 +2,8 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 #include <algorithm>
-#include <utility>
 #include <vector>
+#include <utility>
 
 template <typename Key>
 class BST {
@@ -17,6 +17,7 @@ private:
     };
 
     Node* root;
+
     Node* insertHelper(Node* node, const Key& key) {
         if (!node) return new Node(key);
         if (key < node->key) {
@@ -28,12 +29,14 @@ private:
         }
         return node;
     }
+
     Node* findMin(Node* node) const {
         while (node && node->left) {
             node = node->left;
         }
         return node;
     }
+
     Node* removeHelper(Node* node, const Key& key) {
         if (!node) return nullptr;
         
@@ -62,6 +65,7 @@ private:
         }
         return node;
     }
+
     bool searchHelper(Node* node, const Key& key) const {
         if (!node) return false;
         if (key == node->key) return true;
@@ -70,10 +74,12 @@ private:
         }
         return searchHelper(node->right, key);
     }
+
     int depthHelper(Node* node) const {
         if (!node) return 0;
         return 1 + std::max(depthHelper(node->left), depthHelper(node->right));
     }
+
     Node* copyTree(Node* node) const {
         if (!node) return nullptr;
         Node* newNode = new Node(node->key);
@@ -82,6 +88,7 @@ private:
         newNode->right = copyTree(node->right);
         return newNode;
     }
+
     void clear(Node* node) {
         if (node) {
             clear(node->left);
@@ -89,6 +96,7 @@ private:
             delete node;
         }
     }
+
     void inOrderHelper(Node* node, std::vector<std::pair<Key, int>>& vec) const {
         if (!node) return;
         inOrderHelper(node->left, vec);
@@ -98,10 +106,11 @@ private:
 
 public:
     BST() : root(nullptr) {}
+    
     BST(const BST& other) {
         root = copyTree(other.root);
     }
-
+    
     BST(BST&& other) noexcept : root(other.root) {
         other.root = nullptr;
     }
@@ -142,6 +151,7 @@ public:
     int depth() const {
         return depthHelper(root);
     }
+    
     std::vector<std::pair<Key, int>> inOrder() const {
         std::vector<std::pair<Key, int>> result;
         inOrderHelper(root, result);
