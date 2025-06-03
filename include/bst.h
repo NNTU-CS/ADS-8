@@ -72,7 +72,9 @@ public:
   }
 
   int search(T value) const {
-    return findNode(value) != nullptr;
+    //return findNode(value) != nullptr;
+      Node* foundNode = findNode(value);
+    return foundNode ? foundNode->count : 0;
   }
 
   int getCount(T value) const {
