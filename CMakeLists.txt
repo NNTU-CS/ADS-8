@@ -10,5 +10,3 @@ set(include_dest "include/")
 
 add_subdirectory(src)
 add_subdirectory(test)
-
-target_link_libraries(ADS-8 PRIVATE stdc++fs)
