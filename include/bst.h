@@ -85,7 +85,7 @@ int BST<T>::depth(const Node* node) const {
 
 template<typename T>
 int BST<T>::depth() const {
-    return depth(root);
+    return depth(root)-1;
 }
 
 template<typename T>
