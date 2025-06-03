@@ -1,55 +1,54 @@
 // Copyright 2021 NNTU-CS
 #include <algorithm>
-#include <cctype>
-#include <filesystem>
 #include <fstream>
-#include <unordered_map>
+#include <iostream>
+#include <string>
 #include <vector>
 
 #include "bst.h"
 
-void makeTree(BST<std::string>& tree, const char* filename) {
-  std::ifstream file(filename);
-  if (!file) {
-    std::cerr << "File error!" << std::endl;
+void makeTree(BST<std::string>& tree, const char* fname) {
+  std::ifstream input(fname);
+  if (!input) {
+    std::cerr << "Unable to open file!" << std::endl;
     return;
   }
 
-  std::string word;
-  char ch;
-  while (file.get(ch)) {
-    if (std::isalpha(static_cast<unsigned char>(ch))) {
-      word += std::tolower(ch);
-    } else if (!word.empty()) {
-      tree.insert(word);
-      word.clear();
+  std::string token;
+  char symbol;
+  while (input.get(symbol)) {
+    if (std::isalpha(static_cast<unsigned char>(symbol))) {
+      token += static_cast<char>(std::tolower(symbol));
+    } else if (!token.empty()) {
+      tree.add(token);
+      token.clear();
     }
   }
 
-  if (!word.empty()) {
-    tree.insert(word);
+  if (!token.empty()) {
+    tree.add(token);
   }
 
-  file.close();
+  input.close();
 }
 
-void printFreq(BST<std::string>& tree) {
-  std::vector<std::pair<std::string, int>> words;
-  tree.getWords(words);
+void printFreq(const BST<std::string>& tree) {
+  auto list = tree.getWords();
 
-  std::sort(words.begin(), words.end(),
-            [](const auto& a, const auto& b) { return a.second > b.second; });
+  std::sort(list.begin(), list.end(), [](const auto& lhs, const auto& rhs) {
+    return lhs.second > rhs.second;
+  });
 
-  std::ofstream out("result/freq.txt");
-  if (!out) {
-    std::cerr << "Failed to open result/freq.txt" << std::endl;
+  std::ofstream output("result/freq.txt");
+  if (!output) {
+    std::cerr << "Can't write to result file!" << std::endl;
     return;
   }
 
-  for (const auto& [word, count] : words) {
-    std::cout << word << ": " << count << "\n";
-    out << word << ": " << count << "\n";
+  for (const auto& [word, count] : list) {
+    std::cout << word << "-" << count << '\n';
+    output << word << "-" << count << '\n';
   }
 
-  out.close();
+  output.close();
 }
