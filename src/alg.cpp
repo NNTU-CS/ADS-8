@@ -15,23 +15,31 @@ void makeTree(BST<std::string>& tree, const char* filePath) {
   std::ifstream inputStream(filePath);
   if (!inputStream) {
     std::cerr << "ERROR " << filePath << std::endl;
-  return;
-}
+    return;
+  }
 
-const char* wordBuffer;
-//std::string wordBuffer;
-char character;
-while (inputStream.get(character)) {
-  if (isalpha(character)) {
-    wordBuffer += tolower(static_cast<unsigned char>(character));
-  } else if (!wordBuffer.empty()) {
-    tree.insert(wordBuffer);
-    wordBuffer.clear();
+  const int SIZE = 256;
+  char wordBuffer[SIZE];
+  int length = 0;
+  char character;
+
+  while (inputStream.get(character)) {
+    if (isalpha(static_cast<unsigned char>(character))) {
+      if (length < SIZE - 1) {  // чтобы не выйти за пределы буфера
+        wordBuffer[length++] = tolower(static_cast<unsigned char>(character));
+      }
+    } else if (length > 0) {
+      wordBuffer[length] = '\0';  // завершить строку
+      tree.insert(std::string(wordBuffer));  // если BST принимает std::string, иначе изменить код
+      length = 0;
+    }
   }
-}
-  if (!wordBuffer.empty()) {
-    tree.insert(wordBuffer);
+
+  if (length > 0) {
+    wordBuffer[length] = '\0';
+    tree.insert(std::string(wordBuffer));
   }
+
   inputStream.close();
 }
 
