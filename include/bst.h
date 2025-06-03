@@ -17,8 +17,6 @@ private:
     };
 
     Node* root;
-
-    // Рекурсивная вставка
     Node* insertHelper(Node* node, const Key& key) {
         if (!node) return new Node(key);
         if (key < node->key) {
@@ -30,16 +28,12 @@ private:
         }
         return node;
     }
-
-    // Поиск минимального узла
     Node* findMin(Node* node) const {
         while (node && node->left) {
             node = node->left;
         }
         return node;
     }
-
-    // Рекурсивное удаление
     Node* removeHelper(Node* node, const Key& key) {
         if (!node) return nullptr;
         
@@ -68,8 +62,6 @@ private:
         }
         return node;
     }
-
-    // Рекурсивный поиск
     bool searchHelper(Node* node, const Key& key) const {
         if (!node) return false;
         if (key == node->key) return true;
@@ -78,14 +70,10 @@ private:
         }
         return searchHelper(node->right, key);
     }
-
-    // Рекурсивное вычисление глубины
     int depthHelper(Node* node) const {
         if (!node) return 0;
         return 1 + std::max(depthHelper(node->left), depthHelper(node->right));
     }
-
-    // Рекурсивное копирование
     Node* copyTree(Node* node) const {
         if (!node) return nullptr;
         Node* newNode = new Node(node->key);
@@ -94,8 +82,6 @@ private:
         newNode->right = copyTree(node->right);
         return newNode;
     }
-
-    // Рекурсивное удаление всех узлов
     void clear(Node* node) {
         if (node) {
             clear(node->left);
@@ -103,8 +89,6 @@ private:
             delete node;
         }
     }
-
-    // Вспомогательный метод для in-order обхода
     void inOrderHelper(Node* node, std::vector<std::pair<Key, int>>& vec) const {
         if (!node) return;
         inOrderHelper(node->left, vec);
@@ -114,11 +98,10 @@ private:
 
 public:
     BST() : root(nullptr) {}
-    
     BST(const BST& other) {
         root = copyTree(other.root);
     }
-    
+
     BST(BST&& other) noexcept : root(other.root) {
         other.root = nullptr;
     }
@@ -159,8 +142,6 @@ public:
     int depth() const {
         return depthHelper(root);
     }
-    
-    // Метод для сбора данных в порядке in-order
     std::vector<std::pair<Key, int>> inOrder() const {
         std::vector<std::pair<Key, int>> result;
         inOrderHelper(root, result);
