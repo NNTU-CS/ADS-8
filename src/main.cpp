@@ -1,5 +1,4 @@
 // Copyright 2021 NNTU-CS
-#include "main.h"
 #include <iostream>
 #include <string>
 #include "alg.h"
