@@ -17,7 +17,14 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   std::string currentWord;
   char ch;
   while (file.get(ch)) {
-    if (std::isalpha(ch) && ch >= 0 && ch <= 127) {
+    unsigned char uch = static_cast<unsigned char>(ch);
+    if (uch == 0xC3) {
+      char next;
+      if (file.get(next)) {
+        unsigned char unext = static_cast<unsigned char>(next);
+        if (unext >= 0xA0 && unext <= 0xA6) currentWord += 'a';
+      }
+    } else if (std::isalpha(ch) && ch >= 0 && ch <= 127) {
       currentWord += std::tolower(ch);
     } else {
       if (!currentWord.empty()) {
