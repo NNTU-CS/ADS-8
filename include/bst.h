@@ -105,7 +105,10 @@ class BST {
   }
 
   int depth() const {
-    return depthHelper(root);
+    if (root == nullptr) {
+      return 0;
+    }
+    return depthHelper(root) - 1;
   }
 
   int count() const {
