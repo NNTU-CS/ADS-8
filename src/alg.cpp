@@ -1,12 +1,13 @@
 // Copyright 2021 NNTU-CS
 #include "bst.h"
 
-#include <algorithm>
 #include <cctype>
+
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <unordered_map>
+#include <utility>
 #include <vector>
 
 void makeTree(BST<std::string>& tree, const char* filePath) {
