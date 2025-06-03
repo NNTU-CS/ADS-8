@@ -1,81 +1,81 @@
 // Copyright 2021 NNTU-CS
-
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
 #include <algorithm>
-#include <iostream>
 #include <string>
 #include <vector>
 
 template <typename T>
 class BST {
  private:
-  struct Node {
+  struct TreeNode {
     T key;
-    int count;
-    Node* left;
-    Node* right;
-    Node(const T& value)
-        : key(value), count(1), left(nullptr), right(nullptr) {}
+    int freq;
+    TreeNode* left;
+    TreeNode* right;
+
+    explicit TreeNode(const T& val)
+        : key(val), freq(1), left(nullptr), right(nullptr) {}
   };
 
-  Node* root;
+  TreeNode* root;
 
-  void insert(Node*& node, const T& value) {
-    if (!node)
-      node = new Node(value);
-    else if (value < node->key)
-      insert(node->left, value);
-    else if (value > node->key)
-      insert(node->right, value);
-    else
-      node->count++;
+  TreeNode* insert(TreeNode* curr, const T& val) {
+    if (!curr) return new TreeNode(val);
+
+    if (val == curr->key) {
+      curr->freq++;
+    } else if (val < curr->key) {
+      curr->left = insert(curr->left, val);
+    } else {
+      curr->right = insert(curr->right, val);
+    }
+    return curr;
   }
 
-  int depth(Node* node) const {
+  int getHeight(TreeNode* node) const {
     if (!node) return 0;
-    int leftDepth = depth(node->left);
-    int rightDepth = depth(node->right);
-    return std::max(leftDepth, rightDepth) + 1;
+    int lh = getHeight(node->left);
+    int rh = getHeight(node->right);
+    return 1 + (lh > rh ? lh : rh);
   }
 
-  Node* search(Node* node, const T& value) const {
-    if (!node || node->key == value) return node;
-    if (value < node->key)
-      return search(node->left, value);
-    else
-      return search(node->right, value);
+  int find(TreeNode* node, const T& val) const {
+    if (!node) return 0;
+    if (val == node->key) return node->freq;
+    return val < node->key ? find(node->left, val) : find(node->right, val);
   }
 
-  void inOrder(Node* node, std::vector<std::pair<T, int>>& vec) const {
+  void destroy(TreeNode* node) {
     if (!node) return;
-    inOrder(node->left, vec);
-    vec.push_back({node->key, node->count});
-    inOrder(node->right, vec);
-  }
-
-  void clear(Node* node) {
-    if (!node) return;
-    clear(node->left);
-    clear(node->right);
+    destroy(node->left);
+    destroy(node->right);
     delete node;
+  }
+
+  void inOrder(TreeNode* node, std::vector<std::pair<T, int>>& result) const {
+    if (!node) return;
+    inOrder(node->left, result);
+    result.emplace_back(node->key, node->freq);
+    inOrder(node->right, result);
   }
 
  public:
   BST() : root(nullptr) {}
-  ~BST() { clear(root); }
+  ~BST() { destroy(root); }
 
-  void insert(const T& value) { insert(root, value); }
+  void add(const T& val) { root = insert(root, val); }
 
-  int depth() const { return depth(root); }
+  int search(const T& val) const { return find(root, val); }
 
-  bool search(const T& value) const { return search(root, value) != nullptr; }
+  int depth() const { return getHeight(root) - 1; }
 
-  void getWords(std::vector<std::pair<T, int>>& vec) const {
-    inOrder(root, vec);
+  std::vector<std::pair<T, int>> getWords() const {
+    std::vector<std::pair<T, int>> out;
+    inOrder(root, out);
+    return out;
   }
 };
 
 #endif  // INCLUDE_BST_H_
-
