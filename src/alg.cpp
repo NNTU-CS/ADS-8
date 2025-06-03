@@ -18,7 +18,8 @@ void makeTree(BST<std::string>& tree, const char* filePath) {
   return;
 }
 
-std::string wordBuffer;
+const char* wordBuffer;
+//std::string wordBuffer;
 char character;
 while (inputStream.get(character)) {
   if (isalpha(character)) {
