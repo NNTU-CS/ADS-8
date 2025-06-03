@@ -1,10 +1,9 @@
 // Copyright 2021 NNTU-CS
 #include "bst.h"
 
+#include <iostream>
 #include <string>
 #include <fstream>
-#include <iostream>
-
 
 // Объявление дружественных функций
 void makeTree(BST<std::string>& tree, const char* filePath);
