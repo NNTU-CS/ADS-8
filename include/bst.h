@@ -1,15 +1,15 @@
 // Copyright 2021 NNTU-CS
-
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
 #include <algorithm>
 #include <iostream>
 #include <string>
+#include <utility>
 
 template <typename T>
 class BST {
- private:
+ public:
   struct Node {
     T key;
     int count;
@@ -19,6 +19,9 @@ class BST {
     explicit Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
 
+  using NodePtr = Node*;
+
+ private:
   Node* root;
 
   Node* insert(Node* node, T value) {
@@ -52,7 +55,7 @@ class BST {
     return 1 + std::max(depth(node->left), depth(node->right));
   }
 
-  void inOrder(Node* node, void (*visit)(Node*)) const {
+  void inOrder(Node* node, void (*visit)(NodePtr)) const {
     if (!node) return;
     inOrder(node->left, visit);
     visit(node);
@@ -79,7 +82,11 @@ class BST {
 
   int depth() const { return depth(root); }
 
-  void inOrder(void (*visit)(Node*)) const { inOrder(root, visit); }
+  void inOrder(void (*visit)(NodePtr)) const { inOrder(root, visit); }
+
+  static std::pair<T, int> getNodeData(NodePtr node) {
+    return {node->key, node->count};
+  }
 };
 
 #endif  // INCLUDE_BST_H_
