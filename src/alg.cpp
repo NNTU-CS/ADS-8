@@ -1,7 +1,6 @@
 // Copyright 2021 NNTU-CS
 #include <iostream>
 #include <fstream>
-#include <filesystem>
 #include <locale>
 #include <cstdlib>
 #include <algorithm>
@@ -51,17 +50,15 @@ void printFreq(BST<std::string>& tree) {
       return a.first < b.first;
     });
 
-  std::filesystem::create_directories("result");
-
-  std::ofstream outFile("result/freq.txt");
-  if (!outFile) {
-    std::cerr << "Error creating output file!" << std::endl;
+  std::ofstream outputFile("result/freq.txt");
+  if (!outputFile.is_open()) {
+    std::cout << "Error opening result file!" << std::endl;
     return;
   }
   for (const auto& pair : elements) {
-    std::cout << pair.first << " " << pair.second << std::endl;
-    outFile << pair.first << " " << pair.second << std::endl;
+    std::cout << pair.first << " - " << pair.second << std::endl;
+    outputFile << pair.first << " - " << pair.second << std::endl;
   }
 
-  outFile.close();
+  outputFile.close();
 }
