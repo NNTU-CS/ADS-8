@@ -1,4 +1,5 @@
 // Copyright 2021 NNTU-CS
+
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
@@ -20,6 +21,7 @@ class BST {
   };
 
   using NodePtr = Node*;
+  using Visitor = void (*)(NodePtr);
 
  private:
   Node* root;
@@ -38,24 +40,13 @@ class BST {
     return node;
   }
 
-  Node* search(Node* node, T value) const {
-    if (!node || node->key == value) {
-      return node;
-    }
-
-    if (value < node->key) {
-      return search(node->left, value);
-    } else {
-      return search(node->right, value);
-    }
-  }
-
   int depth(Node* node) const {
     if (!node) return 0;
     return 1 + std::max(depth(node->left), depth(node->right));
   }
 
-  void inOrder(Node* node, void (*visit)(NodePtr)) const {
+  template <typename F>
+  void inOrder(Node* node, F visit) const {
     if (!node) return;
     inOrder(node->left, visit);
     visit(node);
@@ -75,14 +66,12 @@ class BST {
 
   void insert(T value) { root = insert(root, value); }
 
-  int search(T value) const {
-    Node* node = search(root, value);
-    return node ? node->count : 0;
-  }
-
   int depth() const { return depth(root); }
 
-  void inOrder(void (*visit)(NodePtr)) const { inOrder(root, visit); }
+  template <typename F>
+  void inOrder(F visit) const {
+    inOrder(root, visit);
+  }
 
   static std::pair<T, int> getNodeData(NodePtr node) {
     return {node->key, node->count};
