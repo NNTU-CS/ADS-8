@@ -43,7 +43,7 @@ void printFreq(BST<std::string>& tree) {
     return a.second > b.second;
   });
 
-  const char* output_filename = "output.txt";
+  const char* output_filename = "war_peace.txt";
   std::ofstream outputFile(output_filename);
   if (!outputFile) {
     std::cerr << "Ошибка при открытии файла для записи: " << output_filename << std::endl;
