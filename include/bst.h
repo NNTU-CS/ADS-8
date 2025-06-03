@@ -17,7 +17,7 @@ class BST {
         Node* right;
         explicit Node(const T& value): count(1), left(nullptr), right(nullptr), value(value) {}
     };
-    Node* root; 
+    Node* root;
     Node* addNode(Node*, const T&);
     void delTree(Node*);
     int depth(const Node*) const;
