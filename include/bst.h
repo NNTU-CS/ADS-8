@@ -11,121 +11,127 @@
 #include <utility>
 #include <iostream>
 
-template <typename KeyType>
+template <typename T>
 class BST {
 private:
-    struct Node {
-        KeyType value;
-        int frequency;
-        Node* left_child;
-        Node* right_child;
+    struct TreeNode {
+        T key;
+        int freq;
+        TreeNode* left;
+        TreeNode* right;
 
-        explicit Node(const KeyType& val)
-            : value(val), frequency(1), left_child(nullptr), right_child(nullptr) {}
+        explicit TreeNode(const T& val)
+            : key(val), freq(1), left(nullptr), right(nullptr) {}
     };
-    Node* root_node;
-    Node* insertNode(Node* current_node, const KeyType& new_value) {
-        if (!current_node) return new Node(new_value);
 
-        if (new_value == current_node->value) {
-            current_node->frequency++;
-        } else if (new_value < current_node->value) {
-            current_node->left_child = insertNode(current_node->left_child, new_value);
+    TreeNode* root;
+
+    TreeNode* insert(TreeNode* curr, const T& val) {
+        if (!curr) return new TreeNode(val);
+
+        if (val == curr->key) {
+            curr->freq++;
+        } else if (val < curr->key) {
+            curr->left = insert(curr->left, val);
         } else {
-            current_node->right_child = insertNode(current_node->right_child, new_value);
+            curr->right = insert(curr->right, val);
         }
-        return current_node;
+        return curr;
     }
-    int calculateHeight(Node* node) const {
+
+    int getHeight(TreeNode* node) const {
         if (!node) return -1;
-        int left_height = calculateHeight(node->left_child);
-        int right_height = calculateHeight(node->right_child);
-        return 1 + std::max(left_height, right_height);
+        int lh = getHeight(node->left);
+        int rh = getHeight(node->right);
+        return 1 + std::max(lh, rh);
     }
-    int findFrequency(Node* node, const KeyType& search_value) const {
+
+    int findFreq(TreeNode* node, const T& val) const {
         if (!node) return 0;
-        if (search_value == node->value) return node->frequency;
-        return search_value < node->value 
-            ? findFrequency(node->left_child, search_value) 
-            : findFrequency(node->right_child, search_value);
+        if (val == node->key) return node->freq;
+        return val < node->key ? findFreq(node->left, val) : findFreq(node->right, val);
     }
-    void deleteTree(Node* node) {
+
+    void destroy(TreeNode* node) {
         if (!node) return;
-        deleteTree(node->left_child);
-        deleteTree(node->right_child);
+        destroy(node->left);
+        destroy(node->right);
         delete node;
     }
-    void traverseInOrder(Node* node, std::vector<std::pair<KeyType, int>>& result) const {
+
+    void inOrder(TreeNode* node, std::vector<std::pair<T, int>>& result) const {
         if (!node) return;
-        traverseInOrder(node->left_child, result);
-        result.emplace_back(node->value, node->frequency);
-        traverseInOrder(node->right_child, result);
+        inOrder(node->left, result);
+        result.emplace_back(node->key, node->freq);
+        inOrder(node->right, result);
     }
 
-    Node* copySubtree(Node* node) const {
+    TreeNode* copyTree(TreeNode* node) const {
         if (!node) return nullptr;
-        Node* new_node = new Node(node->value);
-        new_node->frequency = node->frequency;
-        new_node->left_child = copySubtree(node->left_child);
-        new_node->right_child = copySubtree(node->right_child);
-        return new_node;
+        TreeNode* newNode = new TreeNode(node->key);
+        newNode->freq = node->freq;
+        newNode->left = copyTree(node->left);
+        newNode->right = copyTree(node->right);
+        return newNode;
     }
+
 public:
-    BST() : root_node(nullptr) {}
+    BST() : root(nullptr) {}
+    
     BST(const BST& other) {
-        root_node = copySubtree(other.root_node);
+        root = copyTree(other.root);
     }
     
-    BST(BST&& other) noexcept : root_node(other.root_node) {
-        other.root_node = nullptr;
+    BST(BST&& other) noexcept : root(other.root) {
+        other.root = nullptr;
     }
     
     ~BST() {
-        deleteTree(root_node);
+        destroy(root);
     }
     
     BST& operator=(const BST& other) {
         if (this != &other) {
-            deleteTree(root_node);
-            root_node = copySubtree(other.root_node);
+            destroy(root);
+            root = copyTree(other.root);
         }
         return *this;
     }
     
     BST& operator=(BST&& other) noexcept {
         if (this != &other) {
-            deleteTree(root_node);
-            root_node = other.root_node;
-            other.root_node = nullptr;
+            destroy(root);
+            root = other.root;
+            other.root = nullptr;
         }
         return *this;
     }
 
-    void insert(const KeyType& value) {
-        root_node = insertNode(root_node, value);
+    void insert(const T& value) {
+        root = insert(root, value);
     }
 
-    bool contains(const KeyType& value) const {
-        Node* current = root_node;
-        while (current) {
-            if (value == current->value) return true;
-            if (value < current->value) current = current->left_child;
-            else current = current->right_child;
+    bool search(const T& value) const {
+        TreeNode* curr = root;
+        while (curr) {
+            if (value == curr->key) return true;
+            if (value < curr->key) curr = curr->left;
+            else curr = curr->right;
         }
         return false;
     }
 
     int depth() const {
-        return calculateHeight(root_node);
+        return getHeight(root);
     }
 
-    int getFrequency(const KeyType& value) const {
-        return findFrequency(root_node, value);
+    int getCount(const T& value) const {
+        return findFreq(root, value);
     }
 
-    std::vector<std::pair<KeyType, int>> getAllEntries() const {
-        std::vector<std::pair<KeyType, int>> result;
-        traverseInOrder(root_node, result);
+    std::vector<std::pair<T, int>> inOrder() const {
+        std::vector<std::pair<T, int>> result;
+        inOrder(root, result);
         return result;
     }
 };
