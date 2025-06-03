@@ -1,5 +1,3 @@
-// Copyright 2023 Your Name
-
 #include <algorithm>
 #include <cctype>
 #include <fstream>
