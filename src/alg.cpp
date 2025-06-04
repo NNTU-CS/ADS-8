@@ -1,49 +1,47 @@
-// Copyright 2021 NNTU-CS
 #include  <iostream>
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
+#include  "bst.h"
 #include <fstream>
 #include <cctype>
 #include <algorithm>
 #include <vector>
-#include <utility>
-#include  "bst.h"
+#include <string>
+#include <iostream>
+#include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-	std::ifstream file(filename);
-	if (!file) {
-		std::cerr << "File error!" << std::endl;
-		return;
-	}
+  // поместите сюда свой код
+  std::ifstream file(filename);
+  if (!file) return;
 
-	std::string current;
-	char ch;
-	while (file.get(ch)) {
-		if (isalpha(static_cast<unsigned char>(ch))) {
-			current += tolower(static_cast<unsigned char>(ch));
-		} else if (!current.empty()) {
-			tree.insert(current);
-			current.clear();
-		}
-	}
-	if (!current.empty()) {
-		tree.insert(current);
-	}
-	file.close();
+  std::string word;
+  char ch;
+  while (file.get(ch)) {
+    if (std::isalpha(static_cast<unsigned char>(ch))) {
+      word += std::tolower(static_cast<unsigned char>(ch));
+    } else {
+      if (!word.empty()) {
+        tree.insert(word);
+        word.clear();
+      }
+    }
+  }
+  if (!word.empty()) tree.insert(word);
+  file.close();
 }
 
-void printFreq(const BST<std::string>& tree) {
-	std::vector<std::pair<std::string, int>> word = tree.Order();
-	std::sort(word.begin(), word.end(), [](const auto& a, const auto& b) { return a.second > b.second; });
-	std::ofstream file("result/freq.txt");
-	if (!file.is_open()) {
-		std::cerr << "File is not open" << std::endl;
-		return;
-	}
-	for (const auto& pair : word) {
-		std::cout << pair.first << "-" << pair.second << '\n';
-		file << pair.first << '-' << pair.second << '\n';
-	}
-	file.close();
+void printFreq(BST<std::string>& tree) {
+  auto words = tree.toVector();
+  std::sort(words.begin(), words.end(),
+            [](const auto& a, const auto& b) {
+              return a.second > b.second;
+            });
+
+  std::ofstream out("result/freq.txt");
+  for (const auto& pair : words) {
+    std::cout << pair.first << " - " << pair.second << std::endl;
+    out << pair.first << " - " << pair.second << std::endl;
+  }
 }
