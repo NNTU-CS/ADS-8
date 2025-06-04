@@ -1,6 +1,5 @@
 // Copyright 2021 NNTU-CS
 #include <algorithm>
-#include <sys/stat.h>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -8,6 +7,7 @@
 #include <cctype>
 
 #include "bst.h"
+#include <sys/stat.h>
 
 static void EnsureResultDir() {
 #ifdef _WIN32
