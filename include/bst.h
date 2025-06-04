@@ -6,12 +6,10 @@
 #include <utility>
 
 template <typename T>
-class BST
-{
-private:
+class BST {
+ private:
     /*---------- структура узла ----------*/
-    struct Node
-    {
+    struct Node {
         T     key;          // само слово
         int   freq;         // сколько раз встретилось
         Node* left;
