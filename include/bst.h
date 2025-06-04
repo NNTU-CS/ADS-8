@@ -25,7 +25,7 @@ private:
 		if (root == nullptr) {
 			return new node(value);
 		}
-		if (root->key == value) {
+		if (value == root->key) {
 			++root->count;
 			return root;
 		}
@@ -53,9 +53,8 @@ private:
 			return searchNode(root->left, value);
 		} else if (value > root->key) {
 			return searchNode(root->right, value);
-		} else {
-			return root->count;
-		}
+		} 
+		return root;
 	}
 	
 	void inOrder(node* root, std::vector<std::pair<T, int>>& result) const {
