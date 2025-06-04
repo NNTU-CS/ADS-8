@@ -3,43 +3,83 @@
 #define INCLUDE_BST_H_
 
 #include <iostream>
-#include <string>
-#include <algorithm>
-#include <vector>
+#include <functional>
 
 template<typename T>
-class BST {
- public:
-    BST() : root(nullptr) {}
-    ~BST() { clear(root); }
+class BST
+{
+private:
+    struct Node
+    {
+        T        key;       // само слово
+        int      freq;      // счётчик повторений
+        Node*    left;
+        Node*    right;
 
-    bool search(const T&);
-    void insert(const T&);
-    int depth(Node<T>* node);
-    void inorderTraversal(Node<T>* node);
-
-    Node<T>* getRoot() const { return root; }
-
-    class Helper {
-     public:
-        static void traverse(Node<T>* node, std::vector<WordFrequencyPair>& list) {
-            if (node == nullptr) return;
-            traverse(node->left, list);
-            list.emplace_back(node->key, node->freq);
-            traverse(node->right, list);
-        }
+        explicit Node(const T& k)
+            : key{k}, freq{1}, left{nullptr}, right{nullptr} {}
     };
 
- private:
-    Node<T>* root;
+    Node* root = nullptr;
 
-    void clear(Node<T>* node) {
-        if (node != nullptr) {
-            clear(node->left);
-            clear(node->right);
-            delete node;
-        }
+/* ---------- служебные рекурсивные функции ---------- */
+    void destroy(Node* p)
+    {
+        if (!p) return;
+        destroy(p->left);
+        destroy(p->right);
+        delete p;
     }
+
+    void insert(Node*& p, const T& key)
+    {
+        if (!p)
+        {
+            p = new Node(key);
+            return;
+        }
+        if (key == p->key)
+        {
+            ++p->freq;
+        }
+        else if (key < p->key)
+            insert(p->left, key);
+        else
+            insert(p->right, key);
+    }
+
+    Node* find(Node* p, const T& key) const
+    {
+        if (!p || key == p->key) return p;
+        return key < p->key ? find(p->left, key) : find(p->right, key);
+    }
+
+    int height(Node* p) const
+    {
+        if (!p) return 0;
+        int lh = height(p->left);
+        int rh = height(p->right);
+        return 1 + (lh > rh ? lh : rh);
+    }
+
+    template<typename F>
+    void inOrder(Node* p, F&& fn) const
+    {
+        if (!p) return;
+        inOrder(p->left, fn);
+        fn(p);
+        inOrder(p->right, fn);
+    }
+
+public:
+/* ----------------- публичный интерфейс ----------------- */
+    ~BST() { destroy(root); }
+
+    void insert(const T& key) { insert(root, key); }
+    int depth() const { return height(root); }
+    bool search(const T& key) const { return find(root, key) != nullptr; }
+    template<typename F>
+    void forEachInOrder(F&& fn) const { inOrder(root, std::forward<F>(fn)); }
 };
 
 #endif  // INCLUDE_BST_H_
