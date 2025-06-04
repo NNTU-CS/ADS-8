@@ -11,12 +11,12 @@ class BST {
     int count;
     Node* left;
     Node* right;
-    };
+  };
   Node* root;
   Node* addNode(Node* root, T value);
   Node* delNode(Node* root, T value);
   void delTree(Node* root);
-   nt searchNode(Node* root, T value);
+  int searchNode(Node* root, T value);
   void printTree(Node* root);
   int getHeight(Node* root);
 
