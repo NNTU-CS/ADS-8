@@ -89,7 +89,7 @@ void BST<T>::print() {
 
 template <typename T>
 int BST<T>::getHeight(Node* root) {
-  if (root == nillptr) return 0;
+  if (root == nullptr) return 0;
   int left = getHeight(root->left);
   int right = getHeight(root->right);
   return std::max(left, right) + 1;
