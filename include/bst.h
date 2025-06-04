@@ -43,7 +43,7 @@ private:
 		}
 		int leftdepth = depthGet(root->left);
 		int rightdepth = depthGet(root->right);
-		return std::max(leftdepth, rightdepth) + 1;
+		return std::max(leftdepth, rightdepth);
 	}
 
 	node* searchNode(node* root, const T& value) const {
