@@ -77,7 +77,7 @@ public:
 	~BST() { clear(root); }
 
 	void insert(T value) {
-		return depth(root);
+		root = addNode(root, value);
 	}
 	int depth() const {
 		return depth(root);
