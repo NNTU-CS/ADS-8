@@ -16,7 +16,7 @@ private:
 		int count;
 		node* left;
 		node* right;
-		explicit node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+		explicit node(const T& value) : key(value), count(1), left(nullptr), right(nullptr) {}
 	};
 
 	node* root;
@@ -25,32 +25,34 @@ private:
 		if (root == nullptr) {
 			return new node(value);
 		}
+		if (root->key == value) {
+			++root->count;
+			return root;
+		}
 		if (value < root->key) {
 			root->left = addNode(root->left, value);
-		} else if (value > root->key) {
-			root->right = addNode(root->right, value);
 		} else {
-			root->count++;
+			root->right = addNode(root->right, value);
 		}
 		return root;
 	}
 
-	int depth(node* root) const {
+	int depthGet(node* root) const {
 		if (root == nullptr) {
 			return 0;
 		}
-		int leftdepth = depth(root->left);
-		int rightdepth = depth(root->right);
+		int leftdepth = depthGet(root->left);
+		int rightdepth = depthGet(root->right);
 		return std::max(leftdepth, rightdepth) + 1;
 	}
 
-	node* search(node* root, const T& value) const {
+	node* searchNode(node* root, const T& value) const {
 		if (root == nullptr) {
 			return 0;
 		} else if (value < root->key) {
-			return search(root->left, value);
+			return searchNode(root->left, value);
 		} else if (value > root->key) {
-			return search(root->right, value);
+			return searchNode(root->right, value);
 		} else {
 			return root->count;
 		}
@@ -80,10 +82,10 @@ public:
 		root = addNode(root, value);
 	}
 	int depth() const {
-		return depth(root);
+		return depthGet(root);
 	}
 	bool search(const T& value) const {
-		return search(root, value) != nullptr;
+		return searchNode(root, value) != nullptr;
 	}
 	std::vector<std::pair<T, int>> Order() const {
 		std::vector<std::pair<T, int>> result;
