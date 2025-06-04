@@ -5,56 +5,59 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <iostream>
+#include <iomanip>
+#include <utility>
 
 template <typename T>
 class BST {
  private:
-  struct Node {
+  struct node {
     T data;
     int count;
-    Node* left;
-    Node* right;
-    explicit Node(const T& val) : data(val), count(1), left(nullptr), right(nullptr) {}
+    node* left;
+    node* right;
+    explicit node(const T& value) : data(value), count(1), left(nullptr), right(nullptr) {}
   };
 
-  Node* root;
+  node* root;
 
-  void insert(Node*& node, const T& value) {
-    if (!node) {
-      node = new Node(value);
-    } else if (value == node->data) {
-      node->count++;
-    } else if (value < node->data) {
-      insert(node->left, value);
+  void insert(node*& root, const T& value) {
+    if (!root) {
+      root = new Node(value);
+    } else if (value == root->data) {
+      root->count++;
+    } else if (value < root->data) {
+      insert(root->left, value);
     } else {
-      insert(node->right, value);
+      insert(root->right, value);
     }
   }
 
-  int search(Node* node, const T& value) const {
-    if (!node) return 0;
-    if (value == node->data) return node->count;
-    if (value < node->data) return search(node->left, value);
-    return search(node->right, value);
+  int search(node* root, const T& value) const {
+    if (!root) return 0;
+    if (value == root->data) return root->count;
+    if (value < root->data) return search(root->left, value);
+    return search(root->right, value);
   }
 
-int depth(Node* node) const {
-    if (node == nullptr) return -1;
-    return 1 + std::max(depth(node->left), depth(node->right));
+int depth(node* root) const {
+    if (root == nullptr) return -1;
+    return 1 + std::max(depth(root->left), depth(root->right));
 }
 
-  void inorder(Node* node, std::vector<std::pair<T, int>>& result) const {
-    if (!node) return;
-    inorder(node->left, result);
-    result.push_back({node->data, node->count});
-    inorder(node->right, result);
+  void inorder(node* root, std::vector<std::pair<T, int>>& result) const {
+    if (!root) return;
+    inorder(root->left, result);
+    result.push_back({root->data, root->count});
+    inorder(root->right, result);
   }
 
-  void clear(Node* node) {
-    if (!node) return;
-    clear(node->left);
-    clear(node->right);
-    delete node;
+  void clear(node* root) {
+    if (!root) return;
+    clear(root->left);
+    clear(root->right);
+    delete root;
   }
 
  public:
