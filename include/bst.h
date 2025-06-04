@@ -46,7 +46,7 @@ private:
 		return (leftdepth >= rightdepth ? leftdepth : rightdepth) + 1;
 	}
 
-	node* searchNode(node* root, const T& value) const {
+	const node* searchNode(const node* root, const T& value) const {
 		if (root == nullptr) {
 			return 0;
 		} else if (value < root->key) {
