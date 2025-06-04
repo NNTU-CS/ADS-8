@@ -16,12 +16,12 @@ private:
 		int count;
 		node* left;
 		node* right;
-		node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
+		explicit node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
 	};
 
 	node* root;
 
-	node* addNode(node* root, T value) {
+	node* addNode(node* root, const T& value) {
 		if (root == nullptr) {
 			return new node(value);
 		}
@@ -52,7 +52,7 @@ private:
 		} else if (value > root->key) {
 			return search(root->right, value);
 		} else {
-			return root;
+			return root->count;
 		}
 	}
 	
