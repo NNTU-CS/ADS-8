@@ -3,6 +3,7 @@
 #define INCLUDE_BST_H_
 #include <iostream>
 #include <algorithm>
+#include <vector>
 template <typename T>
 class BST {
  private:
@@ -19,6 +20,7 @@ class BST {
   int searchNode(Node* root, T value);
   void printTree(Node* root);
   int getHeight(Node* root);
+  void treeToVector(Node* root, std::vector<std::pair<T, int>>&result);
 
  public:
   BST() : root(nullptr) {}
@@ -29,6 +31,11 @@ class BST {
   int search(T value);
   void print();
   int depth();
+  std::vector<std::pair<T, int>> toVector() {
+    std::vector<std::pair<T, int>> result;
+    treeToVector(root, result);
+    return result;
+  }
 };
 
 template <typename T>
@@ -96,6 +103,14 @@ int BST<T>::getHeight(Node* root) {
   int left = getHeight(root->left);
   int right = getHeight(root->right);
   return std::max(left, right) + 1;
+}
+
+template <typename T>
+void BST<T>::treeToVector(Node* root, std::vector<std::pair<T, int>>& result) {
+  if (root == nullptr) return;
+  treeToVector(root->left, result);
+  result.push_back({root->data, root->count});
+  treeToVector(root->right, result);
 }
 
 template <typename T>
