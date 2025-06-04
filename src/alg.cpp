@@ -18,10 +18,11 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 	}
 
 	std::string current;
-	while (!file.eof()) {
-		char ch = file.get();
-		if (ch >= 'A' && ch <= 'Z')
+	char ch;
+	while (!file.get(ch)) {
+		if (ch >= 'A' && ch <= 'Z') {
 			ch += 'a' - 'A';
+		}
 		if (ch >= 'a' && ch <= 'z') {
 			current += ch;
 		} else {
@@ -30,6 +31,9 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 			}
 			current.clear();
 		}
+	}
+	if (!current.empty()) {
+		tree.insert(current);
 	}
 	file.close();
 }
