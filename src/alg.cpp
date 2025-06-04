@@ -1,7 +1,6 @@
 // Copyright 2021 NNTU-CS
 #include <algorithm>
 #include <sys/stat.h>
-#include <direct.h>
 #include <fstream>
 #include <iostream>
 #include <string>
