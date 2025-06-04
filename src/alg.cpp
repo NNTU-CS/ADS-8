@@ -20,15 +20,10 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 	std::string current;
 	char ch;
 	while (file.get(ch)) {
-		if (ch >= 'A' && ch <= 'Z') {
-			ch += 'a' - 'A';
-		}
-		if (ch >= 'a' && ch <= 'z') {
-			current += ch;
-		} else {
-			if (!current.empty()) {
-				tree.insert(current);
-			}
+		if (isalpha(static_cast<unsingned char>(ch))) {
+			current += tolower(static_cast<unsingned char>(ch));
+		} else if (!current.empty()) {
+			tree.insert(current);
 			current.clear();
 		}
 	}
