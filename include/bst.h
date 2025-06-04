@@ -2,17 +2,17 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
+#pragma once
 #include <iostream>
 #include <functional>
 
 template<typename T>
-class BST
-{
-private:
+class BST {
+ private:
     struct Node
     {
-        T        key;       // само слово
-        int      freq;      // счётчик повторений
+        T        key;
+        int      freq;          // сколько раз встретилось слово
         Node*    left;
         Node*    right;
 
@@ -22,62 +22,20 @@ private:
 
     Node* root = nullptr;
 
-/* ---------- служебные рекурсивные функции ---------- */
-    void destroy(Node* p)
-    {
-        if (!p) return;
-        destroy(p->left);
-        destroy(p->right);
-        delete p;
-    }
-
-    void insert(Node*& p, const T& key)
-    {
-        if (!p)
-        {
-            p = new Node(key);
-            return;
-        }
-        if (key == p->key)
-        {
-            ++p->freq;
-        }
-        else if (key < p->key)
-            insert(p->left, key);
-        else
-            insert(p->right, key);
-    }
-
-    Node* find(Node* p, const T& key) const
-    {
-        if (!p || key == p->key) return p;
-        return key < p->key ? find(p->left, key) : find(p->right, key);
-    }
-
-    int height(Node* p) const
-    {
-        if (!p) return 0;
-        int lh = height(p->left);
-        int rh = height(p->right);
-        return 1 + (lh > rh ? lh : rh);
-    }
-
-    template<typename F>
-    void inOrder(Node* p, F&& fn) const
-    {
-        if (!p) return;
-        inOrder(p->left, fn);
-        fn(p);
-        inOrder(p->right, fn);
-    }
-
-public:
-/* ----------------- публичный интерфейс ----------------- */
+ public:
     ~BST() { destroy(root); }
 
     void insert(const T& key) { insert(root, key); }
-    int depth() const { return height(root); }
-    bool search(const T& key) const { return find(root, key) != nullptr; }
+
+    int depth() const {
+        if (!root) return 0;
+        return height(root) - 1;
+    }
+    int search(const T& key) const {
+        Node* n = find(root, key);
+        return n ? n->freq : 0;
+    }
+
     template<typename F>
     void forEachInOrder(F&& fn) const { inOrder(root, std::forward<F>(fn)); }
 };
