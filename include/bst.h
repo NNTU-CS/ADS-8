@@ -24,7 +24,7 @@ class BST {
 
   void insert(node*& root, const T& value) {
     if (!root) {
-      root = new Node(value);
+      root = new node(value);
     } else if (value == root->data) {
       root->count++;
     } else if (value < root->data) {
