@@ -29,4 +29,16 @@ void makeTree(BST<std::string>& tree, const char* filename) {
       }
     }
   }
+  file.close();
+}
+
+void printFreq(BST<std::string>& tree) { auto arr = tree.toVector();
+  std::sort(arr.begin(), arr.end(),
+            [](const auto& a, const auto& b) { return a.second > b.second; });
+  std::ofstream out("freq.txt");
+  for (const auto& twos : arr) {
+    std::cout << twos.first << " - " << twos.second << std::endl;
+    out << twos.first << " - " << twos.second << std::endl;
+  }
+  out.close();
 }
