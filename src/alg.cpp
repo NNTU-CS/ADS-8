@@ -1,10 +1,10 @@
 // Copyright 2021 NNTU-CS
+#include <sys/stat.h>
 #include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <sys/stat.h>
 #include <cctype>
 
 #include "bst.h"
