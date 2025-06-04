@@ -4,16 +4,16 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <sys/stat.h>
 #include <cctype>
 
 #include "bst.h"
-#include <sys/stat.h>
 
 static void EnsureResultDir() {
 #ifdef _WIN32
     _mkdir("result");
 #else
-    mkdir("result", 0777);)
+    mkdir("result", 0777);
 #endif
 }
 
