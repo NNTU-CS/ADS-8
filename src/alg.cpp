@@ -1,13 +1,13 @@
 // Copyright 2021 NNTU-CS
-#include "bst.h"
-#include <cctype>
+#include <algorithm>
 #include <sys/stat.h>
 #include <direct.h>
-#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
+
+#include "bst.h"
 
 static void EnsureResultDir() {
 #ifdef _WIN32
