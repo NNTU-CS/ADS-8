@@ -4,12 +4,14 @@
 #include  <cctype>
 #include  <algorithm>
 #include  <vector>
+#include <utility>
+#include <string>
 #include  "bst.h"
 
 void printFreq(BST<std::string>& tree) {
   auto elems = tree.toVector();
   std::sort(elems.begin(), elems.end(),
-    [](const std::pair<std::string,int>& a, const std::pair<std::string,int>& b) {
+    [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
       if (a.second != b.second)       return a.second > b.second;
       return a.first < b.first;
     });
