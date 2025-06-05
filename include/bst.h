@@ -1,4 +1,5 @@
 // Copyright 2021 NNTU-CS
+// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
@@ -6,54 +7,52 @@
 #include <vector>
 #include <utility>
 
-template<typename T>
+template <typename T>
 class BST {
- private:
   struct Node {
     T key;
     int count;
     Node* left;
     Node* right;
-
-    explicit Node(const T& k)
-      : key(k), count(1), left(nullptr), right(nullptr) {}
+    Node(const T& k): key(k), count(1), left(nullptr), right(nullptr) {}
   };
 
   Node* root;
 
-  Node* insertRec(Node* node, const T& key) {
+  int insert(Node*& node, const T& key) {
     if (!node) {
-      return new Node(key);
+      node = new Node(key);
+      return 0;
     }
-    if (key == node->key) {
-      node->count++;
-    } else if (key < node->key) {
-      node->left = insertRec(node->left, key);
+    if (key < node->key) {
+      return 1 + insert(node->left, key);
+    } else if (node->key < key) {
+      return 1 + insert(node->right, key);
     } else {
-      node->right = insertRec(node->right, key);
+      node->count++;
+      return 0;
     }
+  }
+
+  Node* find(Node* node, const T& key) const {
+    if (!node) return nullptr;
+    if (key < node->key) return find(node->left, key);
+    if (node->key < key) return find(node->right, key);
     return node;
   }
 
-  int searchRec(Node* node, const T& key) const {
+  int depth(Node* node) const {
     if (!node) return 0;
-    if (key == node->key) return node->count;
-    if (key < node->key) return searchRec(node->left, key);
-    return searchRec(node->right, key);
+    int dl = depth(node->left);
+    int dr = depth(node->right);
+    return 1 + (dl > dr ? dl : dr);
   }
 
-  int depthRec(Node* node) const {
-    if (!node) return 0;
-    int dl = depthRec(node->left);
-    int dr = depthRec(node->right);
-    return (dl > dr ? dl : dr) + 1;
-  }
-
-  void inorder(Node* node, std::vector<std::pair<T, int>>& out) const {
+  void traverse(Node* node, std::vector<std::pair<T,int>>& vec) const {
     if (!node) return;
-    inorder(node->left, out);
-    out.emplace_back(node->key, node->count);
-    inorder(node->right, out);
+    vec.emplace_back(node->key, node->count);
+    traverse(node->left, vec);
+    traverse(node->right, vec);
   }
 
   void destroy(Node* node) {
@@ -64,27 +63,20 @@ class BST {
   }
 
  public:
-  BST() : root(nullptr) {}
-  ~BST() {
-    destroy(root);
-  }
+  BST(): root(nullptr) {}
+  ~BST() { destroy(root); }
 
-  void insert(const T& key) {
-    root = insertRec(root, key);
-  }
+  void insert(const T& key) { insert(root, key); }
 
   int search(const T& key) const {
-    return searchRec(root, key);
+    Node* nd = find(root, key);
+    return nd ? nd->count : 0;
   }
 
-  int depth() const {
-    return depthRec(root);
-  }
+  int depth() const { return depth(root); }
 
-  std::vector<std::pair<T, int>> toVector() const {
-    std::vector<std::pair<T, int>> result;
-    inorder(root, result);
-    return result;
+  void getAll(std::vector<std::pair<T,int>>& vec) const {
+    traverse(root, vec);
   }
 };
 
