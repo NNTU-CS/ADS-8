@@ -1,6 +1,5 @@
 // Copyright 2021 NNTU-CS
-
-#include  <iostream>
+#include <iostream>
 #include <string>
 #include "bst.h"
 
@@ -13,16 +12,18 @@ int main() {
 
     makeTree(wordTree, filename);
 
-    std::cout << "Tree height: " << wordTree.height() << std::endl;
+    std::cout << "Глубина дерева: " << wordTree.depth() << std::endl;
 
     printFreq(wordTree);
 
-    int kol = wordTree.search("in");
-    if (kol > 0) {
-        std::cout << "Word 'in' found with count: " << kol << std::endl;
-    } else {
-        std::cout << "Word 'in' not found" << std::endl;
-    }
+    int pierreCount = wordTree.search("pierre");
+    std::cout << "Pierres найдено: " << pierreCount << std::endl;
+
+    int natashaCount = wordTree.search("natasha");
+    std::cout << "Natashas найдено: " << natashaCount << std::endl;
+
+    int andrewCount = wordTree.search("andrew");
+    std::cout << "Andrews найдено: " << andrewCount << std::endl;
 
     return 0;
 }
