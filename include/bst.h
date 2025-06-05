@@ -51,7 +51,7 @@ class BST {
     return (dl > dr ? dl : dr) + 1;
   }
 
-  void traverse(Node* node, std::vector<std::pair<T,int>>& elems) const {
+  void traverse(Node* node, std::vector<std::pair<T, int>>& elems) const {
     if (!node) return;
     traverse(node->left, elems);
     elems.emplace_back(node->key, node->count);
@@ -76,8 +76,8 @@ class BST {
     return 0;
   }
 
-  std::vector<std::pair<T,int>> toVector() const {
-    std::vector<std::pair<T,int>> elems;
+  std::vector<std::pair<T, int>> toVector() const {
+    std::vector<std::pair<T, int>> elems;
     traverse(root, elems);
     return elems;
   }
