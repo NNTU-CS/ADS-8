@@ -8,61 +8,63 @@
 #include  <cstdlib>
 #include  "bst.h"
 
-bool latinLetter(char sm) {
-    return (sm >= 'a' && sm <= 'z') || (sm >= 'A' && sm <= 'Z');
+bool isLatinLetter(char c) {
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
-    if (!file) {
-        std::cout << "Error opening file!" << std::endl;
+    if (!file.is_open()) {
+        std::cerr << "Ошибка открытия файла!\n";
         return;
     }
 
-    std::string lastWord;
-    std::string curtWord;
-    char sm;
+    std::string currentWord;
+    char symbol;
 
-    while (file.get(sm)) {
-        if (isalpha(sm)) {
-            curtWord += tolower(sm);
-        } else if (!curtWord.empty()) {
-            if (curtWord != lastWord) {
-                tree.insert(curtWord);
-                lastWord = curtWord;
-            }
-            curtWord.clear();
+    while (file.get(symbol)) {
+        if (isLatinLetter(symbol)) {
+            currentWord += tolower(symbol);
+        } else if (!currentWord.empty()) {
+            tree.insert(currentWord);
+            currentWord.clear(); // очищаем буфер
         }
     }
 
-    if (!curtWord.empty() && curtWord != lastWord) {
-        tree.insert(curtWord);
+    if (!currentWord.empty()) {
+        tree.insert(currentWord);
     }
 
     file.close();
 }
 
-struct WordFreq {
+struct WordFrequency {
     std::string word;
-    int kol;
+    int frequency;
 };
 
-bool compareWordFreq(const WordFreq& a, const WordFreq& b) {
-    return a.kol > b.kol;
+bool compareByFrequency(const WordFrequency& wf1, const WordFrequency& wf2) {
+    return wf1.frequency > wf2.frequency;
 }
 
 void printFreq(const BST<std::string>& tree) {
-    std::vector<BST<std::string>::Node*> nodes;
+    std::vector<WordFrequency> frequencies;
 
-    tree.inorder([&nodes](auto* node) {
-        nodes.push_back(node);
+    tree.inorder([&frequencies](const typename BST<std::string>::Node* node) {
+        frequencies.emplace_back(WordFrequency{node->slovo, node->kol});
     });
 
-    std::sort(nodes.begin(), nodes.end(), [](auto n1, auto n2) {
-        return n1->kol > n2->kol;
-    });
+    std::sort(frequencies.begin(), frequencies.end(), compareByFrequency);
 
-    for (auto* node : nodes) {
-        std::cout << node->slovo << ": " << node->kol << "\n";
+    std::ofstream output("result/freq.txt");
+    if (!output.is_open()) {
+        std::cerr << "Ошибка записи результата\n";
+        return;
     }
+
+    for (const auto& freq : frequencies) {
+        output << freq.word << ": " << freq.frequency << '\n';
+    }
+
+    output.close();
 }
