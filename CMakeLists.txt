@@ -9,5 +9,10 @@ set(tool_dest "bin")
 set(lib_dest "lib")
 set(include_dest "include/")
 
+set(SOURCES
+    src/main.cpp
+    src/alg.cpp
+)
+
 add_subdirectory(src)
 add_subdirectory(test)
