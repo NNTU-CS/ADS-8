@@ -12,25 +12,82 @@ class BST {
   struct Node {
     T key;
     int count;
+    int height;
     Node* left;
     Node* right;
 
     explicit Node(const T& k)
-      : key(k), count(1), left(nullptr), right(nullptr) {}
+      : key(k), count(1), height(1), left(nullptr), right(nullptr) {}
   };
 
   Node* root;
 
-  void insertRec(Node*& node, const T& key) {
-    if (!node) {
-      node = new Node(key);
-    } else if (key == node->key) {
-      node->count++;
-    } else if (key < node->key) {
-      insertRec(node->left, key);
-    } else {
-      insertRec(node->right, key);
+  int height(Node* n) const {
+    return n ? n->height : 0;
+  }
+
+  int balanceFactor(Node* n) const {
+    return n ? height(n->left) - height(n->right) : 0;
+  }
+
+  void updateHeight(Node* n) {
+    int hl = height(n->left);
+    int hr = height(n->right);
+    n->height = (hl > hr ? hl : hr) + 1;
+  }
+
+  Node* rotateRight(Node* y) {
+    Node* x = y->left;
+    Node* T2 = x->right;
+    x->right = y;
+    y->left = T2;
+    updateHeight(y);
+    updateHeight(x);
+    return x;
+  }
+
+  Node* rotateLeft(Node* x) {
+    Node* y = x->right;
+    Node* T2 = y->left;
+    y->left = x;
+    x->right = T2;
+    updateHeight(x);
+    updateHeight(y);
+    return y;
+  }
+
+  Node* balance(Node* n) {
+    updateHeight(n);
+    int bf = balanceFactor(n);
+    if (bf > 1) {
+      if (balanceFactor(n->left) < 0) {
+        n->left = rotateLeft(n->left);
+      }
+      return rotateRight(n);
     }
+    if (bf < -1) {
+      if (balanceFactor(n->right) > 0) {
+        n->right = rotateRight(n->right);
+      }
+      return rotateLeft(n);
+    }
+    return n;
+  }
+
+  Node* insertRec(Node* node, const T& key) {
+    if (!node) {
+      return new Node(key);
+    }
+    if (key == node->key) {
+      node->count++;
+      return node;
+    }
+    if (key < node->key) {
+      node->left = insertRec(node->left, key);
+    } else {
+      node->right = insertRec(node->right, key);
+    }
+    return balance(node);
   }
 
   void inorder(Node* node, std::vector<std::pair<T, int>>& out) const {
@@ -55,10 +112,7 @@ class BST {
   }
 
   int depthRec(Node* node) const {
-    if (!node) return 0;
-    int dl = depthRec(node->left);
-    int dr = depthRec(node->right);
-    return (dl > dr ? dl : dr) + 1;
+    return node ? node->height : 0;
   }
 
  public:
@@ -68,7 +122,7 @@ class BST {
   }
 
   void insert(const T& key) {
-    insertRec(root, key);
+    root = insertRec(root, key);
   }
 
   int search(const T& key) const {
