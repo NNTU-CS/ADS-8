@@ -18,18 +18,19 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
   std::string line;
   while (std::getline(fin, line)) {
-    std::stringstream ss(line);
-    std::string token;
-    while (ss >> token) {
-      std::string clean;
-      for (char ch : token) {
-        if (std::isalpha(static_cast<unsigned char>(ch))) {
-          clean += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+    std::string cur;
+    for (char ch : line) {
+      if (std::isalpha(static_cast<unsigned char>(ch))) {
+        cur += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+      } else {
+        if (!cur.empty()) {
+          tree.insert(cur);
+          cur.clear();
         }
       }
-      if (!clean.empty()) {
-        tree.insert(clean);
-      }
+    }
+    if (!cur.empty()) {
+      tree.insert(cur);
     }
   }
   fin.close();
