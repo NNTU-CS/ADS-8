@@ -8,7 +8,7 @@
 
 template<typename T>
 class BST {
-private:
+ private:
   struct Node {
     T key;
     int count;
@@ -47,7 +47,21 @@ private:
     delete node;
   }
 
-public:
+  int searchRec(Node* node, const T& key) const {
+    if (!node) return 0;
+    if (key == node->key) return node->count;
+    if (key < node->key) return searchRec(node->left, key);
+    return searchRec(node->right, key);
+  }
+
+  int depthRec(Node* node) const {
+    if (!node) return 0;
+    int dl = depthRec(node->left);
+    int dr = depthRec(node->right);
+    return (dl > dr ? dl : dr) + 1;
+  }
+
+ public:
   BST() : root(nullptr) {}
   ~BST() {
     destroy(root);
@@ -55,6 +69,14 @@ public:
 
   void insert(const T& key) {
     insertRec(root, key);
+  }
+
+  int search(const T& key) const {
+    return searchRec(root, key);
+  }
+
+  int depth() const {
+    return depthRec(root);
   }
 
   std::vector<std::pair<T, int>> toVector() const {
@@ -65,4 +87,3 @@ public:
 };
 
 #endif  // INCLUDE_BST_H_
-
