@@ -1,57 +1,45 @@
 // Copyright 2021 NNTU-CS
-#include <cctype>
+##include <cctype>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
-#include <sstream>
+#include <string>
 #include <vector>
 #include <algorithm>
-#include <utility>
-#include <string>
 
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-  std::ifstream file(filename);
-  if (!file) {
-    std::cout << "File error!" << std::endl;
-    return;
-  }
+  std::ifstream in(filename);
+  if (!in) return;
 
   std::string word;
-  while (file >> word) {
-    std::string cleanedWord;
-    for (char ch : word) {
-      if (std::isalpha(ch)) {
-        cleanedWord += std::tolower(ch);
+  char ch;
+  while (in.get(ch)) {
+    if (std::isalpha(static_cast<unsigned char>(ch))) {
+      word.push_back(static_cast<char>(std::tolower(ch)));
+    } else {
+      if (!word.empty()) {
+        tree.insert(word);
+        word.clear();
       }
     }
-    if (!cleanedWord.empty()) {
-      tree.insert(cleanedWord);
-    }
   }
-  file.close();
+  if (!word.empty()) tree.insert(word);
 }
 
 void printFreq(BST<std::string>& tree) {
-  std::vector<std::pair<std::string, int>> freqList;
-  tree.inOrder(
-      freqList);
+  std::vector<std::pair<std::string, int>> freq;
+  tree.traverseInOrder([&](const std::string& w, int c) {
+    freq.emplace_back(w, c);
+  });
 
-  std::sort(
-      freqList.begin(), freqList.end(),
-      [](const std::pair<std::string, int>& a,
-         const std::pair<std::string, int>& b) { return a.second > b.second; });
+  std::sort(freq.begin(), freq.end(),
+            [](auto& a, auto& b) { return a.second > b.second; });
 
-  std::ofstream outFile("result/freq.txt");
-  if (!outFile) {
-    std::cout << "Cannot open file!" << std::endl;
-    return;
+  std::ofstream out("result/freq.txt");
+  for (auto& p : freq) {
+    std::cout << p.first << "\t" << p.second << "\n";
+    out << p.first << "\t" << p.second << "\n";
   }
-
-  for (const auto& p : freqList) {
-    std::cout << p.first << " : " << p.second << std::endl;
-    outFile << p.first << " : " << p.second << std::endl;
-  }
-
-  outFile.close();
 }
