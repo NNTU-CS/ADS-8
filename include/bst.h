@@ -85,6 +85,12 @@ int BST<T>::depth(Node* node) {
 }
 
 template <typename T>
+int BST<T>::search(const T& value) const {
+    Node* node = search(root, value);
+    return node ? node->count : 0;
+}
+
+template <typename T>
 typename BST<T>::Node* BST<T>::search(const T& value) {
   return search(root, value);
 }
