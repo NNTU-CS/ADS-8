@@ -26,8 +26,7 @@ void buildWordTree(BST<std::string>& tree, const std::string& filename) {
     while (file.get(ch)) {
         if (isLetter(ch)) {
             currentWord += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
-        }
-        else if (!currentWord.empty()) {
+        } else if (!currentWord.empty()) {
             tree.insert(currentWord);
             currentWord.clear();
         }
