@@ -32,8 +32,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     while (fileStream.get(ch)) {
         if (isAlphabetic(ch)) {
             wordBuffer += std::tolower(ch);
-        }
-        else if (!wordBuffer.empty()) {
+        } else if (!wordBuffer.empty()) {
             tree.insert(wordBuffer);
             wordBuffer.clear();
         }
