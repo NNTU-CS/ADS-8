@@ -29,7 +29,7 @@ class BST {
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
   void add(const T& value) { addNode(root, value); }
-  int depth() const { return depth(root); }
+  int depth() const { return depth(root) - 1; }
   int search(const T& value) const {
     Node* node = searchNode(root, value);
     return node ? node->count : 0;
