@@ -1,5 +1,8 @@
 // Copyright 2021 NNTU-CS
-include <algorithm>
+#ifndef BST_H
+#define BST_H
+
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -14,7 +17,7 @@ class BST {
     Node* left;
     Node* right;
 
-    Node(T value) : data(value), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(T value) : data(value), count(1), left(nullptr), right(nullptr) {}
   };
 
   Node* root;
@@ -96,3 +99,5 @@ typename BST<T>::Node* BST<T>::search(Node* node, const T& value) {
   }
   return search(node->right, value);
 }
+
+#endif // BST_H
