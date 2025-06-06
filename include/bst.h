@@ -1,6 +1,6 @@
 // Copyright 2021 NNTU-CS
-#ifndef BST_H
-#define BST_H
+#ifndef INCLUDE_BST_H_
+#define INCLUDE_BST_H_
 
 #include <algorithm>
 #include <iostream>
@@ -100,4 +100,4 @@ typename BST<T>::Node* BST<T>::search(Node* node, const T& value) {
   return search(node->right, value);
 }
 
-#endif // BST_H
+#endif  // INCLUDE_BST_H_
