@@ -32,7 +32,7 @@ class BST {
   void insert(const T& value);
   void inOrder(std::vector<std::pair<T, int>>& freqList);
   int depth();
-  Node* search(const T& value);
+  int search(const T& value);
   Node* getRoot() { return root; }
 };
 
