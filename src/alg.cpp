@@ -1,6 +1,6 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <cctype>
 #include <vector>
 #include <algorithm>
@@ -8,49 +8,55 @@
 #include <utility>
 #include "bst.h"
 
-void makeTree(BST<std::string>& tree, const char* filename) {
-  std::ifstream file(filename);
-  if (!file) {
-    std::cerr << "File error!" << std::endl;
+static bool frequencyLess(const std::pair<std::string, int>& a,
+                          const std::pair<std::string, int>& b) {
+  if (a.second != b.second) {
+    return a.second > b.second;
+  }
+  return a.first < b.first;
+}
+
+void buildTree(BST<std::string>& tree, const char* filepath) {
+  std::ifstream inputFile(filepath);
+  if (!inputFile.is_open()) {
+    std::cerr << "File error: cannot open '" << filepath << "'." << std::endl;
     return;
   }
 
-  std::string word;
-  char c;
-  while (file.get(c)) {
-    if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
-      word.push_back(static_cast<char>(std::tolower(static_cast<unsigned char>(c))));
+  std::string accumulator;
+  char ch;
+  while (inputFile.get(ch)) {
+    if (std::isalpha(static_cast<unsigned char>(ch))) {
+      accumulator.push_back(
+          static_cast<char>(std::tolower(static_cast<unsigned char>(ch))));
     } else {
-      if (!word.empty()) {
-        tree.insert(word);
-        word.clear();
+      if (!accumulator.empty()) {
+        tree.insert(accumulator);
+        accumulator.clear();
       }
     }
   }
-  if (!word.empty()) {
-    tree.insert(word);
+  if (!accumulator.empty()) {
+    tree.insert(accumulator);
   }
-  file.close();
+  inputFile.close();
 }
 
-void printFreq(BST<std::string>& tree) {
-  std::vector<std::pair<std::string, int>> freq;
-  tree.toVector(&freq);
+void outputFrequencies(BST<std::string>& tree) {
+  std::vector<std::pair<std::string, int>> freqList;
+  tree.collect(&freqList);
 
-  std::sort(
-      freq.begin(),
-      freq.end(),
-      [](const std::pair<std::string, int>& a,
-         const std::pair<std::string, int>& b) {
-        if (a.second != b.second) {
-          return a.second > b.second;
-        }
-        return a.first < b.first;
-      });
-  std::ofstream out("result/freq.txt");
-  for (const auto& p : freq) {
-    std::cout << p.first << " " << p.second << std::endl;
-    out << p.first << " " << p.second << std::endl;
+  std::sort(freqList.begin(), freqList.end(), frequencyLess);
+
+  std::ofstream report("result/freq.txt");
+  if (!report.is_open()) {
+    std::cerr << "File error: cannot write to 'result/freq.txt'." << std::endl;
+    return;
   }
-  out.close();
+
+  for (const auto& entry : freqList) {
+    std::cout << entry.first << " " << entry.second << std::endl;
+    report << entry.first << " " << entry.second << std::endl;
+  }
+  report.close();
 }
