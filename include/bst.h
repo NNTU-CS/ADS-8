@@ -36,7 +36,7 @@ class BST {
     int search(const T& value);
     void printInOrder() const;
 
-    std::vector<std::pair<T, int>> get_frequencies() const;
+    std::vector<std::pair<T, int>> getFrequencies() const;
 };
 
 template <typename T>
