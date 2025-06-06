@@ -12,7 +12,7 @@
 
 template <typename T>
 class BST {
-private:
+private: 
     struct Node {
         T data;
         int count;
@@ -32,7 +32,7 @@ private:
     void gather_frequencies(const Node* node, std::vector<std::pair<T, int>>& frequencies) const;
     void clear_tree(Node* node);
 
-public:
+public: 
     BST() : root(nullptr) {}
     ~BST();
     BST(const BST&) = delete;
@@ -79,11 +79,9 @@ void BST<T>::insert(Node*& node, const T& data) {
 
     if (data < node->data) {
         insert(node->left, data);
-    }
-    else if (data > node->data) {
+    } else if (data > node->data) {
         insert(node->right, data);
-    }
-    else {
+    } else {
         node->count++;
     }
 }
