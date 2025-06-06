@@ -8,14 +8,7 @@
 #include <utility>
 #include "bst.h"
 
-static bool compareByFrequency(const std::pair<std::string, int>& a,
-                               const std::pair<std::string, int>& b) {
-  if (a.second != b.second) {
-    return a.second > b.second;
-  }
-  return a.first < b.first;
-}
-
+// Это «основная» функция постройки дерева (новое имя).
 void buildTree(BST<std::string>& tree, const char* filepath) {
   std::ifstream inputFile(filepath);
   if (!inputFile.is_open()) {
@@ -42,11 +35,20 @@ void buildTree(BST<std::string>& tree, const char* filepath) {
   inputFile.close();
 }
 
+// Это «основная» функция вывода частот (новое имя).
 void outputFrequencies(BST<std::string>& tree) {
   std::vector<std::pair<std::string, int>> freqList;
   tree.collect(&freqList);
 
-  std::sort(freqList.begin(), freqList.end(), compareByFrequency);
+  auto frequencyCompare = [](const std::pair<std::string, int>& a,
+                             const std::pair<std::string, int>& b) {
+    if (a.second != b.second) {
+      return a.second > b.second;
+    }
+    return a.first < b.first;
+  };
+
+  std::sort(freqList.begin(), freqList.end(), frequencyCompare);
 
   std::ofstream report("result/freq.txt");
   if (!report.is_open()) {
@@ -59,4 +61,16 @@ void outputFrequencies(BST<std::string>& tree) {
     report << entry.first << " " << entry.second << std::endl;
   }
   report.close();
+}
+
+// Ниже — «обёртки», чтобы тесты, ожидающие makeTree и printFreq, не «сломались».
+
+// Тесты вызывают: makeTree(tree, filename)
+extern "C" void makeTree(BST<std::string>& tree, const char* filename) {
+  buildTree(tree, filename);
+}
+
+// Тесты вызывают: printFreq(tree)
+extern "C" void printFreq(BST<std::string>& tree) {
+  outputFrequencies(tree);
 }
