@@ -5,6 +5,8 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <utility>
+#include <string>
 
 #include "bst.h"
 
