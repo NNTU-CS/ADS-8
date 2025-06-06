@@ -62,7 +62,7 @@ class BST {
             return node->frequency;
     }
 
-public:
+ public:
     BST() : root(nullptr) {}
     ~BST() {
         delete_tree(root);
