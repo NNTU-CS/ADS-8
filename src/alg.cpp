@@ -26,8 +26,8 @@ bool is_letter(char c) {
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
-    if (!file) {
-        std::cerr << "File error!" << std::endl;
+    if (!file.is_open()) {
+        std::cerr << "File error! Could not open: " << filename << std::endl;
         return;
     }
 
@@ -45,12 +45,10 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     if (!word.empty()) {
         tree.insert(word);
     }
-
-    file.close();
 }
 
 void printFreq(BST<std::string>& tree) {
-    std::vector<std::pair<std::string, int>> frequencies = tree.getFrequencies();
+    auto frequencies = tree.getFrequencies();
 
     std::sort(frequencies.begin(), frequencies.end(), [](const auto& a, const auto& b) {
         return a.second > b.second;
@@ -65,6 +63,4 @@ void printFreq(BST<std::string>& tree) {
         std::cout << pair.first << " " << pair.second << std::endl;
         outputFile << pair.first << " " << pair.second << std::endl;
     }
-
-    outputFile.close();
 }
