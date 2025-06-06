@@ -1,5 +1,5 @@
 // Copyright 2021 NNTU-CS
-##include <cctype>
+#include <cctype>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
