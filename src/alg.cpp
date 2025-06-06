@@ -3,6 +3,10 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
+#include <utility>
+#include <string>
+#include <vector>
+#include <algorithm>
 #include  "../include/bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
@@ -30,7 +34,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     std::cout << tree.depth() << std::endl;
 }
 
-bool compareFrequencies(const std::pair<std::string, int>& a, 
+bool compareFrequencies(const std::pair<std::string, int>& a,
                        const std::pair<std::string, int>& b) {
     return a.second > b.second;
 }
@@ -38,7 +42,6 @@ bool compareFrequencies(const std::pair<std::string, int>& a,
 void printFreq(BST<std::string>& tree) {
     std::vector<std::pair<std::string, int>> frequencies = tree.getFrequencies();
     std::sort(frequencies.begin(), frequencies.end(), compareFrequencies);
-    
     std::ofstream outputFile("result/freq.txt");
 
     for (const auto& pair : frequencies) {
