@@ -60,8 +60,6 @@ private:
         delete_tree(node->right);
         delete node;
     }
-
-    // Внутренний метод для поиска частоты слова
     int find_frequency(const TreeNode* node, const T& val) const {
         if (!node) 
             return 0;
