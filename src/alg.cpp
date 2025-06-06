@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <locale>
+#include <utility>
 #include <cstdlib>
 #include <cctype>
 #include <vector>
