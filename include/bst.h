@@ -3,76 +3,77 @@
 #define INCLUDE_BST_H_
 
 #include <algorithm>
-#include <iostream>
 #include <string>
-#include <vector>
+#include <functional>
 
-template <typename T>
+template<typename T>
 class BST {
  private:
   struct Node {
-    T data;
+    T key;
     int count;
     Node* left;
     Node* right;
-
-    Node(const T& value)
-        : data(value), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
-
-  Node* root;
-
-  void insert(Node*& node, const T& value) {
-    if (!node) {
-      node = new Node(value);
-    } else if (value == node->data) {
-      node->count++;
-    } else if (value < node->data) {
-      insert(node->left, value);
-    } else {
-      insert(node->right, value);
-    }
-  }
-
-  void inOrder(Node* node, std::vector<std::pair<T, int>>& freqList) {
-    if (!node) return;
-    inOrder(node->left, freqList);
-    freqList.emplace_back(node->data, node->count);
-    inOrder(node->right, freqList);
-  }
-
-  int depth(Node* node) {
-    if (!node) return 0;
-    int leftDepth = depth(node->left);
-    int rightDepth = depth(node->right);
-    return std::max(leftDepth, rightDepth) + 1;
-  }
-
-  Node* search(Node* node, const T& value) {
-    if (!node || node->data == value) {
-      return node;
-    }
-    if (value < node->data) {
-      return search(node->left, value);
-    } else {
-      return search(node->right, value);
-    }
-  }
+  Node* root = nullptr;
 
  public:
-  BST() : root(nullptr) {}
+  BST() = default;
+  ~BST() { destroy(root); }
 
-  void insert(const T& value) { insert(root, value); }
+  void insert(const T& value) { root = insert(root, value); }
+  int search(const T& value) const {
+    Node* n = search(root, value);
+    return n ? n->count : 0;
+  }
+  int depth() const {
+    if (!root) return 0;
+    return depth(root) - 1;
+  }
+  template<typename Vis>
+  void traverseInOrder(Vis vis) const { traverseInOrder(root, vis); }
+  Node* getRoot() const { return root; }
 
-  void inOrder(std::vector<std::pair<T, int>>& freqList) {
-    inOrder(root, freqList);
+ private:
+  Node* insert(Node* node, const T& value) {
+    if (!node) return new Node(value);
+    if (value < node->key)
+      node->left = insert(node->left, value);
+    else if (value > node->key)
+      node->right = insert(node->right, value);
+    else
+      ++node->count;
+    return node;
   }
 
-  int depth() { return depth(root); }
+  Node* search(Node* node, const T& value) const {
+    if (!node) return nullptr;
+    if (value < node->key) return search(node->left, value);
+    if (value > node->key) return search(node->right, value);
+    return node;
+  }
 
-  int search(const T& value) {
-    Node* node = search(root, value);
-    return node ? node->count : 0;
+  int depth(Node* node) const {
+    if (!node) return 0;
+    int dl = depth(node->left);
+    int dr = depth(node->right);
+    return std::max(dl, dr) + 1;
+  }
+
+  template<typename Vis>
+  void traverseInOrder(Node* node, Vis vis) const {
+    if (!node) return;
+    traverseInOrder(node->left, vis);
+    vis(node->key, node->count);
+    traverseInOrder(node->right, vis);
+  }
+
+  void destroy(Node* node) {
+    if (!node) return;
+    destroy(node->left);
+    destroy(node->right);
+    delete node;
   }
 };
 
