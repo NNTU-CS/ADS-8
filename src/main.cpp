@@ -6,6 +6,9 @@ using std::cout;
 using std::endl;
 using std::string;
 
+void makeTree(BST<std::string>& tree, const char* filename);
+void printFreq(const BST<std::string>& tree);
+
 int main() {
   BST<std::string> tree;
   const char* filename = "src/war_peace.txt";
