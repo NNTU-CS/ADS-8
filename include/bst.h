@@ -1,6 +1,4 @@
 // Copyright 2021 NNTU-CS
-#pragma once
-
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
@@ -25,12 +23,12 @@ class BST {
 
     Node* root;
 
-    void insert(Node*& node, const T& data);
+    void insert_helper(Node*& node, const T& data);
     int calculate_depth(const Node* node) const;
-    const Node* find_node(const Node* node, const T& value) const;
+    Node* find_node(Node* node, const T& value);
     void traverse_in_order(const Node* node) const;
-    void gather_frequencies(const Node* node, std::vector<std::pair<T, int>>& frequencies) const;
-    void clear_tree(Node* node);
+    void collect_frequencies(const Node* node, std::vector<std::pair<T, int>>& freqs) const;
+    void clear_subtree(Node* node);
 
  public:
     BST() : root(nullptr) {}
@@ -40,47 +38,42 @@ class BST {
 
     void insert(const T& data);
     int depth() const;
-    bool search(const T& value) const;
-    int count(const T& value) const;
+    int search(const T& value) const;
     void print_in_order() const;
     std::vector<std::pair<T, int>> get_frequencies() const;
 };
 
+
 template <typename T>
 BST<T>::~BST() {
-    clear_tree(root);
+    clear_subtree(root);
 }
 
 template <typename T>
-void BST<T>::clear_tree(Node* node) {
+void BST<T>::clear_subtree(Node* node) {
     if (node) {
-        clear_tree(node->left);
-        clear_tree(node->right);
+        clear_subtree(node->left);
+        clear_subtree(node->right);
         delete node;
     }
 }
 
 template <typename T>
-bool BST<T>::search(const T& value) const {
-    return find_node(root, value) != nullptr;
-}
-
-template <typename T>
 void BST<T>::insert(const T& data) {
-    insert(root, data);
+    insert_helper(root, data);
 }
 
 template <typename T>
-void BST<T>::insert(Node*& node, const T& data) {
+void BST<T>::insert_helper(Node*& node, const T& data) {
     if (!node) {
         node = new Node(data);
         return;
     }
 
     if (data < node->data) {
-        insert(node->left, data);
+        insert_helper(node->left, data);
     } else if (data > node->data) {
-        insert(node->right, data);
+        insert_helper(node->right, data);
     } else {
         node->count++;
     }
@@ -88,7 +81,7 @@ void BST<T>::insert(Node*& node, const T& data) {
 
 template <typename T>
 int BST<T>::depth() const {
-    return calculate_depth(root);
+    return calculate_depth(root) - 1;
 }
 
 template <typename T>
@@ -99,13 +92,13 @@ int BST<T>::calculate_depth(const Node* node) const {
 }
 
 template <typename T>
-int BST<T>::count(const T& value) const {
-    const Node* result = find_node(root, value);
+int BST<T>::search(const T& value) const {
+    Node* result = find_node(root, value);
     return result ? result->count : 0;
 }
 
 template <typename T>
-const typename BST<T>::Node* BST<T>::find_node(const Node* node, const T& value) const {
+typename BST<T>::Node* BST<T>::find_node(Node* node, const T& value) {
     if (!node) return nullptr;
 
     if (value == node->data) {
@@ -132,17 +125,17 @@ void BST<T>::traverse_in_order(const Node* node) const {
 template <typename T>
 std::vector<std::pair<T, int>> BST<T>::get_frequencies() const {
     std::vector<std::pair<T, int>> frequencies;
-    gather_frequencies(root, frequencies);
+    collect_frequencies(root, frequencies);
     return frequencies;
 }
 
 template <typename T>
-void BST<T>::gather_frequencies(const Node* node,
-    std::vector<std::pair<T, int>>& frequencies) const {
+void BST<T>::collect_frequencies(const Node* node,
+    std::vector<std::pair<T, int>>& freqs) const {
     if (node) {
-        gather_frequencies(node->left, frequencies);
-        frequencies.emplace_back(node->data, node->count);
-        gather_frequencies(node->right, frequencies);
+        collect_frequencies(node->left, freqs);
+        freqs.emplace_back(node->data, node->count);
+        collect_frequencies(node->right, freqs);
     }
 }
 
