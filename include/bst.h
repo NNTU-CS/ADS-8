@@ -22,7 +22,7 @@ class BST {
   void addNode(Node*& node, const T& value);
   int depth(Node* node) const;
   Node* searchNode(Node* node, const T& value) const;
-  void inorder(Node* node, vector<pair<T, int>>& result) const;
+  void inorder(Node* node, std::vector<std::pair<T, int>>& result) const;
   void clear(Node* node);
 
  public:
@@ -66,7 +66,7 @@ typename BST<T>::Node* BST<T>::searchNode(Node* node, const T& value) const {
 }
 
 template<typename T>
-void BST<T>::inorder(Node* node, std::vector<pair<T, int>>& result) const {
+void BST<T>::inorder(Node* node, std::vector<std::pair<T, int>>& result) const {
   if (!node)
     return;
   inorder(node->left, result);
