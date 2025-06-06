@@ -61,6 +61,18 @@ private:
         delete node;
     }
 
+    // Внутренний метод для поиска частоты слова
+    int find_frequency(const TreeNode* node, const T& val) const {
+        if (!node) 
+            return 0;
+        if (val < node->value)
+            return find_frequency(node->left, val);
+        else if (val > node->value)
+            return find_frequency(node->right, val);
+        else 
+            return node->frequency;
+    }
+
 public:
     BST() : root(nullptr) {}
     
@@ -80,6 +92,11 @@ public:
         std::vector<std::pair<T, int>> freq;
         collect_frequencies(root, freq);
         return freq;
+    }
+
+
+    int search(const T& val) const {
+        return find_frequency(root, val);
     }
 };
 
