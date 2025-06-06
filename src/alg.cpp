@@ -7,7 +7,14 @@
 #include <vector>
 #include <algorithm>
 #include  "bst.h"
-using namespace std;
+using std::ifstream;
+using std::ofstream;
+using std::vector;
+using std::pair;
+using std::sort;
+using std::cout;
+using std::endl;
+using std::string;
 
 void makeTree(BST<string>& tree, const char* filename) {
   ifstream file(filename);
