@@ -31,7 +31,7 @@ class BST {
   void add(const T& value) { addNode(root, value); }
   int depthOb() const { return depth(root); }
   Node* search(const T& value) const { return searchNode(root, value); }
-  void toVector(std::vector<pair<T, int>>& result) const { inorder(root, result); }
+  void toVector(std::vector<std::pair<T, int>>& result) const { inorder(root, result); }
 };
 
 template<typename T>
