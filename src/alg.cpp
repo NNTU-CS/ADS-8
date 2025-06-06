@@ -1,45 +1,34 @@
 // Copyright 2021 NNTU-CS
-#include <cctype>
-#include <cstdlib>
-#include <fstream>
-#include <iostream>
+#include  <iostream>
+#include  <fstream>
+#include  <locale>
+#include  <cstdlib>
 #include <string>
-#include <vector>
-#include <algorithm>
-
-#include "bst.h"
+#include  "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-  std::ifstream in(filename);
-  if (!in) return;
+  std::ifstream inputFile(filename);
+  if (!inputFile.is_open()) {
+    std::cerr << "Error: Could not open file " << filename << std::endl;
+  return;
+  }
 
-  std::string word;
+  std::string currentWord;
   char ch;
-  while (in.get(ch)) {
-    if (std::isalpha(static_cast<unsigned char>(ch))) {
-      word.push_back(static_cast<char>(std::tolower(ch)));
-    } else {
-      if (!word.empty()) {
-        tree.insert(word);
-        word.clear();
-      }
+  while (inputFile.get(ch)) {
+    if (isalpha(ch)) {
+      currentWord += tolower(ch);
+    } else if (!currentWord.empty()) {
+      tree.insert(currentWord);
+      currentWord.clear();
     }
   }
-  if (!word.empty()) tree.insert(word);
+  if (!currentWord.empty()) {
+    tree.insert(currentWord);
+  }
+  inputFile.close();
 }
 
 void printFreq(BST<std::string>& tree) {
-  std::vector<std::pair<std::string, int>> freq;
-  tree.traverseInOrder([&](const std::string& w, int c) {
-    freq.emplace_back(w, c);
-  });
-
-  std::sort(freq.begin(), freq.end(),
-            [](auto& a, auto& b) { return a.second > b.second; });
-
-  std::ofstream out("result/freq.txt");
-  for (auto& p : freq) {
-    std::cout << p.first << "\t" << p.second << "\n";
-    out << p.first << "\t" << p.second << "\n";
-  }
+  tree.printSortedByFrequency();
 }
