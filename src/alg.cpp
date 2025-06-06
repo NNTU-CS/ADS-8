@@ -1,12 +1,13 @@
 // Copyright 2021 NNTU-CS
-#include  <iostream>
-#include  <fstream>
-#include  <locale>
-#include  <cstdlib>
+#include <iostream>
+#include <fstream>
+#include <locale>
+#include <cstdlib>
 #include <cctype>
 #include <vector>
+#include <string>
 #include <algorithm>
-#include  "bst.h"
+#include "bst.h"
 using std::ifstream;
 using std::ofstream;
 using std::vector;
@@ -27,16 +28,14 @@ void makeTree(BST<string>& tree, const char* filename) {
   while (file.get(ch)) {
     if (isalpha(static_cast<unsigned char>(ch))) {
       word += tolower(ch);
-    } else {
-      if (!word.empty()) {
-        tree.add(word);
-        word.clear();
-      }
+    } else if (!word.empty()) {
+      tree.add(word);
+      word.clear();
     }
   }
   if (!word.empty())
     tree.add(word);
-    file.close();
+  file.close();
 }
 void printFreq(BST<string>& tree) {
   vector<std::pair<std::string, int>> words;
