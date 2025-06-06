@@ -33,8 +33,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     while (file.get(ch)) {
         if (isLetter(ch)) {
             word += std::tolower(ch);
-        }
-        else if (!word.empty()) {
+        } else if (!word.empty()) {
             tree.insert(word);
             word.clear();
         }
