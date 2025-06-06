@@ -26,6 +26,7 @@ class BST {
     void insert_helper(Node*& node, const T& data);
     int calculate_depth(const Node* node) const;
     Node* find_node(Node* node, const T& value);
+    const Node* find_node(const Node* node, const T& value) const;
     void traverse_in_order(const Node* node) const;
     void collect_frequencies(const Node* node, std::vector<std::pair<T, int>>& freqs) const;
     void clear_subtree(Node* node);
@@ -98,14 +99,19 @@ int BST<T>::search(const T& value) const {
 }
 
 template <typename T>
-typename BST<T>::Node* BST<T>::find_node(const Node* node, const T& value) const {
+typename BST<T>::Node* BST<T>::find_node(Node* node, const T& value) {
     if (!node) return nullptr;
-
-    if (value == node->data) {
-        return node;
-    }
+    if (value == node->data) return node;
     return value < node->data ? find_node(node->left, value)
-        : find_node(node->right, value);
+                             : find_node(node->right, value);
+}
+
+template <typename T>
+const typename BST<T>::Node* BST<T>::find_node(const Node* node, const T& value) const {
+    if (!node) return nullptr;
+    if (value == node->data) return node;
+    return value < node->data ? find_node(node->left, value)
+                             : find_node(node->right, value);
 }
 
 template <typename T>
