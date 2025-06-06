@@ -8,6 +8,7 @@ void printFreq(const BST<std::string>& tree);
 
 int main() {
     BST<std::string> Tree;
+    const char* filename = "war_peace.txt";
     makeTree(Tree, "war_peace.txt");
     printFreq(Tree);
     return 0;
