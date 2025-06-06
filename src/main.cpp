@@ -11,7 +11,7 @@ void printFreq(const BST<std::string>& tree);
 
 int main() {
   BST<std::string> tree;
-  const char* filename = "C:/Users/79202/Downloads/war_peace.txt";
+  const char* filename = "src/war_peace.txt";
   makeTree(tree, filename);
   printFreq(tree);
   return 0;
