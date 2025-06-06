@@ -6,7 +6,6 @@
 #include <string>
 #include <algorithm>
 #include "bst.h"
-
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
   if (!file) {
