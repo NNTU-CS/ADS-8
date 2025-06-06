@@ -1,4 +1,3 @@
-// Copyright 2021 NNTU-CS
 #include <cstdlib>
 #include <fstream>
 #include <string>
@@ -8,19 +7,11 @@ void makeTree(BST<std::string>& tree, const char* filename);
 void printFreq(BST<std::string>& tree);
 
 int main() {
-
   BST<std::string> tree;
   const char* filename = "war_peace.txt";
-
-
   makeTree(tree, filename);
-
   std::ofstream outFile("result/freq.txt");
-  if (!outFile) {
-    return EXIT_FAILURE;
-  }
-
+  if (!outFile) return EXIT_FAILURE;
   tree.printSortedByFrequency(outFile);
-
   return EXIT_SUCCESS;
 }
