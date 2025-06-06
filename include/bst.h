@@ -29,8 +29,11 @@ class BST {
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
   void add(const T& value) { addNode(root, value); }
-  int depthOb() const { return depth(root); }
-  Node* search(const T& value) const { return searchNode(root, value); }
+  int depth() const { return depth(root); }
+  Node* search(const T& value) const {
+    Node* node = searchNode(root, value);
+    return node ? node->count : 0;
+  }
   void toVector(std::vector<std::pair<T, int>>& result) const { inorder(root, result); }
 };
 
@@ -60,9 +63,9 @@ typename BST<T>::Node* BST<T>::searchNode(Node* node, const T& value) const {
   if (value == node->data)
     return node;
   if (value < node->data)
-    return search(node->left, value);
+    return searchNode(node->left, value);
   else
-    return search(node->right, value);
+    return searchNode(node->right, value);
 }
 
 template<typename T>
