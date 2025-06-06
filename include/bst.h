@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
+#include <vector>
+#include <utility>
 
 template <typename T>
 class BST {
@@ -37,18 +39,14 @@ class BST {
   }
 
   int computeDepth(TreeNode* nodePtr) const {
-    if (!nodePtr) {
-      return -1;
-    }
+    if (!nodePtr) return -1;
     int leftDepth = computeDepth(nodePtr->leftChild);
     int rightDepth = computeDepth(nodePtr->rightChild);
     return std::max(leftDepth, rightDepth) + 1;
   }
 
   TreeNode* findNode(TreeNode* nodePtr, const T& keyData) const {
-    if (!nodePtr || nodePtr->dataValue == keyData) {
-      return nodePtr;
-    }
+    if (!nodePtr || nodePtr->dataValue == keyData) return nodePtr;
     if (keyData < nodePtr->dataValue) {
       return findNode(nodePtr->leftChild, keyData);
     }
@@ -89,11 +87,10 @@ class BST {
   void printSortedByFrequency(std::ostream& output = std::cout) const {
     std::vector<std::pair<T, int>> result;
     traverseInOrder(rootNode, result);
-    
-    std::sort(result.begin(), result.end(), [](const std::pair<T, int>& a, const std::pair<T, int>& b) {
-      return a.second > b.second;
-    });
-
+    std::sort(result.begin(), result.end(),
+              [](const std::pair<T, int>& a, const std::pair<T, int>& b) {
+                return a.second > b.second;
+              });
     for (const auto& pair : result) {
       output << pair.first << ": " << pair.second << std::endl;
     }
