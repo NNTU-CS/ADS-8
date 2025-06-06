@@ -17,7 +17,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
   std::string word;
   char c;
-
   while (file.get(c)) {
     if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
       word.push_back(static_cast<char>(std::tolower(static_cast<unsigned char>(c))));
@@ -37,6 +36,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 void printFreq(BST<std::string>& tree) {
   std::vector<std::pair<std::string, int>> freq;
   tree.toVector(&freq);
+
   std::sort(
       freq.begin(),
       freq.end(),
