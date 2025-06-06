@@ -1,13 +1,4 @@
-cmake_minimum_required (VERSION 3.10.2)
-project (ADS-8)
+install(TARGETS ${PROJECT_NAME}.test
+        DESTINATION "${tool_dest}")
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -g")
-
-
-set(tool_dest "bin")
-set(lib_dest "lib")
-set(include_dest "include/")
-
-add_subdirectory(src)
-add_subdirectory(test)
+file(COPY ${PROJECT_SOURCE_DIR}/src/war_peace.txt DESTINATION "/home/runner/work/ADS-8/ADS-8/build/test")
