@@ -14,6 +14,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     std::cerr << "File error!" << std::endl;
     return;
   }
+
   std::string word;
   char c;
   while (file.get(c)) {
@@ -35,6 +36,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 void printFreq(BST<std::string>& tree) {
   std::vector<std::pair<std::string, int>> freq;
   tree.toVector(&freq);
+
   std::sort(
       freq.begin(),
       freq.end(),
