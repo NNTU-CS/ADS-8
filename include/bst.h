@@ -11,8 +11,8 @@
 #include <utility>
 
 template <typename T>
-class BST {
-private: 
+class BST { 
+private:
     struct Node {
         T data;
         int count;
@@ -32,7 +32,7 @@ private:
     void gather_frequencies(const Node* node, std::vector<std::pair<T, int>>& frequencies) const;
     void clear_tree(Node* node);
 
-public: 
+public:
     BST() : root(nullptr) {}
     ~BST();
     BST(const BST&) = delete;
