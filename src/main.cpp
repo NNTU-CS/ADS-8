@@ -8,9 +8,9 @@ void makeTree(BST<std::string>& tree, const char* filename);
 void printFreq(BST<std::string>& tree);
 
 int main() {
-  // Создание пустого дерева
+
   BST<std::string> tree;
-  const char* filename = "war_peace.txt"; // Путь к файлу для анализа
+  const char* filename = "war_peace.txt";
 
 
   makeTree(tree, filename);
