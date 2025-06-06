@@ -9,20 +9,20 @@
 
 namespace {
 
-    std::string to_lower(const std::string& str) {
-        std::string lower_str;
-        lower_str.reserve(str.size());
-        for (const unsigned char c : str) {
-            lower_str += std::tolower(c);
-        }
-        return lower_str;
+std::string to_lower(const std::string& str) {
+    std::string lower_str;
+    lower_str.reserve(str.size());
+    for (const unsigned char c : str) {
+        lower_str += std::tolower(c);
     }
+    return lower_str;
+}
 
-    bool is_letter(char c) {
-        return std::isalpha(static_cast<unsigned char>(c));
-    }
+bool is_letter(char c) {
+    return std::isalpha(static_cast<unsigned char>(c));
+}
 
-} // namespace
+}  // namespace
 
 void makeTree(BST<std::string>& tree, const std::string& filename) {
     std::ifstream file(filename);
@@ -54,7 +54,7 @@ void printFreq(BST<std::string>& tree) {
 
     std::sort(frequencies.begin(), frequencies.end(), [](const auto& a, const auto& b) {
         return a.second > b.second;
-        });
+    });
 
     std::ofstream outputFile("freq.txt");
     if (!outputFile) {
