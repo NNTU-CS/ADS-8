@@ -8,13 +8,12 @@
 
 template <typename T>
 class BST {
-private:
+ private:
     struct TreeNode {
         T value;
         int frequency;
         TreeNode* left;
         TreeNode* right;
-        
         explicit TreeNode(const T& val)
             : value(val), frequency(1), left(nullptr), right(nullptr) {}
     };
@@ -23,10 +22,9 @@ private:
 
     TreeNode* insert(TreeNode* node, const T& val) {
         if (!node) return new TreeNode(val);
-        
         if (val < node->value) {
             node->left = insert(node->left, val);
-        } 
+        }
         else if (val > node->value) {
             node->right = insert(node->right, val);
         } 
