@@ -7,33 +7,41 @@
 #include <cctype>
 #include <vector>
 #include <algorithm>
-#include "bst.h"
+#include  "bst.h"
+
+std::string toLower(const std::string& str) {
+    std::string result = "";
+    for (char c : str) {
+        result += std::tolower(c);
+    }
+    return result;
+}
 
 bool isLetter(char c) {
-    return std::isalpha(static_cast<unsigned char>(c));
+    return std::isalpha(c);
 }
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
-    if (!file.is_open()) {
-        std::cerr << "Error: Could not open file '" << filename << "'" << std::endl;
+    if (!file) {
+        std::cerr << "File error!" << std::endl;
         return;
     }
 
-    std::string currentWord;
+    std::string word;
     char ch;
-
     while (file.get(ch)) {
         if (isLetter(ch)) {
-            currentWord += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
-        } else if (!currentWord.empty()) {
-            tree.insert(currentWord);
-            currentWord.clear();
+            word += std::tolower(ch);
+        }
+        else if (!word.empty()) {
+            tree.insert(word);
+            word.clear();
         }
     }
 
-    if (!currentWord.empty()) {
-        tree.insert(currentWord);
+    if (!word.empty()) {
+        tree.insert(word);
     }
 
     file.close();
