@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-using namespace std;
 
 template<typename T>
 class BST {
@@ -16,7 +15,7 @@ class BST {
     int count;
     Node* left;
     Node* right;
-    Node(const T& d) : data(d), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(const T& d) : data(d), count(1), left(nullptr), right(nullptr) {}
   };
   Node* root;
   void addNode(Node*& node, const T& value);
@@ -31,7 +30,7 @@ class BST {
   void add(const T& value) { addNode(root, value); }
   int depthOb() const { return depth(root); }
   Node* search(const T& value) const { return searchNode(root, value); }
-  void toVector(vector<pair<T, int>>& result) const { inorder(root, result); }
+  void toVector(std::vector<pair<T, int>>& result) const { inorder(root, result); }
 };
 
 template<typename T>
@@ -50,7 +49,7 @@ template<typename T>
 int BST<T>::depth(Node* node) const {
   if (!node)
     return 0;
-  return 1 + max(depth(node->left), depth(node->right));
+  return 1 + std::max(depth(node->left), depth(node->right));
 }
 
 template<typename T>
@@ -66,7 +65,7 @@ typename BST<T>::Node* BST<T>::searchNode(Node* node, const T& value) const {
 }
 
 template<typename T>
-void BST<T>::inorder(Node* node, vector<pair<T, int>>& result) const {
+void BST<T>::inorder(Node* node, std::vector<pair<T, int>>& result) const {
   if (!node)
     return;
   inorder(node->left, result);
