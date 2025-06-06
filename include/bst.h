@@ -4,10 +4,10 @@
 #include <algorithm>
 #include <vector>
 #include <utility>
-#include <iostream>  // Для отладки
+#include <iostream>
 
 template <typename T>
-class BinarySearchTree {
+class BST {
 private:
     struct TreeNode {
         T value;
@@ -133,9 +133,9 @@ private:
     }
 
 public:
-    BinarySearchTree() : root_node(nullptr) {}
+    BST() : root_node(nullptr) {}
     
-    ~BinarySearchTree() {
+    ~BST() {
         delete_tree(root_node);
     }
 
@@ -164,7 +164,6 @@ public:
     int depth() const {
         return calculate_depth(root_node);
     }
-
     std::vector<std::pair<T, int>> get_frequencies() const {
         std::vector<std::pair<T, int>> freq;
         collect_frequencies(root_node, freq);
