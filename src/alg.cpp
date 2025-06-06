@@ -2,66 +2,60 @@
 #include <iostream>
 #include <fstream>
 #include <locale>
+#include <cstdlib>
 #include <string>
 #include <cctype>
 #include <vector>
 #include <algorithm>
 #include "bst.h"
 
-std::string toLowerCase(const std::string& str) {
-    std::string result;
-    for (char ch : str) {
-        result += std::tolower(ch);
-    }
-    return result;
+bool isLetter(char c) {
+    return std::isalpha(static_cast<unsigned char>(c));
 }
 
-bool isAlphabetic(char ch) {
-    return std::isalpha(ch);
-}
-
-void makeTree(BST<std::string>& tree, const char* filename) {
-    std::ifstream fileStream(filename);
-    if (!fileStream) {
-        std::cerr << "Error opening file!" << std::endl;
+void buildWordTree(BST<std::string>& tree, const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open file '" << filename << "'" << std::endl;
         return;
     }
 
-    std::string wordBuffer;
+    std::string currentWord;
     char ch;
-    while (fileStream.get(ch)) {
-        if (isAlphabetic(ch)) {
-            wordBuffer += std::tolower(ch);
-        } else if (!wordBuffer.empty()) {
-            tree.insert(wordBuffer);
-            wordBuffer.clear();
+
+    while (file.get(ch)) {
+        if (isLetter(ch)) {
+            currentWord += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+        }
+        else if (!currentWord.empty()) {
+            tree.insert(currentWord);
+            currentWord.clear();
         }
     }
 
-    if (!wordBuffer.empty()) {
-        tree.insert(wordBuffer);
+    if (!currentWord.empty()) {
+        tree.insert(currentWord);
     }
 
-    fileStream.close();
+    file.close();
 }
 
-void printFreq(const BST<std::string>& tree) {
-    auto frequencyList = tree.get_frequencies();
+void printFreq(BST<std::string>& tree) {
+    std::vector<std::pair<std::string, int>> frequencies = tree.get_frequencies();
 
-    std::sort(frequencyList.begin(), frequencyList.end(), [](const auto& a, const auto& b) {
+    std::sort(frequencies.begin(), frequencies.end(), [](const auto& a, const auto& b) {
         return a.second > b.second;
         });
 
-    std::ofstream outFile("freq.txt");
-    if (!outFile) {
-        std::cerr << "Unable to open output file!" << std::endl;
+    std::ofstream outputFile("freq.txt");
+    if (!outputFile) {
+        std::cerr << "Error opening result file!" << std::endl;
         return;
     }
-
-    for (const auto& pair : frequencyList) {
+    for (const auto& pair : frequencies) {
         std::cout << pair.first << " " << pair.second << std::endl;
-        outFile << pair.first << " " << pair.second << std::endl;
+        outputFile << pair.first << " " << pair.second << std::endl;
     }
 
-    outFile.close();
+    outputFile.close();
 }
