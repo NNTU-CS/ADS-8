@@ -3,7 +3,7 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
-#include  "bst.h"
+#include  "../include/bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream input_file(filename);
@@ -13,7 +13,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     }
     std::string current_word;
     char ch;
-
     while (input_file.get(ch)) {
         if (std::isupper(static_cast<unsigned char>(ch))) {
             ch = std::tolower(static_cast<unsigned char>(ch));
@@ -28,26 +27,24 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     if (!current_word.empty()) {
         tree.add(current_word);
     }
-    std::cout << "Tree depth: " << tree.depth() << std::endl;
+    std::cout << tree.depth() << std::endl;
 }
 
-bool compareFrequencyPairs(const std::pair<std::string, int>& a, 
-                          const std::pair<std::string, int>& b) {
+bool compareFrequencies(const std::pair<std::string, int>& a, 
+                       const std::pair<std::string, int>& b) {
     return a.second > b.second;
 }
 
 void printFreq(BST<std::string>& tree) {
-    std::vector<std::pair<std::string, int>> freq_list = tree.getFrequencies();
-    std::sort(freq_list.begin(), freq_list.end(), compareFrequencyPairs);
+    std::vector<std::pair<std::string, int>> frequencies = tree.getFrequencies();
+    std::sort(frequencies.begin(), frequencies.end(), compareFrequencies);
     
-    std::ofstream output_file("result/freq.txt");
-    if (!output_file) {
-        std::cerr << "Error creating output file" << std::endl;
-        return;
-    }
+    system("mkdir -p result");
+    
+    std::ofstream outputFile("result/freq.txt");
 
-    for (const auto& [word, count] : freq_list) {
-        std::cout << word << " - " << count << "\n";
-        output_file << word << " - " << count << "\n";
+    for (const auto& pair : frequencies) {
+        std::cout << pair.first << " - " << pair.second << std::endl;
+        outputFile << pair.first << " - " << pair.second << std::endl;
     }
 }
