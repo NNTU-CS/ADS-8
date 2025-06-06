@@ -50,22 +50,16 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 }
 
 void printFreq(const BST<std::string>& tree) {
-    // Use getFrequencies() instead of toVector()
     std::vector<std::pair<std::string, int>> words = tree.getFrequencies();
-    
     std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
         return a.second > b.second;
     });
-
-    // Create directory if it doesn't exist
     mkdir("result", 0777);
-    
     std::ofstream file("result/freq.txt");
     if (!file.is_open()) {
         std::cerr << "Failed to create output file!" << std::endl;
         return;
     }
-    
     for (const auto& pair : words) {
         std::cout << pair.first << " - " << pair.second << '\n';
         file << pair.first << " - " << pair.second << '\n';
