@@ -48,7 +48,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 }
 
 void printFreq(BST<std::string>& tree) {
-    std::vector<std::pair<std::string, int>> frequencies = tree.get_frequencies();
+    std::vector<std::pair<std::string, int>> frequencies = tree.getFrequencies();
 
     std::sort(frequencies.begin(), frequencies.end(), [](const auto& a, const auto& b) {
         return a.second > b.second;
