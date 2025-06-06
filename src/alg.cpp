@@ -24,6 +24,12 @@ bool is_letter(char c) {
 
 }  // namespace
 
+// Version for const char* (needed by tests)
+void makeTree(BST<std::string>& tree, const char* filename) {
+    makeTree(tree, std::string(filename));
+}
+
+// Version for std::string
 void makeTree(BST<std::string>& tree, const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
