@@ -10,7 +10,7 @@
 
 template <typename T>
 class BST {
-private:
+ private:
     struct Node {
         T data;
         int count;
@@ -29,7 +29,7 @@ private:
     void inOrderTraversal(const Node* node,
         std::vector<std::pair<T, int>>& frequencies) const;
 
-public:
+ public:
     BST() : root(nullptr) {}
     ~BST();
 
@@ -72,11 +72,9 @@ void BST<T>::insertInternal(Node*& node, const T& data) {
 
     if (data < node->data) {
         insertInternal(node->left, data);
-    }
-    else if (data > node->data) {
+    } else if (data > node->data) {
         insertInternal(node->right, data);
-    }
-    else {
+    } else {
         node->count++;
     }
 }
@@ -106,11 +104,9 @@ const typename BST<T>::Node* BST<T>::findNode(const Node* node, const T& value) 
 
     if (value == node->data) {
         return node;
-    }
-    else if (value < node->data) {
+    } else if (value < node->data) {
         return findNode(node->left, value);
-    }
-    else {
+    } else {
         return findNode(node->right, value);
     }
 }
