@@ -91,7 +91,7 @@ class BST {
     traverseInOrder(rootNode, result);
     
     std::sort(result.begin(), result.end(), [](const std::pair<T, int>& a, const std::pair<T, int>& b) {
-      return a.second < b.second; // Ошибка: сортировка по возрастанию вместо убывания
+      return a.second > b.second;
     });
 
     for (const auto& pair : result) {
