@@ -13,7 +13,7 @@ bool isLetter(char c) {
     return std::isalpha(static_cast<unsigned char>(c));
 }
 
-void buildWordTree(BST<std::string>& tree, const std::string& filename) {
+void makeTree(BST<std::string>& tree, const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
         std::cerr << "Error: Could not open file '" << filename << "'" << std::endl;
