@@ -3,77 +3,105 @@
 #define INCLUDE_BST_H_
 
 #include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <stack>
 #include <string>
-#include <functional>
+#include <vector>
 
-template<typename T>
+template <typename T>
+class Node {
+ public:
+  T word;
+  int quantity;
+  Node* left_point;
+  Node* right_pointer;
+  explicit Node(T value)
+      : word(value), quantity(1), left_point(nullptr), right_pointer(nullptr) {}
+};
+
+template <typename T>
 class BST {
  private:
-  struct Node {
-    T key;
-    int count;
-    Node* left;
-    Node* right;
-    explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
-  };
-  Node* root = nullptr;
+  Node<T>* root;
+  std::vector<Node<T>*> node_storage;
+
+  void insert(Node<T>*& node, T word) {
+    if (node == nullptr) {
+      node = new Node<T>(word);
+      node_storage.push_back(node);
+    } else if (word == node->word) {
+      node->quantity++;
+    } else if (word < node->word) {
+      insert(node->left_point, word);
+    } else {
+      insert(node->right_pointer, word);
+    }
+  }
+
+int depth(Node<T>* node) const {
+  if (!node) return -1;
+  return 1 + std::max(depth(node->left_point), depth(node->right_pointer));
+}
+
+  int search(Node<T>* node, T word) const {
+    if (node == nullptr) return 0;
+    if (word == node->word) return node->quantity;
+    return word < node->word ? search(node->left_point, word)
+                             : search(node->right_pointer, word);
+  }
+
+  void inOrder(Node<T>* root, std::vector<Node<T>*>& nodes) const {
+    std::stack<Node<T>*> stack;
+    Node<T>* current = root;
+
+    while (current || !stack.empty()) {
+      while (current) {
+        stack.push(current);
+        current = current->left_point;
+      }
+
+      current = stack.top();
+      stack.pop();
+      nodes.push_back(current);
+
+      current = current->right_pointer;
+    }
+  }
+
+  void clear(Node<T>* node) {
+    if (node != nullptr) {
+      clear(node->left_point);
+      clear(node->right_pointer);
+      delete node;
+    }
+  }
 
  public:
-  BST() = default;
-  ~BST() { destroy(root); }
+  BST() : root(nullptr) {}
 
-  void insert(const T& value) { root = insert(root, value); }
-  int search(const T& value) const {
-    Node* n = search(root, value);
-    return n ? n->count : 0;
-  }
-  int depth() const {
-    if (!root) return 0;
-    return depth(root) - 1;
-  }
-  template<typename Vis>
-  void traverseInOrder(Vis vis) const { traverseInOrder(root, vis); }
-  Node* getRoot() const { return root; }
+  void insert(T word) { insert(root, word); }
 
- private:
-  Node* insert(Node* node, const T& value) {
-    if (!node) return new Node(value);
-    if (value < node->key)
-      node->left = insert(node->left, value);
-    else if (value > node->key)
-      node->right = insert(node->right, value);
-    else
-      ++node->count;
-    return node;
-  }
+  int search(T word) const { return search(root, word); }
 
-  Node* search(Node* node, const T& value) const {
-    if (!node) return nullptr;
-    if (value < node->key) return search(node->left, value);
-    if (value > node->key) return search(node->right, value);
-    return node;
-  }
+  int depth() const { return depth(root); }
 
-  int depth(Node* node) const {
-    if (!node) return 0;
-    int dl = depth(node->left);
-    int dr = depth(node->right);
-    return std::max(dl, dr) + 1;
-  }
+  ~BST() { clear(root); }
 
-  template<typename Vis>
-  void traverseInOrder(Node* node, Vis vis) const {
-    if (!node) return;
-    traverseInOrder(node->left, vis);
-    vis(node->key, node->count);
-    traverseInOrder(node->right, vis);
-  }
+  void printSortedByFrequency() {
+    std::vector<Node<T>*> nodes;
+    inOrder(root, nodes);
 
-  void destroy(Node* node) {
-    if (!node) return;
-    destroy(node->left);
-    destroy(node->right);
-    delete node;
+    std::sort(nodes.begin(), nodes.end(),
+              [](const Node<T>* a, const Node<T>* b) {
+                return a->quantity > b->quantity;
+              });
+
+    std::ofstream out("freq.txt");
+    for (const auto& node : nodes) {
+      std::cout << node->word << ": " << node->quantity << "\n";
+      if (out) out << node->word << ": " << node->quantity << "\n";
+    }
   }
 };
 
