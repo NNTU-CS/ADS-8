@@ -1,5 +1,6 @@
 // Copyright 2021 NNTU-CS
 #include <string>
+#include <iostream>
 #include "bst.h"
 using std::cout;
 using std::endl;
