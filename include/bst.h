@@ -64,7 +64,10 @@ class BST {
 
   void insert(const T& value) { root = insert(root, value); }
 
-  bool search(const T& value) const { return search(root, value) != nullptr; }
+  size_t search(const T& value) const {
+    Node* node = search(root, value);
+    return node ? node->count : 0;
+  }
 
   size_t depth() const { return depth(root); }
 
