@@ -22,7 +22,7 @@ bool is_letter(char c) {
     return std::isalpha(static_cast<unsigned char>(c));
 }
 
-}
+}  // namespace
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
@@ -34,7 +34,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     std::string word;
     char ch;
     while (file.get(ch)) {
-        if (isLetter(ch)) {
+        if (is_letter(ch)) {
             word += std::tolower(ch);
         } else if (!word.empty()) {
             tree.insert(word);
