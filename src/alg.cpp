@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <sys/stat.h>
 #include "bst.h"
 
 namespace {
@@ -42,22 +43,32 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         }
     }
 
-  if (!word.empty()) tree.insert(word);
-  file.close();
+    if (!word.empty()) {
+        tree.insert(word);
     }
+    file.close();
 }
 
 void printFreq(const BST<std::string>& tree) {
-    std::vector<std::pair<std::string, int>> words = tree.toVector();
-    std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) { return a.second > b.second; });
+    // Use getFrequencies() instead of toVector()
+    std::vector<std::pair<std::string, int>> words = tree.getFrequencies();
+    
+    std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
+        return a.second > b.second;
+    });
+
+    // Create directory if it doesn't exist
+    mkdir("result", 0777);
+    
     std::ofstream file("result/freq.txt");
     if (!file.is_open()) {
-        std::cerr << "File is not open!" << std::endl;
+        std::cerr << "Failed to create output file!" << std::endl;
         return;
     }
+    
     for (const auto& pair : words) {
-        std::cout << pair.first << "-" << pair.second << '\n';
-        file << pair.first << "-" << pair.second << '\n';
+        std::cout << pair.first << " - " << pair.second << '\n';
+        file << pair.first << " - " << pair.second << '\n';
     }
     file.close();
 }
