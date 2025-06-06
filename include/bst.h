@@ -12,20 +12,20 @@ class BST {
   BST();
   ~BST();
 
-  // Вставка слова (если слово уже есть — просто ++count в узле)
+  // Вставка слова (если слово уже есть — ++count в узле)
   void insert(const T& value);
 
-  // Проверка наличия ключа: true, если есть
+  // Проверка наличия ключа: true, если найден
   bool search(const T& value) const;
 
   // Глубина (высота) дерева:
-  // 0, если пустое; иначе — максимальное число узлов от корня до любого листа
+  // 0, если пустое; иначе = depthNode(root_) + 1
   int depth() const;
 
   // Общее число узлов (количество уникальных слов)
   int count() const;
 
-  // Обход «in-order»: заполняет внешний вектор парами {ключ, счётчик-вхождений}
+  // Обход «in-order»: заполняет vec парами {ключ, счётчик-вхождений}
   void toVector(std::vector<std::pair<T, int>>* vec) const;
 
  private:
@@ -39,7 +39,6 @@ class BST {
 
   Node* root_;
 
-  // Вспомогательные рекурсивные функции
   Node* insertNode(Node* node, const T& value);
   Node* searchNode(Node* node, const T& value) const;
   int depthNode(Node* node) const;
@@ -97,7 +96,10 @@ typename BST<T>::Node* BST<T>::searchNode(Node* node, const T& value) const {
 
 template <typename T>
 int BST<T>::depth() const {
-  return depthNode(root_);
+  if (root_ == nullptr) {
+    return 0;
+  }
+  return depthNode(root_) + 1;
 }
 
 template <typename T>
