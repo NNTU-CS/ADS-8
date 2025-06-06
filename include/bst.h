@@ -1,106 +1,162 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
-#include <string>
 #include <iostream>
-#include <queue>
-#include <vector>
 #include <algorithm>
-
+#include <vector>
 template <typename T>
 class BST {
  private:
   struct Node {
     T data;
-    int frequency;
+    int count;
     Node* left;
     Node* right;
-        
-    Node(const T& value) : data(value), frequency(1), left(nullptr), right(nullptr) {}
   };
-    
   Node* root;
-    
-    // Helper function to insert a node
-  Node* insertHelper(Node* node, const T& value) {
-    if (node == nullptr) {
-      return new Node(value);
-    }
-        
-    if (value == node->data) {
-      node->frequency++;
-    } else if (value < node->data) {
-      node->left = insertHelper(node->left, value);
-    } else {
-      node->right = insertHelper(node->right, value);
-    }
-        
-    return node;
-  }
-    
-  int depthHelper(Node* node) const {
-    if (node == nullptr) return 0;
-    return 1 + std::max(depthHelper(node->left), depthHelper(node->right));
-  }
-    
-    // Helper function to delete the tree
-  void deleteTree(Node* node) {
-    if (node == nullptr) return;
-    deleteTree(node->left);
-    deleteTree(node->right);
-    delete node;
-  }
-    
-    // Helper function to collect frequency data
-  void collectFrequencyData(Node* node, std::vector<std::pair<T, int>>& data) const {
-    if (node == nullptr) return;
-    data.push_back({node->data, node->frequency});
-    collectFrequencyData(node->left, data);
-    collectFrequencyData(node->right, data);
-  }
+  Node* addNode(Node* root, T value);
+  Node* delNode(Node* root, T value);
+  void delTree(Node* root);
+  int searchNode(Node* root, T value);
+  void printTree(Node* root);
+  int getHeight(Node* root);
+  void treeToVector(Node* root, std::vector<std::pair<T, int>>&result);
 
  public:
   BST() : root(nullptr) {}
-    
-  ~BST() {
-    deleteTree(root);
-  }
-    
-    // Insert a value into the tree
-  void insert(const T& value) {
-    root = insertHelper(root, value);
-  }
-    
-    // Get the depth (height) of the tree
-  int depth() const {
-    return depthHelper(root);
-  }
-    
-    // Search for a value in the tree, returns frequency if found, 0 if not found
-  int search(const T& value) const {
-    Node* current = root;
-    while (current != nullptr) {
-      if (value == current->data) {
-        return current->frequency;
-      }
-      if (value < current->data) {
-        current = current->left;
-      } else {
-        current = current->right;
-      }
-    }
-  return 0;
-  }
-    
-    // Get sorted frequency data
-  std::vector<std::pair<T, int>> getFrequencyData() const {
-    std::vector<std::pair<T, int>> data;
-    collectFrequencyData(root, data);
-    std::sort(data.begin(), data.end(),
-           [](const auto& a, const auto& b) {
-      return a.second > b.second;
-    });
-    return data;
+  ~BST();
+  void add(T value);
+  void del(T value);
+  void clear();
+  int search(T value);
+  void print();
+  int depth();
+  std::vector<std::pair<T, int>> toVector() {
+    std::vector<std::pair<T, int>> result;
+    treeToVector(root, result);
+    return result;
   }
 };
+
+template <typename T>
+typename BST<T>::Node* BST<T>::addNode(Node* root, T value) {
+  if (root == nullptr) {
+    root = new Node;
+    root->data = value;
+    root->count = 1;
+    root->left = root->right = nullptr;
+  } else if (value < root->data) {
+    root->left = addNode(root->left, value);
+  } else if (value > root->data) {
+    root->right = addNode(root->right, value);
+  } else {
+    root->count++;
+  }
+  return root;
+}
+template <typename T>
+BST<T>::~BST() {
+  clear();
+}
+template <typename T>
+void BST<T>::add(T value) {
+  root = addNode(root, value);
+}
+template <typename T>
+int BST<T>::searchNode(Node* root, T value) {
+  if (root == nullptr)
+    return 0;
+  else if (value < root->data)
+    return searchNode(root->left, value);
+  else if (value > root->data)
+    return searchNode(root->right, value);
+  else
+    return root->count;
+}
+template <typename T>
+int BST<T>::search(T value) {
+  return searchNode(root, value);
+}
+template <typename T>
+void BST<T>::printTree(Node* root) {
+  if (root == nullptr) return;
+  printTree(root->left);
+  for (int i = 0; i < root->count; i++) std::cout << root->data << " ";
+  printTree(root->right);
+}
+template <typename T>
+void BST<T>::print() {
+  printTree(root);
+  return;
+}
+template <typename T>
+int BST<T>::getHeight(Node* root) {
+  if (root == nullptr) return -1;
+  int left = getHeight(root->left);
+  int right = getHeight(root->right);
+  return std::max(left, right) + 1;
+}
+
+template <typename T>
+void BST<T>::treeToVector(Node* root, std::vector<std::pair<T, int>>& result) {
+  if (root == nullptr) return;
+  treeToVector(root->left, result);
+  result.push_back({root->data, root->count});
+  treeToVector(root->right, result);
+}
+
+template <typename T>
+int BST<T>::depth() {
+  return getHeight(root);
+}
+template <typename T>
+void BST<T>::delTree(Node* root) {
+  if (root == nullptr) return;
+  delTree(root->left);
+  delTree(root->right);
+  delete root;
+}
+template <typename T>
+void BST<T>::clear() {
+  delTree(root);
+  root = nullptr;
+}
+template <typename T>
+typename BST<T>::Node* BST<T>::delNode(Node* root, T value) {
+  Node *p, *v;
+  if (root == nullptr) {
+    return root;
+  } else if (value < root->data) {
+    root->left = delNode(root->left, value);
+  } else if (value > root->data) {
+    root->right = delNode(root->right, value);
+  } else {
+    p = root;
+    if (root->right == nullptr) {
+      root = root->left;
+    } else if (root->left == nullptr) {
+      root = root->right;
+    } else {
+      v = root->left;
+      if (v->right != nullptr) {
+        while (v->right->right != nullptr) v = v->right;
+        root->data = v->right->data;
+        root->count = v->right->count;
+        p = v->right;
+        v->right = v->right->left;
+      } else {
+        root->data = v->data;
+        root->count = v->count;
+        p = v;
+        root->left = root->left->left;
+      }
+    }
+    delete p;
+  }
+  return root;
+}
+template <typename T>
+void BST<T>::del(T value) {
+  root = delNode(root, value);
+}
 #endif  // INCLUDE_BST_H_
