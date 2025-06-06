@@ -22,37 +22,31 @@ bool is_letter(char c) {
     return std::isalpha(static_cast<unsigned char>(c));
 }
 
-}  // namespace
-
-// Version for const char* (needed by tests)
-void makeTree(BST<std::string>& tree, const char* filename) {
-    makeTree(tree, std::string(filename));
 }
 
-// Version for std::string
-void makeTree(BST<std::string>& tree, const std::string& filename) {
+void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
-    if (!file.is_open()) {
-        std::cerr << "Error: Failed to open file '" << filename << "'\n";
+    if (!file) {
+        std::cerr << "File error!" << std::endl;
         return;
     }
 
-    std::string current_word;
-    current_word.reserve(32);
-
+    std::string word;
     char ch;
     while (file.get(ch)) {
-        if (is_letter(ch)) {
-            current_word += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
-        } else if (!current_word.empty()) {
-            tree.insert(current_word);
-            current_word.clear();
+        if (isLetter(ch)) {
+            word += std::tolower(ch);
+        } else if (!word.empty()) {
+            tree.insert(word);
+            word.clear();
         }
     }
 
-    if (!current_word.empty()) {
-        tree.insert(current_word);
+    if (!word.empty()) {
+        tree.insert(word);
     }
+
+    file.close();
 }
 
 void printFreq(BST<std::string>& tree) {
