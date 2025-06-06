@@ -8,8 +8,8 @@
 #include <utility>
 #include "bst.h"
 
-static bool frequencyLess(const std::pair<std::string, int>& a,
-                          const std::pair<std::string, int>& b) {
+static bool compareByFrequency(const std::pair<std::string, int>& a,
+                               const std::pair<std::string, int>& b) {
   if (a.second != b.second) {
     return a.second > b.second;
   }
@@ -23,21 +23,21 @@ void buildTree(BST<std::string>& tree, const char* filepath) {
     return;
   }
 
-  std::string accumulator;
+  std::string buffer;
   char ch;
   while (inputFile.get(ch)) {
     if (std::isalpha(static_cast<unsigned char>(ch))) {
-      accumulator.push_back(
+      buffer.push_back(
           static_cast<char>(std::tolower(static_cast<unsigned char>(ch))));
     } else {
-      if (!accumulator.empty()) {
-        tree.insert(accumulator);
-        accumulator.clear();
+      if (!buffer.empty()) {
+        tree.insert(buffer);
+        buffer.clear();
       }
     }
   }
-  if (!accumulator.empty()) {
-    tree.insert(accumulator);
+  if (!buffer.empty()) {
+    tree.insert(buffer);
   }
   inputFile.close();
 }
@@ -46,7 +46,7 @@ void outputFrequencies(BST<std::string>& tree) {
   std::vector<std::pair<std::string, int>> freqList;
   tree.collect(&freqList);
 
-  std::sort(freqList.begin(), freqList.end(), frequencyLess);
+  std::sort(freqList.begin(), freqList.end(), compareByFrequency);
 
   std::ofstream report("result/freq.txt");
   if (!report.is_open()) {
