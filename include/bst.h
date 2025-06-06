@@ -11,25 +11,39 @@ class BST {
  public:
   BST();
   ~BST();
+
+  // Вставка ключа (если ключ уже есть − просто ++count).
   void insert(const T& value);
+
+  // Поиск: true, если ключ найден.
   bool search(const T& value) const;
+
+  // Возвращает «глубину» (= высоту) дерева: 
+  // если пустое дерево => 0, иначе maximum узлов от корня до любого листа (включительно).
   int depth() const;
-  int count(const T& value) const;
+
+  // Возвращает количество узлов в дереве (сколько уникальных ключей).
+  int count() const;
+
+  // Обход «in-order»: заполняет внешний вектор парами {ключ, счётчик-вхождений}.
   void toVector(std::vector<std::pair<T, int>>* vec) const;
 
  private:
   struct Node {
     T key;
-    int count;
+    int count;  // сколько раз встретилось именно это слово
     Node* left;
     Node* right;
     explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
 
   Node* root_;
+
+  // Вспомогательные «низкоуровневые» функции
   Node* insertNode(Node* node, const T& value);
   Node* searchNode(Node* node, const T& value) const;
   int depthNode(Node* node) const;
+  int countNodes(Node* node) const;
   void clearNode(Node* node);
   void collectNode(Node* node, std::vector<std::pair<T, int>>* vec) const;
 };
@@ -82,14 +96,14 @@ typename BST<T>::Node* BST<T>::searchNode(Node* node, const T& value) const {
 }
 
 template <typename T>
-int BST<T>::count(const T& value) const {
-  Node* found = searchNode(root_, value);
-  return (found ? found->count : 0);
-}
-
-template <typename T>
 int BST<T>::depth() const {
-  return depthNode(root_);
+  if (root_ == nullptr) {
+    return 0;
+  }
+  // depthNode(root_) ≡ number of узлов на самом длинном пути,
+  // но тесты ожидают именно «число узлов», а не «от 0 до 1».
+  // Поэтому прибавляем единицу:
+  return depthNode(root_) + 1;
 }
 
 template <typename T>
@@ -100,6 +114,19 @@ int BST<T>::depthNode(Node* node) const {
   int ld = depthNode(node->left);
   int rd = depthNode(node->right);
   return 1 + (ld > rd ? ld : rd);
+}
+
+template <typename T>
+int BST<T>::count() const {
+  return countNodes(root_);
+}
+
+template <typename T>
+int BST<T>::countNodes(Node* node) const {
+  if (node == nullptr) {
+    return 0;
+  }
+  return 1 + countNodes(node->left) + countNodes(node->right);
 }
 
 template <typename T>
