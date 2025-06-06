@@ -39,8 +39,6 @@ void printFreq(BST<std::string>& tree) {
     std::vector<std::pair<std::string, int>> frequencies = tree.getFrequencies();
     std::sort(frequencies.begin(), frequencies.end(), compareFrequencies);
     
-    system("mkdir -p result");
-    
     std::ofstream outputFile("result/freq.txt");
 
     for (const auto& pair : frequencies) {
