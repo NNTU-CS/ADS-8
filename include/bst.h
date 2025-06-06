@@ -24,20 +24,20 @@ class BST {
   BST();
   ~BST();
 
-  // Добавляет оператор ключа или увеличивает счётчик, если ключ уже есть.
+  // Вставка слова (при существовании ++occurrences)
   void insert(const T& value);
 
-  // Проверяет, есть ли ключ в дереве (true/false).
-  bool contains(const T& value) const;
+  // Возвращает число вхождений слова (0, если нет)
+  int search(const T& value) const;
 
   // Возвращает глубину (высоту) дерева:
-  // если пустое — 0, иначе — максимальное число узлов от корня до листа включительно.
+  // 0, если пустое; иначе — максимальное число узлов от корня до листа включительно.
   int depth() const;
 
-  // Считает общее число узлов (уникальных ключей) в дереве.
+  // Возвращает общее число узлов (уникальных ключей)
   int count() const;
 
-  // Заполняет внешний вектор парами {ключ, число вхождений} в порядке возрастания ключей.
+  // Обходит дерево «in-order» и заполняет вектор парами {ключ, occurrences}
   void collect(std::vector<std::pair<T, int>>* output) const;
 
  private:
@@ -81,8 +81,9 @@ TreeNode<T>* BST<T>::addNode(TreeNode<T>* node, const T& value) {
 }
 
 template <typename T>
-bool BST<T>::contains(const T& value) const {
-  return (findNode(rootPtr, value) != nullptr);
+int BST<T>::search(const T& value) const {
+  TreeNode<T>* found = findNode(rootPtr, value);
+  return (found ? found->occurrences : 0);
 }
 
 template <typename T>
