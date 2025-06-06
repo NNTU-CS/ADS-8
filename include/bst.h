@@ -3,156 +3,94 @@
 #define INCLUDE_BST_H_
 
 #include <string>
-#include <vector>
 #include <utility>
-#include <algorithm>
+#include <vector>
 
 template <typename T>
-struct TreeNode {
+struct Node {
   T key;
-  int occurrences;
-  TreeNode* left;
-  TreeNode* right;
+  int cnt;
+  Node* left;
+  Node* right;
 
-  explicit TreeNode(const T& value)
-      : key(value), occurrences(1), left(nullptr), right(nullptr) {}
+  explicit Node(const T& value) : key(value), cnt(1), left(nullptr), right(nullptr) {}
 };
 
 template <typename T>
 class BST {
  public:
-  BST();
-  ~BST();
+  BST() : root_(nullptr) {}
 
-  // Вставка слова: если слово есть в дереве − ++occurrences, иначе создаём новый узел.
-  void insert(const T& value);
+  ~BST() { Destroy(root_); }
 
-  // Поиск: возвращает число вхождений value (0, если узла нет).
-  int search(const T& value) const;
+  BST(const BST&) = delete;
+  BST& operator=(const BST&) = delete;
 
-  // Глубина (высота) дерева: 
-  // если пустое − 0, иначе − максимальное число узлов от корня до листа включительно.
-  int depth() const;
+  void insert(const T& value) { root_ = InsertNode(root_, value); }
 
-  // Общее число узлов (уникальных ключей).
-  int count() const;
+  int search(const T& value) const {
+    Node<T>* node = root_;
+    while (node != nullptr) {
+      if (value < node->key) {
+        node = node->left;
+      } else if (node->key < value) {
+        node = node->right;
+      } else {
+        return node->cnt;
+      }
+    }
+    return 0;
+  }
 
-  // Обход “in‐order”: заполняет внешний вектор парами {ключ, occurrences}.
-  void collect(std::vector<std::pair<T, int>>* output) const;
+  int depth() const { return ComputeDepth(root_) - 1; }
+
+  void getWordFrequencies(std::vector<std::pair<T, int>>& output) const {
+    TraverseInOrder(root_, output);
+  }
 
  private:
-  TreeNode<T>* rootPtr;
+  Node<T>* root_;
 
-  TreeNode<T>* addNode(TreeNode<T>* node, const T& value);
-  TreeNode<T>* findNode(TreeNode<T>* node, const T& value) const;
-  int computeDepth(TreeNode<T>* node) const;
-  int computeCount(TreeNode<T>* node) const;
-  void destroy(TreeNode<T>* node);
-  void collectInOrder(TreeNode<T>* node,
-                      std::vector<std::pair<T, int>>* output) const;
-};
-
-template <typename T>
-BST<T>::BST() : rootPtr(nullptr) {}
-
-template <typename T>
-BST<T>::~BST() {
-  destroy(rootPtr);
-}
-
-template <typename T>
-void BST<T>::insert(const T& value) {
-  rootPtr = addNode(rootPtr, value);
-}
-
-template <typename T>
-TreeNode<T>* BST<T>::addNode(TreeNode<T>* node, const T& value) {
-  if (node == nullptr) {
-    return new TreeNode<T>(value);
-  }
-  if (value < node->key) {
-    node->left = addNode(node->left, value);
-  } else if (value > node->key) {
-    node->right = addNode(node->right, value);
-  } else {
-    node->occurrences++;
-  }
-  return node;
-}
-
-template <typename T>
-int BST<T>::search(const T& value) const {
-  TreeNode<T>* found = findNode(rootPtr, value);
-  return (found ? found->occurrences : 0);
-}
-
-template <typename T>
-TreeNode<T>* BST<T>::findNode(TreeNode<T>* node, const T& value) const {
-  if (node == nullptr) {
-    return nullptr;
-  }
-  if (value < node->key) {
-    return findNode(node->left, value);
-  } else if (value > node->key) {
-    return findNode(node->right, value);
-  } else {
+  Node<T>* InsertNode(Node<T>* node, const T& value) {
+    if (node == nullptr) {
+      return new Node<T>(value);
+    }
+    if (value == node->key) {
+      ++node->cnt;
+    } else if (value < node->key) {
+      node->left = InsertNode(node->left, value);
+    } else {
+      node->right = InsertNode(node->right, value);
+    }
     return node;
   }
-}
 
-template <typename T>
-int BST<T>::depth() const {
-  return computeDepth(rootPtr);
-}
-
-template <typename T>
-int BST<T>::computeDepth(TreeNode<T>* node) const {
-  if (node == nullptr) {
-    return 0;
+  int ComputeDepth(Node<T>* node) const {
+    if (node == nullptr) {
+      return 0;
+    }
+    int left_depth = ComputeDepth(node->left);
+    int right_depth = ComputeDepth(node->right);
+    return (left_depth > right_depth ? left_depth : right_depth) + 1;
   }
-  int leftDepth = computeDepth(node->left);
-  int rightDepth = computeDepth(node->right);
-  return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
-}
 
-template <typename T>
-int BST<T>::count() const {
-  return computeCount(rootPtr);
-}
-
-template <typename T>
-int BST<T>::computeCount(TreeNode<T>* node) const {
-  if (node == nullptr) {
-    return 0;
+  void TraverseInOrder(Node<T>* node, std::vector<std::pair<T, int>>& output) const {
+    if (node == nullptr) {
+      return;
+    }
+    TraverseInOrder(node->left, output);
+    output.emplace_back(node->key, node->cnt);
+    TraverseInOrder(node->right, output);
   }
-  return 1 + computeCount(node->left) + computeCount(node->right);
-}
 
-template <typename T>
-void BST<T>::collect(std::vector<std::pair<T, int>>* output) const {
-  collectInOrder(rootPtr, output);
-}
-
-template <typename T>
-void BST<T>::collectInOrder(
-    TreeNode<T>* node,
-    std::vector<std::pair<T, int>>* output) const {
-  if (node == nullptr) {
-    return;
+  void Destroy(Node<T>* node) {
+    if (node == nullptr) {
+      return;
+    }
+    Destroy(node->left);
+    Destroy(node->right);
+    delete node;
   }
-  collectInOrder(node->left, output);
-  output->emplace_back(node->key, node->occurrences);
-  collectInOrder(node->right, output);
-}
-
-template <typename T>
-void BST<T>::destroy(TreeNode<T>* node) {
-  if (node == nullptr) {
-    return;
-  }
-  destroy(node->left);
-  destroy(node->right);
-  delete node;
-}
+};
 
 #endif  // INCLUDE_BST_H_
