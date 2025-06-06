@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <algorithm>
 
 template <typename T>
 class BST {
@@ -13,7 +14,7 @@ class BST {
     size_t count;
     Node* left;
     Node* right;
-    Node(const T& val) : value(val), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(const T& val) : value(val), count(1), left(nullptr), right(nullptr) {}
   };
 
   Node* root;
@@ -57,7 +58,7 @@ class BST {
     }
   }
 
-public:
+ public:
   BST() : root(nullptr) {}
   ~BST() { destroy(root); }
 
@@ -77,5 +78,8 @@ public:
     return result;
   }
 };
+
+void makeTree(BST<std::string>& tree, const char* filename);
+void printFreq(BST<std::string>& tree);
 
 #endif  // INCLUDE_BST_H_
