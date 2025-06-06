@@ -47,8 +47,8 @@ class BST {
 
   size_t depth(Node* node) const {
     if (!node) return 0;
-    return 1 + std::max(depth(node->left), depth(node->right));
-  }
+    return std::max(depth(node->left), depth(node->right)) + (node->left || node->right ? 1 : 0);
+}
 
   void inOrder(Node* node, std::vector<std::pair<T, size_t>>& result) const {
     if (node) {
