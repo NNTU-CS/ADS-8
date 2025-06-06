@@ -29,6 +29,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   fileStream.close();
 }
 
-void printFrequency(BST<std::string>& tree) {
+void printFreq(BST<std::string>& tree) {
     tree.printSortedByFrequency();
 }
