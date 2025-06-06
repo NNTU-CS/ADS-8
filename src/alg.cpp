@@ -42,25 +42,22 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         }
     }
 
-    if (!word.empty()) {
-        tree.insert(word);
+  if (!word.empty()) tree.insert(word);
+  file.close();
     }
 }
 
-void printFreq(BST<std::string>& tree) {
-    auto frequencies = tree.getFrequencies();
-
-    std::sort(frequencies.begin(), frequencies.end(), [](const auto& a, const auto& b) {
-        return a.second > b.second;
-    });
-
-    std::ofstream outputFile("freq.txt");
-    if (!outputFile) {
-        std::cerr << "Error opening result file!" << std::endl;
+void printFreq(const BST<std::string>& tree) {
+    std::vector<std::pair<std::string, int>> words = tree.toVector();
+    std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) { return a.second > b.second; });
+    std::ofstream file("result/freq.txt");
+    if (!file.is_open()) {
+        std::cerr << "File is not open!" << std::endl;
         return;
     }
-    for (const auto& pair : frequencies) {
-        std::cout << pair.first << " " << pair.second << std::endl;
-        outputFile << pair.first << " " << pair.second << std::endl;
+    for (const auto& pair : words) {
+        std::cout << pair.first << "-" << pair.second << '\n';
+        file << pair.first << "-" << pair.second << '\n';
     }
+    file.close();
 }
