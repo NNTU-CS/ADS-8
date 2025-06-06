@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <sys/stat.h>
 #include "bst.h"
 
 namespace {
