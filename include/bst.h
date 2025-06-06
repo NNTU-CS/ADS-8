@@ -56,7 +56,7 @@ class BST {
       return new Node<T>(n);
     }
 
-    if (value < node->key) {
+    if (n < node->key) {
       node->l = insertRecursive(node->l, n);
     } else if (n > node->key) {
       node->r = insertRecursive(node->r, n);
@@ -71,10 +71,10 @@ class BST {
       return node;
     }
 
-    if (value < node->key) {
-      return searchNodeRecursive(node->l, value);
+    if (n < node->key) {
+      return searchNodeRecursive(node->l, n);
     } else {
-      return searchNodeRecursive(node->r, value);
+      return searchNodeRecursive(node->r, n);
     }
   }
 
