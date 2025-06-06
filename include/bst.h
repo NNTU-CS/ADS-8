@@ -1,3 +1,4 @@
+// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
@@ -122,7 +123,7 @@ void BST<T>::printInOrder() const {
 }
 
 template <typename T>
-std::vector<std::pair<T, int>> BST<T>::get_frequencies() const {
+std::vector<std::pair<T, int>> BST<T>::getFrequencies() const {
     std::vector<std::pair<T, int>> frequencies;
     collectFrequencies(root, frequencies);
     return frequencies;
