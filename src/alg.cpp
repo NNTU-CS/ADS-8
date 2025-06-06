@@ -31,7 +31,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 }
 
 void printFreq(const BST<std::string>& tree) {
-    std::vector<std::pair<std::string, int>> words = tree.array_words();
+    std::vector<std::pair<std::string, int>> words = tree.toVector();
     std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) { return a.second > b.second; });
     std::ofstream file("result/freq.txt");
     if (!file.is_open()) {
