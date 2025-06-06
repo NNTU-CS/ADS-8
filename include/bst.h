@@ -3,77 +3,83 @@
 #define INCLUDE_BST_H_
 
 #include <string>
-#include <utility>
 #include <vector>
+#include <utility>
 #include <algorithm>
 
 template <typename T>
-struct Node {
-    T key;
-    int cnt;
-    Node* l;
-    Node* r;
-    explicit Node(const T& n) : key(n), cnt(1), l(nullptr), r(nullptr) {}
-};
-template <typename T>
 class BST {
- public:
-    BST() : rt(nullptr) {}
-    ~BST() { destroyTree(rt); }
-    BST(const BST&) = delete;
-    BST& operator=(const BST&) = delete;
-    void insert(const T& n) { rt = insertRecursive(rt, n); }
-    int search(const T& n) const {
-        Node<T>* f_n = searchNodeRecursive(rt, n);
-        return f_n != nullptr ? f_n->cnt : 0;
-    }
-    int depth() const {
-        return rt == nullptr ? 0 : depthRecursive(rt) - 1;
-    }
-    void getWordFrequencies(std::vector<std::pair<T, int>>& vec) const {
-        getWordFrequenciesRecursive(rt, vec);
-    }
  private:
-    Node<T>* rt;
-    Node<T>* insertRecursive(Node<T>* node, const T& n) {
-        if (node == nullptr) {
-            return new Node<T>(n);
-        }
-        if (n < node->key) {
-            node->l = insertRecursive(node->l, n);
-        } else if (n > node->key) {
-            node->r = insertRecursive(node->r, n);
-        } else {
-            node->cnt++;
-        }
-        return node;
+  struct Node {
+    T word;
+    int count;
+    Node* left;
+    Node* right;
+    explicit Node(const T& w) : word(w), count(1), left(nullptr), right(nullptr) {}
+  };
+  Node* root;
+  void insert(Node*& node, const T& w) {
+    if (!node) {
+      node = new Node(w);
+      return;
     }
-    Node<T>* searchNodeRecursive(Node<T>* node, const T& n) const {
-        if (node == nullptr || node->key == n) {
-            return node;
-        }
-        return searchNodeRecursive(n < node->key ? node->l : node->r, n);
+    if (w < node->word) {
+      insert(node->left, w);
+    } else if (w > node->word) {
+      insert(node->right, w);
+    } else {
+      node->count++;
     }
-    int depthRecursive(Node<T>* node) const {
-        if (node == nullptr) {
-            return 0;
-        }
-        return 1 + std::max(depthRecursive(node->l), depthRecursive(node->r));
+  }
+  void collect(Node* node, std::vector<std::pair<T, int>>& freqList) const {
+    if (!node) {
+      return;
     }
-    void destroyTree(Node<T>* node) {
-        if (node != nullptr) {
-            destroyTree(node->l);
-            destroyTree(node->r);
-            delete node;
-        }
+    collect(node->left, freqList);
+    freqList.emplace_back(node->word, node->count);
+    collect(node->right, freqList);
+  }
+  void clear(Node* node) {
+    if (!node) {
+      return;
     }
-    void getWordFrequenciesRecursive(Node<T>* node, std::vector<std::pair<T, int>>& vec) const {
-        if (node != nullptr) {
-            getWordFrequenciesRecursive(node->l, vec);
-            vec.emplace_back(node->key, node->cnt);
-            getWordFrequenciesRecursive(node->r, vec);
-        }
+    clear(node->left);
+    clear(node->right);
+    delete node;
+  }
+  int search(Node* node, const T& w) const {
+    if (!node) {
+      return 0;
     }
-};
+    if (w < node->word) {
+      return search(node->left, w);
+    } else if (w > node->word) {
+      return search(node->right, w);
+    } else {
+      return node->count;
+    }
+  }
+  int calculateDepth(Node* node) const {
+    if (!node) {
+      return -1;
+    }
+    return 1 + std::max(calculateDepth(node->left), calculateDepth(node->right));
+  }
 
+ public:
+  BST() : root(nullptr) {}
+  ~BST() { clear(root); }
+  void add(const T& w) { insert(root, w); }
+  std::vector<std::pair<T, int>> getFrequencies() const {
+    std::vector<std::pair<T, int>> freqList;
+    collect(root, freqList);
+    return freqList;
+  }
+  int depth() const {
+    return calculateDepth(root);
+  }
+  int search(const T& w) const {
+    return search(root, w);
+  }
+};
 #endif  // INCLUDE_BST_H_
