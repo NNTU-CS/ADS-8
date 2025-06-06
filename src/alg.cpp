@@ -1,80 +1,65 @@
 // Copyright 2021 NNTU-CS
+#include <algorithm>
+#include <cctype>
 #include <fstream>
 #include <iostream>
-#include <cctype>
-#include <vector>
-#include <algorithm>
 #include <string>
 #include <utility>
+#include <vector>
+
 #include "bst.h"
 
+bool compareFrequency(const std::pair<std::string, int>& lhs,
+                      const std::pair<std::string, int>& rhs) {
+  if (lhs.second != rhs.second) {
+    return lhs.second > rhs.second;
+  }
+  return lhs.first < rhs.first;
+}
 
-// Читает файл post по символам, собирает строки-слова в нижний регистр и вставляет в tree.
-static void buildTree(BST<std::string>& tree, const char* filepath) {
-  std::ifstream inputFile(filepath);
-  if (!inputFile.is_open()) {
-    std::cerr << "File error: cannot open '" << filepath << "'." << std::endl;
+void makeTree(BST<std::string>& tree, const char* filename) {
+  std::ifstream input_file(filename, std::ios::in);
+  if (!input_file) {
+    std::cerr << "Ошибка: не удалось открыть файл '" << filename
+              << "' для чтения." << std::endl;
     return;
   }
-
-  std::string buffer;
-  char ch;
-  while (inputFile.get(ch)) {
+  std::string current_word;
+  int ch_int;
+  while ((ch_int = input_file.get()) != EOF) {
+    char ch = static_cast<char>(ch_int);
     if (std::isalpha(static_cast<unsigned char>(ch))) {
-      buffer.push_back(
-          static_cast<char>(std::tolower(static_cast<unsigned char>(ch))));
-    } else {
-      if (!buffer.empty()) {
-        tree.insert(buffer);
-        buffer.clear();
-      }
+      current_word.push_back(std::tolower(static_cast<unsigned char>(ch)));
+    } else if (!current_word.empty()) {
+      tree.insert(current_word);
+      current_word.clear();
     }
   }
-  if (!buffer.empty()) {
-    tree.insert(buffer);
+  if (!current_word.empty()) {
+    tree.insert(current_word);
   }
-  inputFile.close();
 }
 
-// Сортирует вектор пар «(слово, частота)» по частоте убывания, потом по ключу.
-static bool frequencyCompare(const std::pair<std::string, int>& a,
-                             const std::pair<std::string, int>& b) {
-  if (a.second != b.second) {
-    return a.second > b.second;
+void printFreq(BST<std::string>& tree) {
+  std::vector<std::pair<std::string, int>> word_freq;
+  tree.getWordFrequencies(word_freq);
+
+  std::sort(word_freq.begin(), word_freq.end(), compareFrequency);
+
+  const std::string header = "Частотный анализ слов (по убыванию встречаемости):";
+  std::cout << header << std::endl;
+  for (const auto& entry : word_freq) {
+    std::cout << entry.first << ": " << entry.second << std::endl;
   }
-  return a.first < b.first;
-}
 
-// Собирает пары {слово, count} "in‐order", затем сортирует и выводит.
-static void outputFrequencies(BST<std::string>& tree) {
-  std::vector<std::pair<std::string, int>> freqList;
-  tree.collect(&freqList);
-
-  std::sort(freqList.begin(), freqList.end(), frequencyCompare);
-
-  std::ofstream report("result/freq.txt");
-  if (!report.is_open()) {
-    std::cerr << "File error: cannot write to 'result/freq.txt'." << std::endl;
+  std::ofstream output_file("result/freq.txt");
+  if (!output_file) {
+    std::cerr << "Ошибка: не получилось открыть файл 'result/freq.txt' для записи результатов."
+              << std::endl;
     return;
   }
-
-  for (const auto& entry : freqList) {
-    std::cout << entry.first << " " << entry.second << std::endl;
-    report << entry.first << " " << entry.second << std::endl;
+  output_file << header << std::endl;
+  for (const auto& entry : word_freq) {
+    output_file << entry.first << ": " << entry.second << std::endl;
   }
-  report.close();
-}
-
-// === ФУНКЦИИ, КОТОРЫЕ ОЖИДАЮТ ТЕСТЫ ===
-
-// Сигнатура makeTree(BST<std::string>&, const char*), как в тестах.
-// Просто вызывает наш buildTree(...).
-void makeTree(BST<std::string>& tree, const char* filename) {
-  buildTree(tree, filename);
-}
-
-// Сигнатура printFreq(BST<std::string>&), как в тестах.
-// Просто вызывает наш outputFrequencies(...).
-void printFreq(BST<std::string>& tree) {
-  outputFrequencies(tree);
 }
