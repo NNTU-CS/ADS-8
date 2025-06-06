@@ -27,7 +27,7 @@ void makeTree(BST<string>& tree, const char* filename) {
   string word;
   char ch;
   while (file.get(ch)) {
-    if (isalpha(static_cast<unsigned char>(ch))) {
+    if ((ch>='A' && ch<= 'Z') || (ch>='a' && ch<= 'z')) {
       word += tolower(ch);
     } else if (!word.empty()) {
       tree.add(word);
