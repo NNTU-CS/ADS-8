@@ -1,17 +1,11 @@
-#include <cstdlib>
 #include <cctype>
-#include <locale>
 #include <fstream>
-#include <iostream>
 #include <string>
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
-  if (!file) {
-    std::cerr << "File error!" << std::endl;
-    return;
-  }
+  if (!file) return;
 
   std::string currentWord;
   char ch;
@@ -29,5 +23,5 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 }
 
 void printFreq(BST<std::string>& tree) {
-  tree.printSortedByFrequency();  
+  tree.printSortedByFrequency();
 }
