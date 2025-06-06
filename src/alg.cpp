@@ -1,11 +1,11 @@
 // Copyright 2021 NNTU-CS
-#include  <iostream>
-#include  <fstream>
-#include  <locale>
-#include  <cstdlib>
-#include  <cctype>
-#include  <string>
-#include  "bst.h"
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+#include <locale>
+#include <string>
+#include <algorithm>
+#include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
@@ -13,49 +13,32 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     std::cout << "File error!" << std::endl;
     return;
   }
-
-  std::string currentWord;
-  char ch;
-
-  while (file.get(ch)) {
-        // Convert uppercase to lowercase
-    ch = std::tolower(ch);
-        
-        // If character is a letter, add it to current word
-    if (std::isalpha(ch)) {
-      currentWord += ch;
-    }
-        // If we encounter a non-letter and we have a word, process it
-    else if (!currentWord.empty()) {
-      tree.insert(currentWord);
-    currentWord.clear();
+  std::string cur = "";
+  while (!file.eof()) {
+    char ch = file.get();
+    if (ch >= 'A' && ch <= 'Z') {
+      ch = tolower(ch);
+      cur.push_back(ch);
+    } else if (ch >= 'a' && ch <= 'z') {
+      cur.push_back(ch);
+    } else {
+      if (cur != "") {
+        tree.add(cur);
+        cur = "";
+      } else {
+        continue;
+      }
     }
   }
-
-    // Process the last word if exists
-  if (!currentWord.empty()) {
-    tree.insert(currentWord);
-  }
-
   file.close();
 }
-
-void printFreq(BST<std::string>& tree) {
-  auto frequencyData = tree.getFrequencyData();
-    
-    // Print to console
-  for (const auto& [word, freq] : frequencyData) {
-    std::cout << word << ": " << freq << std::endl;
+void printFreq(BST<std::string>& tree) { auto arr = tree.toVector();
+  std::sort(arr.begin(), arr.end(),
+            [](const auto& a, const auto& b) { return a.second > b.second; });
+  std::ofstream out("freq.txt");
+  for (const auto& twos : arr) {
+    std::cout << twos.first << " - " << twos.second << std::endl;
+    out << twos.first << " - " << twos.second << std::endl;
   }
-    
-    // Save to file
-  std::ofstream outFile("result/freq.txt");
-  if (outFile) {
-    for (const auto& [word, freq] : frequencyData) {
-      outFile << word << ": " << freq << std::endl;
-    }
-    outFile.close();
-  } else {
-    std::cout << "Error: Could not open result/freq.txt for writing" << std::endl;
-  }
-} 
+  out.close();
+}
