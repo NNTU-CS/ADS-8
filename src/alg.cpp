@@ -1,68 +1,63 @@
 // Copyright 2021 NNTU-CS
-#include "bst.h"
-#include <algorithm>
-#include <fstream>
-#include <iostream>
-#include <vector>
+#include  <iostream>
+#include  <fstream>
+#include  <locale>
+#include  <cstdlib>
+#include  <vector>
+#include  <algorithm>
+#include  <cctype>
+#include  <string>
+#include  "bst.h"
 
-std::string toLower(const std::string &str) {
-  std::string result = str;
-  for (char &c : result) {
-    c = std::tolower(c);
-  }
-  return result;
+void makeTree(BST<std::string>& tree, const char* filename) {
+  std::ifstream file(filename, std::ios::binary);
+    if (!file) {
+        std::cerr << "File error: " << filename << '\n';
+        return;
+    }
+
+    std::string word;
+    char        ch;
+
+    auto flush_word = [&]{
+        if (!word.empty()) {
+            tree.insert(word);
+            word.clear();
+        }
+    };
+
+    while (file.get(ch)) {
+        unsigned char uch = static_cast<unsigned char>(ch);
+
+        if (std::isalpha(uch) && uch < 128) {
+            word.push_back(static_cast<char>(std::tolower(uch)));
+        } else {
+            flush_word();
+        }
+    }
+    flush_word();       
 }
 
-bool isLatinLetter(char c) {
-  return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-}
 
-void makeTree(BST<std::string> &tree, const char *filename) {
-  std::ifstream file(filename);
-  if (!file) {
-    return;
-  }
+void printFreq(BST<std::string>& tree) {
+    std::vector<std::pair<std::string, std::size_t>> v;
+    tree.inorder([&](const std::string& w, std::size_t c){
+        v.emplace_back(w, c);
+    });
 
-  std::string word;
-  char c;
-  while (!file.eof()) {
-    word.clear();
-    while (!file.eof()) {
-      c = file.get();
-      if (isLatinLetter(c)) {
-        word += c;
-      } else if (!word.empty()) {
-        tree.insert(toLower(word));
-        word.clear();
-      }
+    std::sort(v.begin(), v.end(),
+              [](const auto& a, const auto& b){
+                  return (a.second == b.second) ? a.first < b.first
+                                                : a.second > b.second;
+              });
+
+    std::ofstream out("result/freq.txt");
+    if (!out) {
+        std::cerr << "Cannot open result/freq.txt for writing!\n";
     }
-    if (!word.empty()) {
-      tree.insert(toLower(word));
+
+    for (const auto& [w, c] : v) {
+        std::cout << w << " : " << c << '\n';
+        if (out) out << w << ' ' << c << '\n';
     }
-  }
-  file.close();
-}
-
-void printFreq(BST<std::string> &tree) {
-  std::vector<std::pair<std::string, int>> frequencies = tree.getFrequencies();
-
-  std::sort(frequencies.begin(), frequencies.end(),
-            [](const auto &a, const auto &b) {
-              return a.second > b.second ||
-                     (a.second == b.second && a.first < b.first);
-            });
-
-  for (const auto &pair : frequencies) {
-    std::cout << pair.first << ": " << pair.second << std::endl;
-  }
-
-  std::ofstream outFile("result/freq.txt");
-  if (outFile) {
-    for (const auto &pair : frequencies) {
-      outFile << pair.first << ": " << pair.second << "\n";
-    }
-    outFile.close();
-  } else {
-    std::cout << "err" << std::endl;
-  }
 }
