@@ -71,7 +71,10 @@ class BST {
 
   int depth() const { return depth(root); }
 
-  BSTNode<T>* search(const T& value) const { return search(root, value); }
+  int search(const T& value) const { 
+    BSTNode<T>* node = search(root, value); 
+    return node ? node->count : 0;
+  }
 
   void inorder(void(*visitor)(BSTNode<T>*, void*), void* arg) const {
   inorder(root, visitor, arg);
