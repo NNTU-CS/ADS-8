@@ -1,9 +1,7 @@
-// Copyright 2021 NNTU-CS
-#ifndef INCLUDE_BST_H_
-#define INCLUDE_BST_H_
+#ifndef BST_H
+#define BST_H
+
 #include <string>
-#include <vector>
-#include <utility>
 
 template <typename T>
 class BST {
@@ -38,19 +36,13 @@ private:
         return 1 + (leftDepth > rightDepth ? leftDepth : rightDepth);
     }
 
-    Node* search(Node* node, const T& key) const {
-        if (!node || node->key == key) return node;
+    int searchCount(Node* node, const T& key) const {
+        if (!node) return 0;
+        if (key == node->key) return node->count;
         if (key < node->key)
-            return search(node->left, key);
+            return searchCount(node->left, key);
         else
-            return search(node->right, key);
-    }
-
-    void inOrder(Node* node, std::vector<std::pair<T, int>>& result) const {
-        if (!node) return;
-        inOrder(node->left, result);
-        result.emplace_back(node->key, node->count);
-        inOrder(node->right, result);
+            return searchCount(node->right, key);
     }
 
     void clear(Node* node) {
@@ -72,14 +64,9 @@ public:
         return depth(root);
     }
 
-    bool search(const T& key) const {
-        return search(root, key) != nullptr;
-    }
-
-    std::vector<std::pair<T, int>> inOrder() const {
-        std::vector<std::pair<T, int>> result;
-        inOrder(root, result);
-        return result;
+    int search(const T& key) const {
+        return searchCount(root, key);
     }
 };
-#endif  // INCLUDE_BST_H_
+
+#endif
