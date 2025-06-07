@@ -1,17 +1,15 @@
 // Copyright 2021 NNTU-CS
+// Copyright 2021 NNTU-CS
 #include <iostream>
 #include <string>
 #include "bst.h"
 
+void makeTree(BST<std::string>&, const char*);
+void printFreq(BST<std::string>&);
+
 int main() {
-    BST<std::string> words;
-    makeTree(words, "src/war_and_peace.txt");
-    std::cout << "Tree constructed.\n";
-
-    std::cout << "Maximum tree depth: " << words.depth() << '\n';
-
-    printFreq(words);
-    std::cout << "Result saved in 'result/freq.txt'\n";
-
-    return 0;
+  BST<std::string> tree;
+  makeTree(tree, "war_peace.txt");
+  printFreq(tree);
+  return 0;
 }
