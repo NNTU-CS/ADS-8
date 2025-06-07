@@ -5,6 +5,8 @@
 #include  <locale>
 #include  <cstdlib>
 #include <string>
+#include <random>
+#include <vector>
 #include  "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
@@ -16,24 +18,33 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
   std::string word;
   char ch;
+  std::vector<std::string> words;
+
   while (file.get(ch)) {
     if (std::isalpha(ch)) {
       word += std::tolower(ch);
     } else {
       if (!word.empty()) {
-        tree.insert(word);
+        words.push_back(word);
         word.clear();
       }
     }
   }
 
   if (!word.empty()) {
-    tree.insert(word);
+    words.push_back(word);
   }
 
   file.close();
-}
 
+  std::random_device rd;
+  std::mt19937 g(rd());
+  std::shuffle(words.begin(), words.end(), g);
+
+  for (const auto& w : words) {
+    tree.insert(w);
+  }
+}
 
 void printFreq(BST<std::string>& tree) {
   auto sortedWords = tree.getSortedByFrequency();
