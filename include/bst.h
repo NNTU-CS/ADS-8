@@ -67,5 +67,4 @@ class BST {
     return out;
   }
 };
-
 #endif  // INCLUDE_BST_H_
