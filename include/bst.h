@@ -77,9 +77,10 @@ class BST {
     return depth(root);
   }
 
-  Node* search(const T& value) const {
-    return search(root, value);
-  }
+  int search(const T& value) const {
+    Node* node = search(root, value);
+    return node ? node->count : 0;
+}
 
   std::vector<std::pair<T, int>> getSortedByFrequency() const {
     std::vector<std::pair<T, int>> result;
