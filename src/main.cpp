@@ -1,16 +1,17 @@
 // Copyright 2021 NNTU-CS
 #include <iostream>
-#include "alg.cpp"
+#include <string>
 #include "bst.h"
 
-using namespace std;
-
 int main() {
-    BST<string> words;
+    BST<std::string> words;
     makeTree(words, "src/war_and_peace.txt");
-    cout << "Tree constructed.\n";
-    cout << "Maximum tree depth: " << words.depth() << endl;
+    std::cout << "Tree constructed.\n";
+
+    std::cout << "Maximum tree depth: " << words.depth() << '\n';
+
     printFreq(words);
-    cout << "Result saved in 'result/freq.txt'\n";
+    std::cout << "Result saved in 'result/freq.txt'\n";
+
     return 0;
 }
