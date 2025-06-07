@@ -1,5 +1,5 @@
 // Copyright 2021 NNTU-CS
-// src/alg.cpp
+
 #include <cctype>
 #include <algorithm>
 #include <fstream>
