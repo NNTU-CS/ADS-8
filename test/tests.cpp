@@ -10,7 +10,7 @@ TEST(lab8, test1_1) {
     BST<std::string> tree;
     makeTree(tree, filename);
 
-    int height = tree.height();
+    int height = tree.heightT();
     EXPECT_EQ(height, 35);
 }
 TEST(lab8, test1_2) {
