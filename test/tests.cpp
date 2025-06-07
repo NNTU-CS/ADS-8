@@ -1,4 +1,4 @@
-pth// Copyright 2025 NNTU-CS
+// Copyright 2025 NNTU-CS
 #include <gtest/gtest.h>
 #include <string>
 
@@ -10,7 +10,7 @@ TEST(lab8, test1_1) {
     BST<std::string> tree;
     makeTree(tree, filename);
 
-    int height = tree.heightT();
+    int height = tree.depth();
     EXPECT_EQ(height, 35);
 }
 TEST(lab8, test1_2) {
