@@ -15,8 +15,8 @@ struct BSTNode {
 
 template <typename T>
 class BST {
-  private:  
-    BSTNode<T>* root;
+ private:
+  BSTNode<T>* root;
 
     void insert(BSTNode<T>*& node, const T& value) {
       if (!node) {
@@ -63,19 +63,19 @@ class BST {
       delete node;
     }
 
-  public:  
-    BST() : root(nullptr) {}
-    ~BST() { free(root); }
+ public:
+  BST() : root(nullptr) {}
+  ~BST() { free(root); }
 
-    void insert(const T& value) { insert(root, value); }
+  void insert(const T& value) { insert(root, value); }
 
-    int depth() const { return depth(root); }
+  int depth() const { return depth(root); }
 
-    BSTNode<T>* search(const T& value) const { return search(root, value); }
+  BSTNode<T>* search(const T& value) const { return search(root, value); }
 
-    void inorder(void(*visitor)(BSTNode<T>*, void*), void* arg) const {
-        inorder(root, visitor, arg);
-    }
+  void inorder(void(*visitor)(BSTNode<T>*, void*), void* arg) const {
+  inorder(root, visitor, arg);
+  }
 };
 
 #endif  // INCLUDE_BST_H_
