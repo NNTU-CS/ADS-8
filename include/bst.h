@@ -37,7 +37,7 @@ class BST {
 
 template<typename T>
 BST<T>::~BST() {
-    auto destroy = [&](Node<T> *node) {
+    std::function<void(Node<T> *)> destroy = [this](Node<T> *node) {
         if (node != nullptr) {
             destroy(node->left);
             destroy(node->right);
