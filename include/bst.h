@@ -19,13 +19,15 @@ struct Node {
 
 template<typename T>
 class BST {
- private:
+private:
     Node<T> *root;
+
+    void clear(Node<T> *node);
 
     size_t depthHelper(Node<T> *node) const;
     void inorderHelper(std::vector<Node<T> *> &vec, Node<T> *node) const;
 
- public:
+public:
     BST() : root(nullptr) {}
     ~BST();
     bool insert(const T &val);
@@ -46,6 +48,21 @@ void BST<T>::clear(Node<T> *node) {
         clear(node->left);
         clear(node->right);
         delete node;
+    }
+}
+
+template<typename T>
+size_t BST<T>::depthHelper(Node<T> *node) const {
+    if (node == nullptr) return 0;
+    return 1 + std::max(depthHelper(node->left), depthHelper(node->right));
+}
+
+template<typename T>
+void BST<T>::inorderHelper(std::vector<Node<T> *> &vec, Node<T> *node) const {
+    if (node != nullptr) {
+        inorderHelper(vec, node->left);
+        vec.push_back(node);
+        inorderHelper(vec, node->right);
     }
 }
 
@@ -83,7 +100,7 @@ bool BST<T>::insert(const T &val) {
 }
 
 template<typename T>
-bool BST<T>::search(const T &val) {
+bool BST<T>::search(const T &val) const {
     Node<T> *current = root;
     while (current != nullptr && current->key != val) {
         if (val < current->key) {
@@ -101,23 +118,8 @@ size_t BST<T>::depth() const {
 }
 
 template<typename T>
-size_t BST<T>::depthHelper(Node<T> *node) const {
-    if (node == nullptr) return 0;
-    return 1 + std::max(depthHelper(node->left), depthHelper(node->right));
-}
-
-template<typename T>
 void BST<T>::inorder(std::vector<Node<T> *> &vec) const {
     inorderHelper(vec, root);
-}
-
-template<typename T>
-void BST<T>::inorderHelper(std::vector<Node<T> *> &vec, Node<T> *node) const {
-    if (node != nullptr) {
-        inorderHelper(vec, node->left);
-        vec.push_back(node);
-        inorderHelper(vec, node->right);
-    }
 }
 
 template<typename T>
