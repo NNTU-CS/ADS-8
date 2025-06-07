@@ -2,119 +2,138 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <algorithm>
+#include <iostream>
 #include <string>
-#include <utility>
+#include <algorithm>
 #include <vector>
+#include <utility>
 
 template <typename T>
 class BST {
  private:
     struct Node {
-        T value;
+        T data;
         int count;
         Node* left;
         Node* right;
-        explicit Node(const T& value): count(1), left(nullptr), right(nullptr), value(value) {}
+
+        explicit Node(const T& data)
+            : data(data), count(1), left(nullptr), right(nullptr) {}
     };
+
     Node* root;
-    Node* addNode(Node*, const T&);
-    void delTree(Node*);
-    int depth(const Node*) const;
-    void collectNodes(Node*, std::vector<std::pair<T, int>>&) const;
+
+    void insertInternal(Node*& node, const T& data);
+    void freeSubtree(Node* node);
+    const Node* findNode(const Node* node, const T& value) const;
+    void inOrderTraversal(const Node* node,
+        std::vector<std::pair<T, int>>& frequencies) const;
+
  public:
-    BST();
+    BST() : root(nullptr) {}
     ~BST();
-    void add(const T&);
-    void clear();
+
+    BST(const BST&) = delete;
+    BST& operator=(const BST&) = delete;
+
+    void insert(const T& data);
     int depth() const;
-    int search(const T&) const;
-    std::vector<std::pair<T, int>> getWordsWithCounts() const;
+    int search(const T& value) const;
+    void printInOrder() const;
+    std::vector<std::pair<T, int>> getFrequencies() const;
 };
 
-template<typename T>
-BST<T>::BST() : root(nullptr) {}
 
-template<typename T>
+template <typename T>
 BST<T>::~BST() {
-    clear();
+    freeSubtree(root);
 }
 
-template<typename T>
-typename BST<T>::Node* BST<T>::addNode(Node* node, const T& value) {
-    if (node == nullptr) {
-        return new Node(value);
-    }
-    if (value == node->value) {
-        node->count++;
-    } else if (value < node->value) {
-        node->left = addNode(node->left, value);
-    } else {
-        node->right = addNode(node->right, value);
-    }
-    return node;
-}
-
-template<typename T>
-void BST<T>::add(const T& value) {
-    root = addNode(root, value);
-}
-
-template<typename T>
-void BST<T>::delTree(Node* node) {
+template <typename T>
+void BST<T>::freeSubtree(Node* node) {
     if (node) {
-        delTree(node->left);
-        delTree(node->right);
+        freeSubtree(node->left);
+        freeSubtree(node->right);
         delete node;
     }
 }
 
-template<typename T>
-void BST<T>::clear() {
-    delTree(root);
-    root = nullptr;
+template <typename T>
+void BST<T>::insert(const T& data) {
+    insertInternal(root, data);
 }
 
-template<typename T>
-int BST<T>::depth(const Node* node) const {
-    if (!node) return 0;
-    return std::max(depth(node->left), depth(node->right)) + 1;
-}
-
-template<typename T>
-int BST<T>::depth() const {
-    return depth(root)-1;
-}
-
-template<typename T>
-int BST<T>::search(const T& value) const {
-    Node* current = root;
-    while (current) {
-        if (value == current->value) {
-            return current->count;
-        }
-        if (value < current->value) {
-            current = current->left;
-        } else {
-            current = current->right;
-        }
+template <typename T>
+void BST<T>::insertInternal(Node*& node, const T& data) {
+    if (!node) {
+        node = new Node(data);
+        return;
     }
-    return 0;
+
+    if (data < node->data) {
+        insertInternal(node->left, data);
+    } else if (data > node->data) {
+        insertInternal(node->right, data);
+    } else {
+        node->count++;
+    }
 }
 
-template<typename T>
-std::vector<std::pair<T, int>> BST<T>::getWordsWithCounts() const {
-    std::vector<std::pair<T, int>> result;
-    collectNodes(root, result);
-    return result;
+template <typename T>
+int BST<T>::depth() const {
+    if (!root) return -1;
+
+    auto calculateDepth = [](const Node* node, auto&& self) -> int {
+        if (!node) return 0;
+        return 1 + std::max(self(node->left, self),
+            self(node->right, self));
+        };
+
+    return calculateDepth(root, calculateDepth) - 1;
 }
 
-template<typename T>
-void BST<T>::collectNodes(Node* node, std::vector<std::pair<T, int>>& result) const {
-    if (!node) return;
-    collectNodes(node->left, result);
-    result.emplace_back(node->value, node->count);
-    collectNodes(node->right, result);
+template <typename T>
+int BST<T>::search(const T& value) const {
+    const Node* result = findNode(root, value);
+    return result ? result->count : 0;
+}
+
+template <typename T>
+const typename BST<T>::Node* BST<T>::findNode(const Node* node, const T& value) const {
+    if (!node) return nullptr;
+
+    if (value == node->data) {
+        return node;
+    } else if (value < node->data) {
+        return findNode(node->left, value);
+    } else {
+        return findNode(node->right, value);
+    }
+}
+
+template <typename T>
+std::vector<std::pair<T, int>> BST<T>::getFrequencies() const {
+    std::vector<std::pair<T, int>> frequencies;
+    inOrderTraversal(root, frequencies);
+    return frequencies;
+}
+
+template <typename T>
+void BST<T>::inOrderTraversal(const Node* node,
+    std::vector<std::pair<T, int>>& frequencies) const {
+    if (node) {
+        inOrderTraversal(node->left, frequencies);
+        frequencies.emplace_back(node->data, node->count);
+        inOrderTraversal(node->right, frequencies);
+    }
+}
+
+template <typename T>
+void BST<T>::printInOrder() const {
+    auto frequencies = getFrequencies();
+    for (const auto& [data, count] : frequencies) {
+        std::cout << data << " (" << count << ")\n";
+    }
 }
 
 #endif  // INCLUDE_BST_H_
