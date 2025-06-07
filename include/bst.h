@@ -37,14 +37,16 @@ class BST {
 
 template<typename T>
 BST<T>::~BST() {
-    std::function<void(Node<T> *)> destroy = [this](Node<T> *node) {
-        if (node != nullptr) {
-            destroy(node->left);
-            destroy(node->right);
-            delete node;
-        }
-    };
-    destroy(root);
+    clear(root);
+}
+
+template<typename T>
+void BST<T>::clear(Node<T> *node) {
+    if (node != nullptr) {
+        clear(node->left);
+        clear(node->right);
+        delete node;
+    }
 }
 
 template<typename T>
