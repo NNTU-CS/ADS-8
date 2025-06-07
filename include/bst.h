@@ -1,20 +1,19 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
+#pragma once
 #include <iostream>
 #include <string>
 
-// Узел дерева
 template <typename T>
 struct BSTNode {
+  explicit BSTNode(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
   T key;
   int count;
   BSTNode* left;
   BSTNode* right;
-  BSTNode(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
 };
 
-// Класс BST
 template <typename T>
 class BST {
 private:
@@ -36,10 +35,18 @@ private:
   }
 
   BSTNode<T>* search(BSTNode<T>* node, const T& value) const {
-    if (!node) return nullptr;
-    if (value == node->key) return node;
-    if (value < node->key) return search(node->left, value);
-    return search(node->right, value);
+    if (!node) {
+      return nullptr;
+    }
+    else if (value == node->key) {
+      return node;
+    }
+    else if (value < node->key) {
+      return search(node->left, value);
+    }
+    else {
+      return search(node->right, value);
+    }
   }
 
   int depth(BSTNode<T>* node) const {
@@ -74,7 +81,6 @@ public:
   BSTNode<T>* search(const T& value) const { return search(root, value); }
 
   void inorder(void(*visitor)(BSTNode<T>*, void*), void* arg) const {
-  inorder(root, visitor, arg);
-}
+    inorder(root, visitor, arg);
+  }
 };
-#endif  // INCLUDE_BST_H_
