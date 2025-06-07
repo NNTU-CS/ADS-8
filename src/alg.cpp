@@ -35,7 +35,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
             flush_word();
         }
     }
-    flush_word();       
+    flush_word();
 }
 
 
