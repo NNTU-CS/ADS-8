@@ -1,4 +1,4 @@
-// include/bst.h
+// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
@@ -9,7 +9,7 @@
 
 template <typename T>
 class BST {
-public:
+ public:
     struct Node {
         T slovo;
         int kol;
@@ -18,7 +18,7 @@ public:
         explicit Node(T s) : slovo(s), kol(1), left(nullptr), right(nullptr) {}
     };
 
-private:
+ private:
     Node* root;
 
     Node* addNode(Node* root, const T& value) {
@@ -72,7 +72,7 @@ private:
         delete root;
     }
 
-public:
+ public:
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
 
