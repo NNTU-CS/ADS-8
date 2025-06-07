@@ -74,7 +74,7 @@ class BST {
   }
 
   int depth() const {
-    return depth(root);
+    return depth(root)-1;
   }
 
   int search(const T& value) const {
