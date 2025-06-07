@@ -81,7 +81,7 @@ bool BST<T>::insert(const T &val) {
 }
 
 template<typename T>
-bool BST<T>::search(const T &val) const {
+bool BST<T>::search(const T &val) {
     Node<T> *current = root;
     while (current != nullptr && current->key != val) {
         if (val < current->key) {
