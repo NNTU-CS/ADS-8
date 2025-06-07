@@ -7,7 +7,7 @@ void makeTree(BST<std::string>& tree, const char* filename);
 void printFreq(BST<std::string>& tree);
 
 int main() {
-    const char* inputFile = "src/war_peace.txt";
+    const char* inputFile = "war_peace.txt";
     BST<std::string> wordTree;
 
     makeTree(wordTree, inputFile);
