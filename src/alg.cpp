@@ -38,7 +38,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
             }
         }
     }
-    if (!Word.empty()) {
+    if (!currentWord.empty()) {
         tree.add(toLower(currentWord));
     }
     file.close();
