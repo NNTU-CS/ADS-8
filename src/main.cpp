@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <filesystem>
+#include <utility>
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* fname) {
@@ -48,7 +48,6 @@ int main(int argc, char* argv[]) {
         std::cout << "Usage: " << argv[0] << " <inputfile>" << std::endl;
         return 1;
     }
-    std::filesystem::create_directories("result");
     BST<std::string> tree;
     makeTree(tree, argv[1]);
     printFreq(tree);
