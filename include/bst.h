@@ -32,18 +32,15 @@ class BST {
     return node;
   }
 
- 
   int depthRec(Node* node) const {
     if (!node) return -1;
     return std::max(depthRec(node->left), depthRec(node->right)) + 1;
   }
 
- 
   Node* searchRec(Node* node, const T& key) const {
     if (!node || node->key == key) return node;
     return searchRec(key < node->key ? node->left : node->right, key);
   }
-
 
   void collectNodes(Node* node, std::vector<std::pair<T, int>>& vec) const {
     if (!node) return;
@@ -51,7 +48,6 @@ class BST {
     vec.emplace_back(node->key, node->count);
     collectNodes(node->right, vec);
   }
-
 
   void deleteTree(Node* node) {
     if (!node) return;
@@ -63,20 +59,12 @@ class BST {
  public:
   BST() : root(nullptr) {}
   ~BST() { deleteTree(root); }
-
- 
   void insert(const T& key) { root = insertRec(root, key); }
-
- 
   int depth() const { return depthRec(root); }
-
-
   int search(const T& key) const {
     Node* node = searchRec(root, key);
     return node ? node->count : 0;
   }
-
-
   std::vector<std::pair<T, int>> getAll() const {
     std::vector<std::pair<T, int>> result;
     collectNodes(root, result);
