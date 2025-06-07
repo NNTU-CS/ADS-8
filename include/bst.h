@@ -44,9 +44,10 @@ class BST {
 
     int depth(BSTNode<T>* node) const {
       if (!node) return 0;
+      if (!node->left && !node->right) return 0;
       int l = depth(node->left);
       int r = depth(node->right);
-      return 1 + (l > r ? l : r);
+      return (l > r ? l : r) + 1;
     }
 
     void inorder(BSTNode<T>* node, void(*visitor)(BSTNode<T>*, void*), void* arg) const {
@@ -77,7 +78,7 @@ class BST {
   }
 
   void inorder(void(*visitor)(BSTNode<T>*, void*), void* arg) const {
-  inorder(root, visitor, arg);
+    inorder(root, visitor, arg);
   }
 };
 
