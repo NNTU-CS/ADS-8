@@ -15,73 +15,67 @@ struct BSTNode {
 
 template <typename T>
 class BST {
-private:
-  BSTNode<T>* root;
+  private:
+    BSTNode<T>* root;
 
-  void insert(BSTNode<T>*& node, const T& value) {
-    if (!node) {
-      node = new BSTNode<T>(value);
+    void insert(BSTNode<T>*& node, const T& value) {
+      if (!node) {
+        node = new BSTNode<T>(value);
+      } else if (value == node->key) {
+        node->count++;
+      } else if (value < node->key) {
+        insert(node->left, value);
+      } else {
+        insert(node->right, value);
+      }
     }
-    else if (value == node->key) {
-      node->count++;
+
+    BSTNode<T>* search(BSTNode<T>* node, const T& value) const {
+      if (!node) {
+        return nullptr;
+      } else if (value == node->key) {
+        return node;
+      } else if (value < node->key) {
+        return search(node->left, value);
+      } else {
+        return search(node->right, value);
+      }
     }
-    else if (value < node->key) {
-      insert(node->left, value);
+
+    int depth(BSTNode<T>* node) const {
+      if (!node) return 0;
+      int l = depth(node->left);
+      int r = depth(node->right);
+      return 1 + (l > r ? l : r);
     }
-    else {
-      insert(node->right, value);
+
+    void inorder(BSTNode<T>* node, void(*visitor)(BSTNode<T>*, void*), void* arg) const {
+      if (!node) return;
+      inorder(node->left, visitor, arg);
+      visitor(node, arg);
+      inorder(node->right, visitor, arg);
     }
-  }
 
-  BSTNode<T>* search(BSTNode<T>* node, const T& value) const {
-    if (!node) {
-      return nullptr;
+    void free(BSTNode<T>* node) {
+      if (!node) return;
+      free(node->left);
+      free(node->right);
+      delete node;
     }
-    else if (value == node->key) {
-      return node;
+
+  public:
+    BST() : root(nullptr) {}
+    ~BST() { free(root); }
+
+    void insert(const T& value) { insert(root, value); }
+
+    int depth() const { return depth(root); }
+
+    BSTNode<T>* search(const T& value) const { return search(root, value); }
+
+    void inorder(void(*visitor)(BSTNode<T>*, void*), void* arg) const {
+        inorder(root, visitor, arg);
     }
-    else if (value < node->key) {
-      return search(node->left, value);
-    }
-    else {
-      return search(node->right, value);
-    }
-  }
-
-  int depth(BSTNode<T>* node) const {
-    if (!node) return 0;
-    int l = depth(node->left);
-    int r = depth(node->right);
-    return 1 + (l > r ? l : r);
-  }
-
-  void inorder(BSTNode<T>* node, void(*visitor)(BSTNode<T>*, void*), void* arg) const {
-    if (!node) return;
-    inorder(node->left, visitor, arg);
-    visitor(node, arg);
-    inorder(node->right, visitor, arg);
-  }
-
-  void free(BSTNode<T>* node) {
-    if (!node) return;
-    free(node->left);
-    free(node->right);
-    delete node;
-  }
-
-public:
-  BST() : root(nullptr) {}
-  ~BST() { free(root); }
-
-  void insert(const T& value) { insert(root, value); }
-
-  int depth() const { return depth(root); }
-
-  BSTNode<T>* search(const T& value) const { return search(root, value); }
-
-  void inorder(void(*visitor)(BSTNode<T>*, void*), void* arg) const {
-    inorder(root, visitor, arg);
-  }
 };
 
 #endif  // INCLUDE_BST_H_
