@@ -50,7 +50,7 @@ void printFreq(BST<std::string>& tree) {
   std::vector<WordFreq> arr;
   tree.inorder(collect, &arr);
 
-  std::qsort(arr.begin(), arr.end(), [](const WordFreq& a, const WordFreq& b) {
+  std::sort(arr.begin(), arr.end(), [](const WordFreq& a, const WordFreq& b) {
   return (a.count > b.count) || (a.count == b.count && a.word < b.word);
 });
 
