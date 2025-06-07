@@ -1,41 +1,47 @@
 // Copyright 2021 NNTU-CS
-#include <fstream>
-#include <iostream>
+#include  <iostream>
+#include  <fstream>
+#include  <locale>
+#include  <cstdlib>
 #include <string>
-#include <cctype>
-#include <sstream>
-#include "bst.h"
+#include  "bst.h"
 
-void makeTree(BST<std::string>& tree, const char* filename) {
-    std::ifstream file(filename);
-
-    if (!file) {
-        std::cerr << "File error!" << std::endl;
+void makeTree(BST<std::string>& tree, const char* fi_name) {
+    std::ifstream fi(fi_name);
+    if (!fi.is_open()) {
         return;
     }
-    std::string word;
+    std::string currentWord;
     char ch;
-    while (file.get(ch)) {
-        if (std::isalpha(ch)) { 
-            word += std::tolower(ch);
+    while (fi.get(ch)) {
+        if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) {
+            if (ch >= 'A' && ch <= 'Z') {
+                currentWord += (ch - 'A' + 'a');
+            } else {
+                currentWord += ch;
+            }
         } else {
-            if (!word.empty()) {
-                tree.insert(word);
-                word.clear();
+            if (!currentWord.empty()) {
+                tree.insert(currentWord);
+                currentWord.clear();
             }
         }
     }
-    if (!word.empty()) {
-        tree.insert(word);
+    if (!currentWord.empty()) {
+        tree.insert(currentWord);
     }
-    file.close();
+    fi.close();
 }
+
 void printFreq(BST<std::string>& tree) {
+    auto words = tree.getWordsByFrequency();
     std::ofstream outFile("result/freq.txt");
-    if (!outFile) {
-        std::cerr << "Error writing to file!" << std::endl;
+    if (!outFile.is_open()) {
         return;
+    }    
+    for (const auto& pair : words) {
+        std::cout << pair.first << " " << pair.second << std::endl;
+        outFile << pair.first << " " << pair.second << std::endl;
     }
-    tree.printFreq();
     outFile.close();
 }
