@@ -38,7 +38,7 @@ void printFreq(BST<std::string>& tree) {
     std::ofstream outFile("result/freq.txt");
     if (!outFile.is_open()) {
         return;
-    }    
+    }
     for (const auto& pair : words) {
         std::cout << pair.first << " " << pair.second << std::endl;
         outFile << pair.first << " " << pair.second << std::endl;
