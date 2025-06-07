@@ -60,7 +60,7 @@ class BST {
 
     int depth() const {
         if (!root) return 0;
-        return depth_nodes(root) - 1;   
+        return depth_nodes(root) - 1;
     }
 
     template <typename F>
