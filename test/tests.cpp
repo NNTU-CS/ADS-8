@@ -1,4 +1,4 @@
-// Copyright 2025 NNTU-CS
+pth// Copyright 2025 NNTU-CS
 #include <gtest/gtest.h>
 #include <string>
 
