@@ -30,7 +30,6 @@ class BST {
 
  public:
   BST();
- ~BST();
   ~BST();
   void add(T);
   void print();
