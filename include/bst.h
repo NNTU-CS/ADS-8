@@ -22,6 +22,9 @@ class BST {
 private:
     Node<T> *root;
 
+    size_t depthHelper(Node<T> *node);
+    void inorderHelper(std::vector<Node<T> *> &vec, Node<T> *node);
+
 public:
     BST() : root(nullptr) {}
     ~BST();
