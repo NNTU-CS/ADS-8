@@ -13,28 +13,23 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         std::cerr << "File error!" << std::endl;
         return;
     }
-
     std::string word;
     char ch;
-
     while (file.get(ch)) {
-        if (std::isalpha(ch)) {
-            word += std::tolower(ch);  // Преобразуем символ в нижний регистр
+        if (std::isalpha(ch)) { 
+            word += std::tolower(ch);
         } else {
             if (!word.empty()) {
-                tree.insert(word);  // Добавляем слово в дерево
+                tree.insert(word);
                 word.clear();
             }
         }
     }
-
     if (!word.empty()) {
-        tree.insert(word);  // Не забываем добавить последнее слово
+        tree.insert(word);
     }
-
     file.close();
 }
-
 void printFreq(BST<std::string>& tree) {
     std::ofstream outFile("result/freq.txt");
     if (!outFile) {
