@@ -3,6 +3,7 @@
 #define INCLUDE_BST_H_
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 template <typename T>
 class BST {
@@ -47,6 +48,7 @@ class BST {
     out.emplace_back(curr->data, curr->times);
     inOrder(curr->rightNode, out);
   }
+
  public:
   BST() : rootNode(nullptr) {}
   ~BST() {
