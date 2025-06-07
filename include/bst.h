@@ -2,78 +2,108 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 #include <string>
-#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <stack>
 
 template <typename T>
 class BST {
-private:
+ private:
     struct Node {
-        T data;
-        int count;
+        T value;
+        int freq;
         Node* left;
         Node* right;
-        Node(T value) : data(value), count(1), left(nullptr), right(nullptr) {}
+        explicit Node(const T& v) : value(v), freq(1), left(nullptr), right(nullptr) {}
     };
     Node* root;
-    void insert(Node*& node, const T& value) {
-        if (node == nullptr) {
-            node = new Node(value);
-        } else if (value == node->data) {
-            node->count++; // Увеличиваем счетчик при повторении слова
-        } else if (value < node->data) {
-            insert(node->left, value);
-        } else {
-            insert(node->right, value);
-        }
-    }
-    bool search(Node* node, const T& value) const {
-        if (node == nullptr) {
-            return false;
-        } else if (value == node->data) {
-            return true;
-        } else if (value < node->data) {
-            return search(node->left, value);
-        } else {
-            return search(node->right, value);
-        }
-    }
-    void printFreq(Node* node) const {
-        if (node == nullptr) {
-            return;
-        }
-        printFreq(node->left);
-        std::cout << node->data << ": " << node->count << std::endl;
-        printFreq(node->right);
-    }
-    void depth(Node* node, int& max_depth, int current_depth) const {
-        if (node == nullptr) {
-            return;
-        }
-        if (current_depth > max_depth) {
-            max_depth = current_depth;
-        }
-        depth(node->left, max_depth, current_depth + 1);
-        depth(node->right, max_depth, current_depth + 1);
+
+    // Функция для вычисления глубины дерева
+    int getDepth(Node* node) {
+        if (!node) return 0;
+        int left = getDepth(node->left);
+        int right = getDepth(node->right);
+        return 1 + (left > right ? left : right);
     }
 
-public:
+ public:
     BST() : root(nullptr) {}
-    void insert(const T& value) {
-        insert(root, value);
-    }
-    bool search(const T& value) const {
-        return search(root, value);
-    }
-    void printFreq() const {
-        printFreq(root);
-    }
-    int depth() const {
-        int max_depth = 0;
-        depth(root, max_depth, 1);
-        return max_depth;
-    }
     ~BST() {
-        delete root;
+        std::stack<Node*> stack;
+        if (root) stack.push(root);
+        while (!stack.empty()) {
+            Node* current = stack.top();
+            stack.pop();
+            if (current->left) stack.push(current->left);
+            if (current->right) stack.push(current->right);
+            delete current;
+        }
     }
+
+    // Вставка элемента в дерево
+    void insert(const T& value) {
+        if (!root) {
+            root = new Node(value);
+            return;
+        }
+        Node* current = root;
+        while (true) {
+            if (value == current->value) {
+                current->freq++;
+                return;
+            } else if (value < current->value) {
+                if (!current->left) {
+                    current->left = new Node(value);
+                    return;
+                }
+                current = current->left;
+            } else {
+                if (!current->right) {
+                    current->right = new Node(value);
+                    return;
+                }
+                current = current->right;
+            }
+        }
+    }
+
+    // Поиск частоты слова в дереве
+    int search(const T& value) {
+        Node* current = root;
+        while (current) {
+            if (value == current->value) return current->freq;
+            current = (value < current->value) ? current->left : current->right;
+        }
+        return 0;
+    }
+
+    // Получение глубины дерева
+    int depth() {
+        if (!root) return 0;
+        return getDepth(root) - 1;
+    }
+
+    // Получение всех слов по частоте
+    std::vector<std::pair<T, int>> getWordsByFrequency() {
+        std::vector<std::pair<T, int>> result;
+        std::stack<Node*> stack;
+        Node* current = root;
+        while (current || !stack.empty()) {
+            while (current) {
+                stack.push(current);
+                current = current->left;
+            }
+            current = stack.top();
+            stack.pop();
+            result.push_back({current->value, current->freq});
+            current = current->right;
+        }
+        std::sort(result.begin(), result.end(),
+                  [](const auto& a, const auto& b) { return a.second > b.second; });
+        return result;
+    }
+
+    BST(const BST&) = delete;
+    BST& operator=(const BST&) = delete;
 };
 #endif  // INCLUDE_BST_H_
