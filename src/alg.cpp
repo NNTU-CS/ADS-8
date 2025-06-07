@@ -8,6 +8,7 @@
 #include  <cstdlib>
 #include  "bst.h"
 
+
 bool isLatinLetter(char c) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
