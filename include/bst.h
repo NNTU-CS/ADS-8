@@ -2,92 +2,77 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <string>
+#include <functional>
 #include <utility>
-#include <vector>
 
-template <typename T> class BST {
-private:
-  struct Node {
-    T data;
-    int count;
-    Node *left;
-    Node *right;
-    Node(const T &value)
-        : data(value), count(1), left(nullptr), right(nullptr) {}
-  };
+template <typename T>
+class BST {
+    struct Node {
+        T           key;
+        std::size_t count;
+        Node*       left;
+        Node*       right;
+        explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+    };
 
-  Node *root;
+    Node* root = nullptr;
 
-  void insertNode(Node *&node, const T &value) {
-    if (!node) {
-      node = new Node(value);
-      return;
+    static void clear(Node* n) {
+        if (!n) return;
+        clear(n->left);
+        clear(n->right);
+        delete n;
     }
-    if (value < node->data) {
-      insertNode(node->left, value);
-    } else if (value > node->data) {
-      insertNode(node->right, value);
-    } else {
-      node->count++;
+
+    static void insert(Node*& n, const T& value) {
+        if (!n) {
+            n = new Node(value);
+            return;
+        }
+        if (value == n->key) ++n->count;
+        else if (value < n->key) insert(n->left, value);
+        else                     insert(n->right, value);
     }
-  }
 
-  Node *searchNode(Node *node, const T &value) const {
-    if (!node || node->data == value) {
-      return node;
+    static int depth_nodes(Node* n) {
+        if (!n) return 0;
+        int l = depth_nodes(n->left);
+        int r = depth_nodes(n->right);
+        return 1 + (l > r ? l : r);
     }
-    if (value < node->data) {
-      return searchNode(node->left, value);
+
+ public:
+    BST() = default;
+    ~BST() { clear(root); }
+
+    void insert(const T& value)              { insert(root, value); }
+
+
+    int search(const T& value) const {
+        Node* n = root;
+        while (n) {
+            if (value == n->key)  return static_cast<int>(n->count);
+            n = (value < n->key) ? n->left : n->right;
+        }
+        return 0;
     }
-    return searchNode(node->right, value);
-  }
 
-  int getDepth(Node *node) const {
-    if (!node)
-      return 0;
-    int leftDepth = getDepth(node->left);
-    int rightDepth = getDepth(node->right);
-    return 1 + std::max(leftDepth, rightDepth);
-  }
 
-  void clear(Node *node) {
-    if (node) {
-      clear(node->left);
-      clear(node->right);
-      delete node;
+    int depth() const {
+        if (!root) return 0;
+        return depth_nodes(root) - 1;   
     }
-  }
 
-  void collectFrequencies(Node *node,
-                          std::vector<std::pair<T, int>> &freq) const {
-    if (node) {
-      collectFrequencies(node->left, freq);
-      freq.push_back({node->data, node->count});
-      collectFrequencies(node->right, freq);
+    template <typename F>
+    void inorder(F&& f) const {
+        std::function<void(Node*)> walk = [&](Node* n){
+            if (!n) return;
+            walk(n->left);
+            f(n->key, n->count);
+            walk(n->right);
+        };
+        walk(root);
     }
-  }
-
-public:
-  BST() : root(nullptr) {}
-  ~BST() { clear(root); }
-
-  void insert(const T &value) { insertNode(root, value); }
-
-  bool search(const T &value) const {
-    return searchNode(root, value) != nullptr;
-  }
-
-  int depth() const { return getDepth(root); }
-
-  std::vector<std::pair<T, int>> getFrequencies() const {
-    std::vector<std::pair<T, int>> freq;
-    collectFrequencies(root, freq);
-    return freq;
-  }
 };
 
-void makeTree(BST<std::string> &tree, const char *filename);
-void printFreq(BST<std::string> &tree);
-
-#endif // INCLUDE_BST_H_
+#endif  // INCLUDE_BST_H_
