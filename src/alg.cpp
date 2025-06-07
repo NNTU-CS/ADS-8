@@ -54,7 +54,7 @@ void printFreq(BST<std::string>& tree) {
   return (a.count > b.count) || (a.count == b.count && a.word < b.word);
 });
 
-std::ofstream fout("freq.txt");
+std::ofstream fout("result/freq.txt");
 for (const auto& wf : arr) {
   std::cout << wf.word << ": " << wf.count << std::endl;
   if (fout) fout << wf.word << ": " << wf.count << std::endl;
