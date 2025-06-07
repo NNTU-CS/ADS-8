@@ -3,23 +3,23 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
+#include <fstream>
 #include <cctype>
 #include <string>
 #include <vector>
 #include <algorithm>
 #include "bst.h"
 
-using std::string;
-using std::vector;
+namespace Alg {
 
-void makeTree(BST<string> &tree, const char *filename) {
+void makeTree(BST<std::string> &tree, const char *filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
         std::cerr << "Error opening the file!\n";
         return;
     }
 
-    string word;
+    std::string word;
     char c;
     while (file.get(c)) {
         if (isalpha(c)) {
@@ -32,16 +32,16 @@ void makeTree(BST<string> &tree, const char *filename) {
     file.close();
 }
 
-void printFreq(BST<string> &tree) {
+void printFreq(BST<std::string> &tree) {
     std::ofstream output("result/freq.txt");
     if (output.fail()) {
         std::cerr << "Error writing to file!\n";
         return;
     }
 
-    vector<Node<string> *> nodes;
+    std::vector<Node<std::string> *> nodes;
     tree.inorder(nodes);
-    std::sort(nodes.begin(), nodes.end(), [](const Node<string> *a, const Node<string> *b) {
+    std::sort(nodes.begin(), nodes.end(), [](const Node<std::string> *a, const Node<std::string> *b) {
         return a->count > b->count || (a->count == b->count && a->key < b->key);
     });
 
@@ -50,3 +50,4 @@ void printFreq(BST<string> &tree) {
     }
     output.close();
 }
+}  // namespace Alg
