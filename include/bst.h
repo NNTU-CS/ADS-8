@@ -12,12 +12,15 @@ struct Node {
   size_t count;
   Node *left;
   Node *right;
+
   Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
 };
+
 template<typename T>
 class BST {
 private:
   Node<T>* root;
+
 public:
   BST() : root(nullptr) {}
   ~BST();
@@ -27,6 +30,7 @@ public:
   void inorder(std::vector<Node<T>*>&);
   void printFrequency();
 };
+
 template<typename T>
 BST<T>::~BST() {
   auto destroy = [](Node<T>* node) {
@@ -38,18 +42,21 @@ BST<T>::~BST() {
   };
   destroy(root);
 }
+
 template<typename T>
 bool BST<T>::insert(const T& val) {
   if (root == nullptr) {
     root = new Node<T>(val);
     return true;
   }
+
   Node<T>* current = root;
   while(true) {
     if(val == current->key){
       ++current->count;
       break;
     }
+
     if(val < current->key) {
       if(current->left == nullptr) {
         current->left = new Node<T>(val);
@@ -71,6 +78,7 @@ bool BST<T>::insert(const T& val) {
   }
   return true;
 }
+
 template<typename T>
 bool BST<T>::search(const T& val) {
   Node<T>* current = root;
@@ -84,15 +92,18 @@ bool BST<T>::search(const T& val) {
   }
   return current != nullptr;
 }
+
 template<typename T>
 size_t BST<T>::depth(Node<T>* node) {
   if(node == nullptr) return 0;
   return 1 + std::max(depth(node->left), depth(node->right));
 }
+
 template<typename T>
 size_t BST<T>::depth(){
   return depth(root);
 }
+
 template<typename T>
 void BST<T>::inorder(std::vector<Node<T>*>& vec, Node<T>* node) {
   if(node != nullptr) {
@@ -101,10 +112,12 @@ void BST<T>::inorder(std::vector<Node<T>*>& vec, Node<T>* node) {
     inorder(vec, node->right);
   }
 }
+
 template<typename T>
 void BST<T>::inorder(std::vector<Node<T>*>& vec) {
   inorder(vec, root);
 }
+
 template<typename T>
 void BST<T>::printFrequency() {
   std::vector<Node<T>*> nodes;
