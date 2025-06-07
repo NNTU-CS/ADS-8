@@ -83,3 +83,5 @@ public:
     inorder(root, visitor, arg);
   }
 };
+
+#endif  // INCLUDE_BST_H_
