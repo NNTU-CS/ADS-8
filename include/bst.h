@@ -19,20 +19,20 @@ struct Node {
 
 template<typename T>
 class BST {
-private:
+ private:
     Node<T> *root;
 
-    size_t depthHelper(Node<T> *node);
-    void inorderHelper(std::vector<Node<T> *> &vec, Node<T> *node);
+    size_t depthHelper(Node<T> *node) const;
+    void inorderHelper(std::vector<Node<T> *> &vec, Node<T> *node) const;
 
-public:
+ public:
     BST() : root(nullptr) {}
     ~BST();
     bool insert(const T &val);
     bool search(const T &val);
-    size_t depth();
-    void inorder(std::vector<Node<T> *> &vec);
-    void printFrequency();
+    size_t depth() const;
+    void inorder(std::vector<Node<T> *> &vec) const;
+    void printFrequency() const;
 };
 
 template<typename T>
@@ -81,7 +81,7 @@ bool BST<T>::insert(const T &val) {
 }
 
 template<typename T>
-bool BST<T>::search(const T &val) {
+bool BST<T>::search(const T &val) const {
     Node<T> *current = root;
     while (current != nullptr && current->key != val) {
         if (val < current->key) {
@@ -94,24 +94,23 @@ bool BST<T>::search(const T &val) {
 }
 
 template<typename T>
-size_t BST<T>::depth() {
-    if (root == nullptr) return 0;
-    return 1 + std::max(depthHelper(root->left), depthHelper(root->right));
+size_t BST<T>::depth() const {
+    return depthHelper(root);
 }
 
 template<typename T>
-size_t BST<T>::depthHelper(Node<T> *node) {
+size_t BST<T>::depthHelper(Node<T> *node) const {
     if (node == nullptr) return 0;
     return 1 + std::max(depthHelper(node->left), depthHelper(node->right));
 }
 
 template<typename T>
-void BST<T>::inorder(std::vector<Node<T> *> &vec) {
+void BST<T>::inorder(std::vector<Node<T> *> &vec) const {
     inorderHelper(vec, root);
 }
 
 template<typename T>
-void BST<T>::inorderHelper(std::vector<Node<T> *> &vec, Node<T> *node) {
+void BST<T>::inorderHelper(std::vector<Node<T> *> &vec, Node<T> *node) const {
     if (node != nullptr) {
         inorderHelper(vec, node->left);
         vec.push_back(node);
@@ -120,7 +119,7 @@ void BST<T>::inorderHelper(std::vector<Node<T> *> &vec, Node<T> *node) {
 }
 
 template<typename T>
-void BST<T>::printFrequency() {
+void BST<T>::printFrequency() const {
     std::vector<Node<T> *> nodes;
     inorder(nodes);
     std::sort(nodes.begin(), nodes.end(), [](const Node<T> *a, const Node<T> *b) {
