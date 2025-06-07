@@ -17,10 +17,9 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   std::string word;
   char ch;
   while (file.get(ch)) {
-    if (isalpha(ch) && (ch & 0x80) == 0) {  // только латинские
+    if (isalpha(ch) && (ch & 0x80) == 0) {
       word += static_cast<char>(tolower(ch));
-    }
-    else {
+    } else {
       if (!word.empty()) {
         tree.insert(word);
         word.clear();
@@ -50,7 +49,7 @@ void printFreq(BST<std::string>& tree) {
 
   std::sort(arr.begin(), arr.end(), [](const WordFreq& a, const WordFreq& b) {
     return (a.count > b.count) || (a.count == b.count && a.word < b.word);
-    });
+  });
 
   std::ofstream fout("result/freq.txt");
   for (const auto& wf : arr) {
