@@ -15,7 +15,7 @@ struct BSTNode {
 
 template <typename T>
 class BST {
-  private:
+  private:  
     BSTNode<T>* root;
 
     void insert(BSTNode<T>*& node, const T& value) {
@@ -63,7 +63,7 @@ class BST {
       delete node;
     }
 
-  public:
+  public:  
     BST() : root(nullptr) {}
     ~BST() { free(root); }
 
