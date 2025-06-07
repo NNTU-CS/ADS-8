@@ -32,3 +32,21 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
   file.close();
 }
+
+
+void printFreq(BST<std::string>& tree) {
+  auto sortedWords = tree.getSortedByFrequency();
+
+  std::ofstream outFile("result/freq.txt");
+  if (!outFile) {
+    std::cerr << "Error creating output file!" << std::endl;
+    return;
+  }
+
+  for (const auto& pair : sortedWords) {
+    //std::cout << pair.first << " -> " << pair.second << std::endl;
+    outFile << pair.first << " -> " << pair.second << std::endl;
+  }
+
+  outFile.close();
+}
