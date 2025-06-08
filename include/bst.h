@@ -4,6 +4,8 @@
 #define INCLUDE_BST_H_
 
 #include <string>
+#include <vector>
+#include <algorithm>
 
 template <typename T>
 class BST {
@@ -54,6 +56,13 @@ class BST {
     delete node;
   }
 
+  void collectNodes(Node* node, std::vector<Node*>& nodes) const {
+    if (!node) return;
+    collectNodes(node->left, nodes);
+    nodes.push_back(node);
+    collectNodes(node->right, nodes);
+  }
+
  public:
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
@@ -68,6 +77,12 @@ class BST {
 
   int search(const T& key) const {
     return searchCount(root, key);
+  }
+
+  std::vector<Node*> getAllNodes() const {
+    std::vector<Node*> nodes;
+    collectNodes(root, nodes);
+    return nodes;
   }
 };
 
