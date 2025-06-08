@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <regex>
 #include <algorithm>
+#include <set>
 #include "bst.h"
 
 // Вспомогательная рекурсивная функция для сбалансированной вставки
