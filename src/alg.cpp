@@ -10,7 +10,7 @@
 #include  <utility>
 #include  "bst.h"
 
-void makeTree(BST<std::string>& tree, const char* filename) {
+void makeTree(bst<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
   std::string Word;
   while (!file.eof()) {
@@ -29,7 +29,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   }
   file.close();
 }
-void printFreq(BST<std::string>& tree) {
+void printFreq(bst<std::string>& tree) {
     auto words = tree.symBypass();
     std::sort(words.begin(), words.end(),
         [](const auto& a, const auto& b) {
