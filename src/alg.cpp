@@ -1,12 +1,12 @@
 // Copyright 2021 NNTU-CS
+#include <sys/stat.h>
+#include <cerrno>
 #include <iostream>
 #include <fstream>
 #include <cctype>
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <sys/stat.h>
-#include <cerrno>
 #include "bst.h"
 
 namespace {
