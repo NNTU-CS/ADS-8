@@ -1,79 +1,48 @@
 // Copyright 2021 NNTU-CS
-#ifndef INCLUDE_BST_H_
-#define INCLUDE_BST_H_
+#include  <iostream>
+#include  <fstream>
+#include  <locale>
+#include  <cstdlib>
+#include <cctype>
+#include <algorithm>
 #include <string>
 #include <vector>
-#include <algorithm>
+#include <functional>
+#include "bst.h"
 
-template <typename T>
-class BST {
- private:
-  struct node {
-    T key;
-    int count;
-    node* right, * left;
-    explicit node(const T& value) : key(value), count(1), right(nullptr), left(nullptr) {}
-  };
-  node* root;
-  node* addNode(node* root, const T& value) {
-    if (root == nullptr) {
-      return new node(value);
+void makeTree(BST<std::string>& tree, const char* filename) {
+    std::ifstream file(filename);
+    if (!file) {
+        std::cout << "File error!" << std::endl;
+        return;
     }
-    if (root->key == value) {
-      ++root->count;
-      return root;
+    std::string word;
+    while (!file.eof()) {
+        char ch = file.get();
+        if (ch >= 'A' && ch <= 'Z') ch += 'a' - 'A';
+        if (ch >= 'a' && ch <= 'z') {
+            word += ch;
+        } else {
+            if (!word.empty()) {
+                tree.add(word);
+            }
+            word.clear();
+        }
     }
-    if (root->key > value) {
-      root->left = addNode(root->left, value);
-    } else {
-      root->right = addNode(root->right, value);
-    }
-    return root;
-  }
-  int get_depth(node* root) {
-    if (root == nullptr) return 0;
-    int left_depth = get_depth(root->left);
-    int right_depth = get_depth(root->right);
-    return (left_depth >= right_depth ? left_depth : right_depth) + 1;
-  }
-  int search_node(node* root, const T& value) {
-    if (root == nullptr) return 0;
-    if (value == root->key) return root->count;
-    if (value < root->key) return search_node(root->left, value);
-    else return search_node(root->right, value);
-    }
-  void clear(node* root) {
-    if (root == nullptr) return;
-    clear(root->left);
-    clear(root->right);
-    delete root;
-  }
-  void Order(node* root, std::vector<std::pair<T, int>>& res) const {
-    if (root == nullptr) return;
-    Order(root->left, res);
-    res.push_back({ root->key, root->count });
-    Order(root->right, res);
-  }
+    file.close();
+}
 
- public:
-  BST(): root(nullptr) {}
-  ~BST() {
-    clear(root);
-  }
-  void add(const T& value) {
-    root = addNode(root, value);
-  }
-  int search(const T& value) {
-    return search_node(root, value);
-  }
-  int depth() {
-    return get_depth(root)-1;
-  }
-  std::vector<std::pair<T, int>> array_words() const {
-    std::vector<std::pair<T, int>> result;
-    Order(root, result);
-    return result;
-  }
-};
-
-#endif  // INCLUDE_BST_H_
+void printFreq(const BST<std::string>& tree) {
+    std::vector<std::pair<std::string, int>> words = tree.array_words();
+    std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) { return a.second > b.second; });
+    std::ofstream file("result/freq.txt");
+    if (!file.is_open()) {
+        std::cerr << "File is not open!" << std::endl;
+        return;
+    }
+    for (const auto& pair : words) {
+        std::cout << pair.first << "-" << pair.second << '\n';
+        file << pair.first << "-" << pair.second << '\n';
+    }
+    file.close();
+}
