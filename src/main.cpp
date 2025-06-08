@@ -1,17 +1,46 @@
 // Copyright 2021 NNTU-CS
-#include "bst.h"
-#include <algorithm>
-#include <cctype>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <locale>
 #include <string>
-void makeTree (BST<std::string>& tree, const char* filename);
-void printFreq (BST<std::string>& tree);
-int main() {
-    BST<std::string> tree;
-    makeTree (tree, "src/war_peace.txt");
-    std::cout << "Tree depth: " << tree.depth() << std::endl;
-    printFreq (tree);
-    return 0;
+#include <algorithm>
+
+#include "bst.h"
+
+void makeTree(BST<std::string>& tree, const char* filename) {
+  std::ifstream file(filename);
+  if (!file) {
+    std::cout << "File error!" << std::endl;
+    return;
+  }
+  std::string word;
+  char ch;
+  while (file.get(ch)) {
+    if (std::isalpha(ch)) {
+      word += std::tolower(ch);
+    } else {
+      if (!word.empty()) {
+        tree.insert(word);
+        word.clear();
+      }
+    }
+  }
+  if (!word.empty()) {
+    tree.insert(word);
+  }
+  file.close();
+}
+void printFreq(BST<std::string>& tree) {
+  auto items = tree.getAll();
+  std::sort(items.begin(), items.end(),
+            [](const auto& a, const auto& b) {
+              return a.second > b.second;
+            });
+  std::ofstream fout("result/freq.txt");
+  for (const auto& pair : items) {
+    std::cout << pair.first << " : " << pair.second << std::endl;
+    fout << pair.first << " : " << pair.second << "\n";
+  }
+  fout.close();
 }
