@@ -18,8 +18,8 @@ class BST {
         Node* left;
         Node* right;
 
-        Node(const T& k)
-        : key(k), count(1), left(nullptr), right(nullptr) {}
+        explicit Node(const T& k)
+            : key(k), count(1), left(nullptr), right(nullptr) {}
     };
 
     Node* root;
@@ -27,38 +27,36 @@ class BST {
     void insert(Node*& node, const T& key) {
         if (!node) {
             node = new Node(key);
-        }
-        else if (key < node->key) {
+        } else if (key < node->key) {
             insert(node->left, key);
-        }
-        else if (key > node->key) {
+        } else if (key > node->key) {
             insert(node->right, key);
-        }
-        else {
+        } else {
             node->count++;
         }
     }
 
     Node* search(Node* node, const T& key) const {
-        if (!node || node->key == key)
+        if (!node || node->key == key) {
             return node;
-        return (key < node->key)
-               ? search(node->left, key)
-               : search(node->right, key);
+        } else {
+            return (key < node->key)
+                   ? search(node->left, key)
+                   : search(node->right, key);
+        }
     }
 
     int depth(Node* node) const {
-        if (!node) return 0;
+        if (!node) return -1;
         int l = depth(node->left);
         int r = depth(node->right);
         return 1 + std::max(l, r);
     }
 
-    void inorder(Node* node,
-std::vector<std::pair<T, int>>& output) const {
+    void inorder(Node* node, std::vector<std::pair<T, int>>& output) const {
         if (!node) return;
         inorder(node->left, output);
-        output.push_back({ node->key, node->count });
+        output.push_back({node->key, node->count});
         inorder(node->right, output);
     }
 
@@ -89,8 +87,7 @@ std::vector<std::pair<T, int>>& output) const {
         return node ? node->count : 0;
     }
 
-    void collect(
-std::vector<std::pair<T, int>>& output) const {
+    void collect(std::vector<std::pair<T, int>>& output) const {
         inorder(root, output);
     }
 };
