@@ -1,56 +1,39 @@
 // Copyright 2021 NNTU-CS
 
-#include <string>
 #include <iostream>
+#include <string>
 #include <fstream>
 #include <cctype>
 #include <algorithm>
-#include <vector>
-#include  "bst.h"
+#include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-    std::ifstream file(filename);
-    if (!file) {
-        std::cerr << "File error: " << filename << std::endl;
+    std::ifstream fin(filename);
+    if (!fin.is_open()) {
+        std::cerr << "Cannot open file: " << filename << "\n";
         return;
     }
-
-    std::string tekuhSlovo;
-    while (!file.eof()) {
-        char ch = file.get();
-        if (isalpha(ch)) {
-            tekuhSlovo += tolower(ch);
-        } else {
-            if (!tekuhSlovo.empty()) {
-                tree.insert(tekuhSlovo);
-                tekuhSlovo.clear();
-            }
+    std::string tekuhSlovo;  // word → tekuhSlovo
+    char c;
+    while (fin.get(c)) {
+        if (isalpha(static_cast<unsigned char>(c))) {
+            tekuhSlovo.clear();
+            do {
+                tekuhSlovo += std::tolower(static_cast<unsigned char>(c));
+            } while (fin.get(c) && isalpha(static_cast<unsigned char>(c)));
+            tree.insert(tekuhSlovo);
         }
     }
-
-    if (!tekuhSlovo.empty()) {
-        tree.insert(tekuhSlovo);
-    }
-
-    file.close();
+    fin.close();
 }
 
 void printFreq(BST<std::string>& tree) {
-    auto words = tree.getWordsWithCounts();
-
+    auto words = tree.getAll();
     std::sort(words.begin(), words.end(),
-        [](const auto& a, const auto& b) { return a.second > b.second; });
-
-    std::ofstream outFile("result/freq.txt");
-    if (!outFile) {
-        std::cerr << "Cannot create output file!" << std::endl;
-        return;
+        [](const auto& a, const auto& b) {
+            return a.second != b.second ? a.second > b.second : a.first < b.first;
+        });
+    for (const auto& p : words) {
+        std::cout << p.first << " " << p.second << "\n";
     }
-
-    for (const auto& [word, count] : words) {
-        std::cout << word << ": " << count << std::endl;
-        outFile << word << ": " << count << std::endl;
-    }
-
-    outFile.close();
 }
