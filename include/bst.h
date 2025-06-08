@@ -84,8 +84,9 @@ std::vector<std::pair<T, int>>& output) const {
         return depth(root);
     }
 
-    bool search(const T& key) const {
-        return search(root, key) != nullptr;
+    int search(const T& key) const {
+        Node* node = search(root, key);
+        return node ? node->count : 0;
     }
 
     void collect(
