@@ -10,7 +10,7 @@
 
 template <typename T>
 class BST {
-private:
+    private:
     struct Node {
         T key;
         int countW;
@@ -54,7 +54,7 @@ private:
         delete node;
     }
 
-public:
+    public:
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
     void insert(const T& value) {
