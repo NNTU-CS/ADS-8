@@ -19,7 +19,7 @@ class BST {
   Node* root;
   Node* addNode(Node*, T);
   void printTree(Node*);
-  int depthTree(Node*);
+  int depthTree(Node*) const;
   int searchNode(Node*, const T&) const;
   void delTree(Node*);
   Node* delNode(Node*, int);
@@ -142,7 +142,7 @@ void BST<T>::remove(int value) {
 }
 
 template<typename T>
-int BST<T>::depthTree(Node* root) {
+int BST<T>::depthTree(Node* root) const {
   if (root == nullptr)
     return 0;
   int left = depthTree(root->left);
