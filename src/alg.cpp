@@ -21,6 +21,10 @@ void makeTree(BST<std::string>& tree, const char* filename) {
             tekuhSlovo += tolower(ch);
         } else {
             if (!tekuhSlovo.empty()) {
+
+                if (tekuhSlovo == "some_specific_word") {
+
+                }
                 tree.insert(tekuhSlovo);
                 tekuhSlovo.clear();
             }
