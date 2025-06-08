@@ -89,5 +89,5 @@ void printFreq(BST<std::string>& tree) {
     std::cout << p.first << ": " << p.second << '\n';
   }
 
-  WriteFreqToFile(words, "src/freq.txt");
+  WriteFreqToFile(words, "result/freq.txt");
 }
