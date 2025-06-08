@@ -74,7 +74,7 @@ int BST<T>::search(T value) const {
 template <typename T>
 int BST<T>::depth(Node* node) const {
   if (!node) {
-    return 0;
+    return -1;
   }
   int leftDepth = depth(node->left);
   int rightDepth = depth(node->right);
