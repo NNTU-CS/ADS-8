@@ -3,44 +3,68 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
-#include <cctype>
+#include  "bst.h"
+#include <iostream>
+#include <fstream>
+#include <locale>
+#include <cstdlib>
 #include <algorithm>
-#include <vector>
+#include <cctype>
 #include <string>
+#include <vector>
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   // поместите сюда свой код
   std::ifstream file(filename);
-  if (!file) return;
+  if (!file) {
+    std::cout << "File error!" << std::endl;
+    return;
+  }
 
   std::string word;
   char ch;
+
   while (file.get(ch)) {
     if (std::isalpha(static_cast<unsigned char>(ch))) {
       word += std::tolower(static_cast<unsigned char>(ch));
-    } else {
-      if (!word.empty()) {
-        tree.insert(word);
-        word.clear();
-      }
+    } else if (!word.empty()) {
+      tree.insert(word);
+      word.clear();
     }
   }
-  if (!word.empty()) tree.insert(word);
+
+  // Insert the last word if file doesn't end with separator
+  if (!word.empty()) {
+    tree.insert(word);
+  }
+
   file.close();
 }
 
-void printFreq(const BST<std::string>& tree) {
-    std::vector<std::pair<std::string, int>> words = tree.toVector();
-    std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) { return a.second > b.second; });
-    std::ofstream file("result/freq.txt");
-    if (!file.is_open()) {
-        std::cerr << "File is not open!" << std::endl;
-        return;
-    }
-    for (const auto& pair : words) {
-        std::cout << pair.first << "-" << pair.second << '\n';
-        file << pair.first << "-" << pair.second << '\n';
-    }
-    file.close();
+// Prints word frequencies sorted by count (descending) and alphabetically (ascending)
+// Outputs to both console and "result/freq.txt" file
+void printFreq(BST<std::string>& tree) {
+  std::vector<std::pair<std::string, int>> elements;
+  tree.getAll(elements);
+
+  std::sort(elements.begin(), elements.end(),
+    [](const auto& a, const auto& b) {
+      if (a.second != b.second) {
+        return a.second > b.second;
+      }
+      return a.first < b.first;
+    });
+
+  std::ofstream outputFile("result/freq.txt");
+  if (!outputFile.is_open()) {
+    std::cout << "Error opening result file!" << std::endl;
+    return;
+  }
+  for (const auto& pair : elements) {
+    std::cout << pair.first << " - " << pair.second << std::endl;
+    outputFile << pair.first << " - " << pair.second << std::endl;
+  }
+
+  outputFile.close();
 }
