@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+void makeTree(BST<std::string>& tree, const char* filename);
+void printFreq(BST<std::string>& tree);
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 template<typename T>
