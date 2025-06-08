@@ -7,13 +7,13 @@
 
 template <typename T>
 class BST {
-private:
+ private:
   struct Node {
     T key;
     int count;
     Node* left;
     Node* right;
-    Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(T k) : key(k), count(1), left(nullptr), right(nullptr) {}
   };
 
   Node* root;
@@ -24,7 +24,7 @@ private:
   void inOrder(Node* node, std::function<void(const T&, int)> visit) const;
   void clear(Node* node);
 
-public:
+ public:
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
 
@@ -44,11 +44,9 @@ typename BST<T>::Node* BST<T>::insert(Node* node, T value) {
   }
   if (value == node->key) {
     node->count++;
-  }
-  else if (value < node->key) {
+  } else if (value < node->key) {
     node->left = insert(node->left, value);
-  }
-  else {
+  } else {
     node->right = insert(node->right, value);
   }
   return node;
@@ -61,8 +59,7 @@ typename BST<T>::Node* BST<T>::search(Node* node, T value) const {
   }
   if (value < node->key) {
     return search(node->left, value);
-  }
-  else {
+  } else {
     return search(node->right, value);
   }
 }
