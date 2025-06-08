@@ -28,3 +28,18 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     }
     file.close();
 }
+
+void printFreq(const BST<std::string>& tree) {
+    std::vector<std::pair<std::string, int>> words = tree.words();
+    std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) { return a.second > b.second; });
+    std::ofstream file("result/freq.txt");
+    if (!file.is_open()) {
+        std::cerr << "File is not open!" << std::endl;
+        return;
+    }
+    for (const auto& pair : words) {
+        std::cout << pair.first << "-" << pair.second << '\n';
+        file << pair.first << "-" << pair.second << '\n';
+    }
+    file.close();
+}
