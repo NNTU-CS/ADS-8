@@ -14,14 +14,14 @@
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
   if (!file) {
-    std::cout << "File error!" << std::endl;
+    std::cerr << "File error: cannot open " << filename << std::endl;
     return;
   }
   std::string word;
   char ch;
   while (file.get(ch)) {
-    if (std::isalpha(ch)) {
-      word += std::tolower(ch);
+    if (std::isalpha(static_cast<unsigned char>(ch))) {
+      word += std::tolower(static_cast<unsigned char>(ch));
     } else {
       if (!word.empty()) {
         tree.insert(word);
@@ -34,22 +34,20 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   }
 }
 void printFreq(BST<std::string>& tree) {
-  struct stat info;
-  (void)system("mkdir -p result");
-  if (stat("result", &info) != 0 || !(info.st_mode & S_IFDIR)) {
-    system("mkdir -p result");
-  }
   auto items = tree.getAll();
   std::sort(items.begin(), items.end(),
             [](const auto& a, const auto& b) {
               return a.second > b.second;
             });
   std::ofstream fout("result/freq.txt");
+  if (!fout) {
+    std::cerr << "Error opening file for writing: result/freq.txt" << std::endl;
+    return;
+  }
   for (const auto& pair : items) {
     std::cout << pair.first << " : " << pair.second << std::endl;
     fout << pair.first << " : " << pair.second << "\n";
   }
-  fout.close();
 }
 int main(int argc, char* argv[]) {
   if (argc < 2) {
