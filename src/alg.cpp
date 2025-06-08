@@ -1,8 +1,9 @@
 // Copyright 2021 NNTU-CS
 #include  "bst.h"
-#include <string>
-#include  <iostream>
+#include <cctype>
 #include  <fstream>
+#include  <iostream>
+#include <string>
 #include  <locale>
 #include  <cstdlib>
 #include <regex>
