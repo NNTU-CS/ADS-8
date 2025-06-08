@@ -6,6 +6,7 @@
 #include <cctype>
 #include <vector>
 #include <algorithm>
+#include <string>
 #include  "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
@@ -20,8 +21,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   while (file.get(ch)) {
     if (isalpha(ch)) {
       currentWord += tolower(ch);
-    }
-    else if (!currentWord.empty()) {
+    } else if (!currentWord.empty()) {
       tree.insert(currentWord);
       currentWord.clear();
     }
