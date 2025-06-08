@@ -11,14 +11,14 @@
 
 template <typename T>
 class BST {
-private:
+ private:
     struct Node {
         T info;
         int kol;
         Node* left;
         Node* right;
-        
-        Node(T k) : info(k), kol(1), left(nullptr), right(nullptr) {}
+
+        explicit Node(T k) : info(k), kol(1), left(nullptr), right(nullptr) {}
     };
 
     Node* root;
@@ -27,18 +27,18 @@ private:
         if (node == nullptr) {
             return new Node(value);
         }
-        
+
         if (value == node->info) {
             node->kol++;
             return node;
         }
-        
+
         if (value < node->info) {
             node->left = insert(node->left, value);
         } else {
             node->right = insert(node->right, value);
         }
-        
+
         return node;
     }
 
@@ -51,13 +51,13 @@ private:
         int rightDepth = depth(node->right);
 
         return 1 + std::max(leftDepth, rightDepth);
-    } 
+    }
 
     Node* searchNode(Node* node, T value) const {
         if (node == nullptr || node->info == value) {
             return node;
         }
-        
+
         if (value < node->info) {
             return searchNode(node->left, value);
         }
@@ -80,9 +80,9 @@ private:
         }
     }
 
-public:
+ public:
     BST() : root(nullptr) {}
-    
+
     ~BST() {
         clear(root);
     }
