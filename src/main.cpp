@@ -5,6 +5,8 @@
 #include <locale>
 #include <string>
 #include <algorithm>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "bst.h"
 
@@ -29,9 +31,12 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   if (!word.empty()) {
     tree.insert(word);
   }
-  file.close();
 }
 void printFreq(BST<std::string>& tree) {
+  struct stat info;
+  if (stat("result", &info) != 0 || !(info.st_mode & S_IFDIR)) {
+    system("mkdir -p result");
+  }
   auto items = tree.getAll();
   std::sort(items.begin(), items.end(),
             [](const auto& a, const auto& b) {
@@ -43,4 +48,14 @@ void printFreq(BST<std::string>& tree) {
     fout << pair.first << " : " << pair.second << "\n";
   }
   fout.close();
+}
+int main(int argc, char* argv[]) {
+  if (argc < 2) {
+    std::cerr << "Usage: " << argv[0] << " <filename>" << std::endl;
+    return 1;
+  }
+  BST<std::string> tree;
+  makeTree(tree, argv[1]);
+  printFreq(tree);
+  return 0;
 }
