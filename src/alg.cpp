@@ -14,34 +14,26 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         return;
     }
 
-    std::vector<std::string> words;
     std::string tekuhSlovo;
-    
     while (!file.eof()) {
         char ch = file.get();
         if (isalpha(ch)) {
             tekuhSlovo += tolower(ch);
         } else {
             if (!tekuhSlovo.empty()) {
-                words.push_back(tekuhSlovo);
+                tree.insert(tekuhSlovo);
                 tekuhSlovo.clear();
             }
         }
     }
     
     if (!tekuhSlovo.empty()) {
-        words.push_back(tekuhSlovo);
+        tree.insert(tekuhSlovo);
     }
     
     file.close();
-
-    std::sort(words.begin(), words.end());
-    words.erase(std::unique(words.begin(), words.end()), words.end());
-    
-    for (const auto& word : words) {
-        tree.insert(word);
-    }
 }
+
 
 void printFreq(BST<std::string>& tree) {
     auto words = tree.inOrder();
