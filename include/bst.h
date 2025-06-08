@@ -1,10 +1,11 @@
 // Copyright 2021 NNTU-CS
-#ifndef INCLUDE_BST_H_
-#define INCLUDE_BST_H_
+#ifndef BST_H
+#define BST_H
+
+#include <algorithm>
+#include <functional>
 #include <iostream>
 #include <string>
-#include <functional>
-#include <algorithm>
 
 template <typename T>
 class BST {
@@ -19,11 +20,12 @@ class BST {
 
   Node* root;
 
-  Node* insert(Node* node, T value);
-  Node* search(Node* node, T value) const;
-  int depth(Node* node) const;
-  void inOrder(Node* node, std::function<void(const T&, int)> visit) const;
-  void clear(Node* node);
+  static Node* insert(Node* node, T value);
+  static Node* search(Node* node, T value);
+  static int depth(Node* node);
+  static void inOrder(Node* node,
+                      const std::function<void(const T&, int)>& visit);
+  static void clear(Node* node);
 
  public:
   BST() : root(nullptr) {}
@@ -32,7 +34,9 @@ class BST {
   void insert(T value) { root = insert(root, value); }
   int search(T value) const;
   int depth() const { return depth(root); }
-  void inOrder(std::function<void(const T&, int)> visit) const { inOrder(root, visit); }
+  void inOrder(const std::function<void(const T&, int)>& visit) const {
+    inOrder(root, visit);
+  }
 };
 
 void makeTree(BST<std::string>& tree, const char* filename);
@@ -40,11 +44,9 @@ void printFreq(BST<std::string>& tree);
 
 template <typename T>
 typename BST<T>::Node* BST<T>::insert(Node* node, T value) {
-  if (!node) {
-    return new Node(value);
-  }
+  if (node == nullptr) return new Node(value);
   if (value == node->key) {
-    node->count++;
+    ++node->count;
   } else if (value < node->key) {
     node->left = insert(node->left, value);
   } else {
@@ -54,48 +56,38 @@ typename BST<T>::Node* BST<T>::insert(Node* node, T value) {
 }
 
 template <typename T>
-typename BST<T>::Node* BST<T>::search(Node* node, T value) const {
-  if (!node || node->key == value) {
-    return node;
-  }
-  if (value < node->key) {
-    return search(node->left, value);
-  } else {
-    return search(node->right, value);
-  }
+typename BST<T>::Node* BST<T>::search(Node* node, T value) {
+  if (node == nullptr || node->key == value) return node;
+  return (value < node->key) ? search(node->left, value)
+                             : search(node->right, value);
 }
 
 template <typename T>
 int BST<T>::search(T value) const {
-  Node* node = search(root, value);
-  return node ? node->count : 0;
+  Node* res = search(root, value);
+  return res ? res->count : 0;
 }
 
 template <typename T>
-int BST<T>::depth(Node* node) const {
-  if (!node) {
-    return -1;
-  }
-  int leftDepth = depth(node->left);
-  int rightDepth = depth(node->right);
-  return std::max(leftDepth, rightDepth);
+int BST<T>::depth(Node* node) {
+  return node ? std::max(depth(node->left), depth(node->right)) + 1 : 0;
 }
 
 template <typename T>
-void BST<T>::inOrder(Node* node, std::function<void(const T&, int)> visit) const {
-  if (node) {
-    inOrder(node->left, visit);
-    visit(node->key, node->count);
-    inOrder(node->right, visit);
-  }
+void BST<T>::inOrder(Node* node,
+                     const std::function<void(const T&, int)>& visit) {
+  if (!node) return;
+  inOrder(node->left, visit);
+  visit(node->key, node->count);
+  inOrder(node->right, visit);
 }
 
 template <typename T>
 void BST<T>::clear(Node* node) {
-  if (node) {
-    clear(node->left);
-    clear(node->right);
-    delete node;
-  }
+  if (!node) return;
+  clear(node->left);
+  clear(node->right);
+  delete node;
 }
-#endif  // INCLUDE_BST_H_
+
+#endif
