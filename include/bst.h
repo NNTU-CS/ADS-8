@@ -1,3 +1,4 @@
+// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 #include <iostream>
@@ -10,10 +11,10 @@ class BST {
  private:
   struct Node {
     T key;
-    int count;
+    int countW;
     Node* left;
     Node* right;
-    explicit Node(T value) : key(value), count(1), left(nullptr), right(nullptr) {}
+    explicit Node(const T& value) : key(value), countW(1), left(nullptr), right(nullptr) {}
   };
   Node* root;
   void insert(Node*& node, const T& value) {
@@ -24,24 +25,24 @@ class BST {
     } else if (value > node->key) {
       insert(node->right, value);
     } else {
-      node->count++;
+      node->countW++;
     }
   }
   Node* search(Node* node, const T& value) const {
     if (!node || node->key == value) return node;
-    if (value < node->key)
-      return search(node->left, value);
-    else
-      return search(node->right, value);
+    if (value < node->key) return search(node->left, value);
+    else return search(node->right, value);
   }
   int depth(Node* node) const {
     if (!node) return 0;
-    return std::max(depth(node->left), depth(node->right)) + 1;
+    int leftDepth = depth(node->left);
+    int rightDepth = depth(node->right);
+    return std::max(leftDepth, rightDepth) + 1;
   }
   void collect(Node* node, std::vector<std::pair<T, int>>& out) const {
     if (!node) return;
     collect(node->left, out);
-    out.push_back({node->key, node->count});
+    out.push_back({node->key, node->countW});
     collect(node->right, out);
   }
   void clear(Node* node) {
@@ -51,15 +52,17 @@ class BST {
     delete node;
   }
 
- public:
+public:
   BST() : root(nullptr) {}
   ~BST() { clear(root); }
+
   void insert(const T& value) {
     insert(root, value);
   }
-  bool search(const T& value) {
+  bool search(const T& value) const {
     return search(root, value) != nullptr;
   }
+
   int depth() const {
     return depth(root);
   }
