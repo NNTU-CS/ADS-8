@@ -56,8 +56,9 @@ typename BST<T>::Node* BST<T>::addNode(Node* root, T value) {
     root->left = addNode(root->left, value);
   } else if (root->value < value) {
     root->right = addNode(root->right, value);
-  } else
+  } else {
     root->count++;
+  }
   return root;
 }
 
@@ -100,19 +101,19 @@ void BST<T>::clear() {
 template<typename T>
 typename BST<T>::Node* BST<T>::delNode(typename BST<T>::Node* root, int value) {
   Node* p, * v;
-  if (root == nullptr)
+  if (root == nullptr) {
     return root;
-  else if (value < root->value)
+  } else if (value < root->value) {
     root->left = delNode(root->left, value);
-  else if (value > root->value)
+  } else if (value > root->value){
     root->right = delNode(root->right, value);
-  else {
+  } else {
     p = root;
-    if (root->right == nullptr)
+    if (root->right == nullptr) {
       root = root->left;
-    else if (root->left == nullptr)
+    } else if (root->left == nullptr) {
       root = root->right;
-    else {
+    } else {
       v = root->left;
       if (v->right) {
         while (v->right->right)
