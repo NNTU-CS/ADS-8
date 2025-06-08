@@ -48,6 +48,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     for (const auto& w : ordered) {
         tree.insert(w);
 }
+
 void printFreq(BST<std::string>& tree) {
     auto words = tree.toVector();
 
