@@ -65,7 +65,11 @@ class BST {
 
     void insert(const T& key) { insert(root, key); }
     int depth() const { return depth(root); }
-    bool search(const T& key) const { return search(root, key) != nullptr; }
+    int search(const T& key) const {
+        Node* node = search(root, key);
+        return node ? node->count : 0;
+    }
+
 
     std::vector<std::pair<T, int>> toVector() const {
         std::vector<std::pair<T, int>> vec;
