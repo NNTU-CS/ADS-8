@@ -1,7 +1,4 @@
 // Copyright 2021 NNTU-CS
-#include "bst.h"
-
-#include <cctype>
 #include <cerrno>
 #include <cstdio>
 
@@ -13,10 +10,13 @@
 #endif
 
 #include <algorithm>
+#include <cctype>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
+
+#include "bst.h"
 
 static void EnsureParentDirectoryExists(const std::string& out_path) {
   std::size_t pos = out_path.find_last_of("/\\");
