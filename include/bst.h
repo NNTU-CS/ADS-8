@@ -2,7 +2,8 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <algorithm> // для std::max
+#include <algorithm>
+#include <iostream>
 
 template <typename T> class BST {
   struct Node {
@@ -10,7 +11,8 @@ template <typename T> class BST {
     Node *right;
     int count;
     T word;
-    explicit Node(const T &word) : word(word), left(nullptr), right(nullptr), count(1) {}
+    explicit Node(const T &word)
+        : word(word), left(nullptr), right(nullptr), count(1) {}
   };
   Node *root;
   void add(Node *&node, const T &word) {
@@ -50,13 +52,21 @@ template <typename T> class BST {
     free(node->right);
     delete node;
   }
+  void printInOrderHelper(Node *node, std::ostream &out) const {
+    if (!node)
+      return;
+    printInOrderHelper(node->left, out);
+    out << node->word << " " << node->count << '\n';
+    printInOrderHelper(node->right, out);
+  }
 
- public:
+public:
   BST() : root(nullptr) {}
   ~BST() { free(root); }
   void add(const T &word) { add(root, word); }
-  int depth() const { return treeHeight(root)-1; }
+  int depth() const { return treeHeight(root) - 1; }
   int search(const T &word) const { return search(root, word); }
+  void printInOrder(std::ostream &out) const { printInOrderHelper(root, out); }
 };
 
 #endif // INCLUDE_BST_H_
