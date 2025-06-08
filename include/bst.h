@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <string>
 void makeTree(BST<std::string>& tree, const char* filename);
 void printFreq(BST<std::string>& tree);
 #ifndef INCLUDE_BST_H_
@@ -107,7 +108,7 @@ typename BST<T>::Node* BST<T>::delNode(typename BST<T>::Node* root, int value) {
     return root;
   } else if (value < root->value) {
     root->left = delNode(root->left, value);
-  } else if (value > root->value){
+  } else if (value > root->value) {
     root->right = delNode(root->right, value);
   } else {
     p = root;
