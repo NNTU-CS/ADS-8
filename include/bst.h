@@ -66,4 +66,12 @@ class BST {
         delete node;
     }
 };
+struct WordFreq {
+    std::string word;
+    int freq;
+    WordFreq(const std::string& w, int f) : word(w), freq(f) {}
+};
+void makeTree(BST<std::string>&, const char*);
+void inorderCollect(BST<std::string>::Node*, std::vector<WordFreq>&);
+void printFreq(BST<std::string>&);
 #endif  // INCLUDE_BST_H_
