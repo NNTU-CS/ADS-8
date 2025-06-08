@@ -1,63 +1,64 @@
 // Copyright 2021 NNTU-CS
+// Copyright 2025 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <string>
 #include <vector>
 #include <algorithm>
-#include <iostream>
-#include <iomanip>
-#include <utility>
 
 template <typename T>
 class BST {
  private:
-  struct node {
-    T data;
-    int count;
-    node* left;
-    node* right;
-    explicit node(const T& value) : data(value), count(1), left(nullptr), right(nullptr) {}
+  struct Node {
+    T value;          // Stores the node's value
+    int count;        // Count of duplicate values
+    Node* left;       // Left child pointer
+    Node* right;      // Right child pointer
+
+    explicit Node(const T& val) : value(val), count(1), left(nullptr), right(nullptr) {}
   };
 
-  node* root;
+  Node* root;
 
-  void insert(node*& root, const T& value) {
-    if (!root) {
-      root = new node(value);
-    } else if (value == root->data) {
-      root->count++;
-    } else if (value < root->data) {
-      insert(root->left, value);
+  // Recursively inserts a value into the BST
+  void insert(Node*& node, const T& value) {
+    if (!node) {
+      node = new Node(value);
+    } else if (value < node->value) {
+      insert(node->left, value);
+    } else if (value > node->value) {
+      insert(node->right, value);
     } else {
-      insert(root->right, value);
+      node->count++;
     }
   }
 
-  int search(node* root, const T& value) const {
-    if (!root) return 0;
-    if (value == root->data) return root->count;
-    if (value < root->data) return search(root->left, value);
-    return search(root->right, value);
+  // Finds a node with the specified value
+  Node* find(Node* node, const T& value) const {
+    if (!node || node->value == value) return node;
+    return find(value < node->value ? node->left : node->right, value);
   }
 
-int depth(node* root) const {
-    if (root == nullptr) return -1;
-    return 1 + std::max(depth(root->left), depth(root->right));
-}
-
-  void inorder(node* root, std::vector<std::pair<T, int>>& result) const {
-    if (!root) return;
-    inorder(root->left, result);
-    result.push_back({root->data, root->count});
-    inorder(root->right, result);
+  // Calculates tree depth using ternary operator
+  int depth(Node* node) const {
+    return !node ? -1 : 1 + (depth(node->left) > depth(node->right) ?
+                             depth(node->left) : depth(node->right));
   }
 
-  void clear(node* root) {
-    if (!root) return;
-    clear(root->left);
-    clear(root->right);
-    delete root;
+  // In-order traversal that populates an output vector
+  void inOrder(Node* node, std::vector<std::pair<T, int>>& out) const {
+    if (!node) return;
+    inOrder(node->left, out);
+    out.emplace_back(node->value, node->count);
+    inOrder(node->right, out);
+  }
+
+  // Recursively clears all nodes
+  void clear(Node* node) {
+    if (!node) return;
+    clear(node->left);
+    clear(node->right);
+    delete node;
   }
 
  public:
@@ -68,18 +69,21 @@ int depth(node* root) const {
     insert(root, value);
   }
 
+  int findCount(const T& value) const {
+    Node* found = find(root, value);
+    return found ? found->count : 0;
+  }
+
   int search(const T& value) const {
-    return search(root, value);
+    return findCount(value);  // search simply calls findCount
   }
 
   int depth() const {
     return depth(root);
   }
 
-  std::vector<std::pair<T, int>> toVector() const {
-    std::vector<std::pair<T, int>> result;
-    inorder(root, result);
-    return result;
+  void getAll(std::vector<std::pair<T, int>>& result) const {
+    inOrder(root, result);  // Uses output parameter
   }
 };
 
