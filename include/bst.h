@@ -9,7 +9,7 @@
 
 
 template <typename T>
-class bst {
+class BST {
  private:
     struct Node {
         T key;
@@ -63,8 +63,8 @@ class bst {
     }
 
  public:
-    bst() : root(nullptr) {}
-    ~bst() { clear(root); }
+    BST() : root(nullptr) {}
+    ~BST() { clear(root); }
 
     void insert(T value) {
         root = insert(root, std::move(value));
