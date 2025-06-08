@@ -27,31 +27,30 @@ void makeTree(BST<std::string>& tree, const char* filename) {
             }
         }
     }
-    
+
     if (!tekuhSlovo.empty()) {
         tree.insert(tekuhSlovo);
     }
-    
+
     file.close();
 }
 
-
 void printFreq(BST<std::string>& tree) {
     auto words = tree.getWordsWithCounts();
-    
-    std::sort(words.begin(), words.end(), 
+
+    std::sort(words.begin(), words.end(),
         [](const auto& a, const auto& b) { return a.second > b.second; });
-    
+
     std::ofstream outFile("result/freq.txt");
     if (!outFile) {
         std::cerr << "Cannot create output file!" << std::endl;
         return;
     }
-    
+
     for (const auto& [word, count] : words) {
         std::cout << word << ": " << count << std::endl;
         outFile << word << ": " << count << std::endl;
     }
-    
+
     outFile.close();
 }
