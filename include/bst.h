@@ -23,7 +23,7 @@ private:
 
     Node* root;
 
-    Node* insert(Node* node, T value) {
+   Node* insert(Node* node, T value) {
         if (node == nullptr) {
             return new Node(value);
         }
@@ -32,11 +32,16 @@ private:
             node->kol++;
             return node;
         }
-        
-        if (value < node->info) {
+        if (node->left == nullptr) {
             node->left = insert(node->left, value);
-        } else {
+        } else if (node->right == nullptr) {
             node->right = insert(node->right, value);
+        } else {
+            if (depth(node->left) <= depth(node->right)) {
+                node->left = insert(node->left, value);
+            } else {
+                node->right = insert(node->right, value);
+            }
         }
         
         return node;
