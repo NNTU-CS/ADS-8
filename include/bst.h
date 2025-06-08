@@ -4,94 +4,102 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <algorithm>
-#include <functional>
+#include <fstream>
+#include <cctype>
 
 template <typename T>
 class BST {
- public:
+private:
     struct Node {
-        T slovo;
+        T info;
         int kol;
         Node* left;
         Node* right;
-        explicit Node(T s) : slovo(s), kol(1), left(nullptr), right(nullptr) {}
+        
+        Node(T k) : info(k), kol(1), left(nullptr), right(nullptr) {}
     };
 
- private:
     Node* root;
 
-    Node* addNode(Node* root, const T& value) {
-        if (root == nullptr) {
+    Node* insert(Node* node, T value) {
+        if (node == nullptr) {
             return new Node(value);
         }
-        if (value < root->slovo) {
-            root->left = addNode(root->left, value);
-        } else if (value > root->slovo) {
-            root->right = addNode(root->right, value);
+        
+        if (value == node->info) {
+            node->kol++;
+            return node;
+        }
+        
+        if (value < node->info) {
+            node->left = insert(node->left, value);
         } else {
-            ++root->kol;
+            node->right = insert(node->right, value);
         }
-        return root;
+        
+        return node;
     }
 
-    int heightT(Node* root) const {
-        if (root == nullptr) {
+    int depth(Node* node) const {
+        if (node == nullptr) {
             return 0;
         }
-        int leftH = heightT(root->left);
-        int rightH = heightT(root->right);
-        return std::max(leftH, rightH) + 1;
+        return 1 + std::max(depth(node->left), depth(node->right));
     }
 
-    int searchNode(Node* spot, T value) const {
-        if (spot == nullptr) {
-            return 0;
-        } else if (value < spot->slovo) {
-            return searchNode(spot->left, value);
-        } else if (value > spot->slovo) {
-            return searchNode(spot->right, value);
+    Node* search(Node* node, T value) const {
+        if (node == nullptr || node->info == value) {
+            return node;
         }
-        return spot->kol;
+        
+        if (value < node->info) {
+            return search(node->left, value);
+        } else {
+            return search(node->right, value);
+        }
     }
 
-    template<typename Visitor>
-    void traverseInOrder(Node* node, Visitor visit) const {
+    void inOrder(Node* node, std::vector<std::pair<T, int>>& result) const {
         if (node != nullptr) {
-            traverseInOrder(node->left, visit);
-            visit(node);
-            traverseInOrder(node->right, visit);
+            inOrder(node->left, result);
+            result.emplace_back(node->info, node->kol);
+            inOrder(node->right, result);
         }
     }
 
-    void clear(Node* root) {
-        if (root == nullptr)
-            return;
-        clear(root->left);
-        clear(root->right);
-        delete root;
+    void clear(Node* node) {
+        if (node != nullptr) {
+            clear(node->left);
+            clear(node->right);
+            delete node;
+        }
     }
 
- public:
+public:
     BST() : root(nullptr) {}
-    ~BST() { clear(root); }
+    
+    ~BST() {
+        clear(root);
+    }
 
-    void insert(const T& value) {
-        root = addNode(root, value);
+    void insert(T value) {
+        root = insert(root, value);
     }
 
     int depth() const {
-        return heightT(root);
+        return depth(root);
     }
 
-    int search(const T& value) const {
-        return searchNode(root, value);
+    bool search(T value) const {
+        return search(root, value) != nullptr;
     }
 
-    template<typename Visitor>
-    void inorder(Visitor visit) const {
-        traverseInOrder(root, visit);
+    std::vector<std::pair<T, int>> inOrder() const {
+        std::vector<std::pair<T, int>> result;
+        inOrder(root, result);
+        return result;
     }
 };
-
 #endif  // INCLUDE_BST_H_
