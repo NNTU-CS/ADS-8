@@ -60,6 +60,14 @@ private:
         return searchNode(node->right, value);
     }
 
+    void inOrder(Node* node, std::vector<std::pair<T, int>>& result) const {
+        if (node != nullptr) {
+            inOrder(node->left, result);
+            result.emplace_back(node->info, node->kol);
+            inOrder(node->right, result);
+        }
+    }
+
     void clear(Node* node) {
         if (node != nullptr) {
             clear(node->left);
