@@ -1,6 +1,4 @@
 // Copyright 2021 NNTU-CS
-#include <sys/stat.h>
-#include <cerrno>
 #include <iostream>
 #include <fstream>
 #include <cctype>
@@ -48,23 +46,19 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     file.close();
 }
 
-void printFreq(BST<std::string>& tree) {
+void printFreq(const BST<std::string>& tree) {
     std::vector<std::pair<std::string, int>> words = tree.getFrequencies();
     std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
-        if (a.second != b.second) return a.second > b.second;
-        return a.first < b.first;
+        return a.second > b.second;
     });
-    if (mkdir("result", 0777) != 0 && errno != EEXIST) {
-        std::cerr << "Warning: Could not create result directory" << std::endl;
-    }
-    std::ofstream fout("result/freq.txt");
-    if (!fout.is_open()) {
-        std::cerr << "Error: Could not open output file" << std::endl;
+    std::ofstream file("result/freq.txt");
+    if (!file.is_open()) {
+        std::cerr << "Failed to create output file!" << std::endl;
         return;
     }
-    for (const auto& pr : words) {
-        std::cout << pr.first << " " << pr.second << std::endl;
-        fout << pr.first << " " << pr.second << std::endl;
+    for (const auto& pair : words) {
+        std::cout << pair.first << " - " << pair.second << '\n';
+        file << pair.first << " - " << pair.second << '\n';
     }
-    fout.close();
+    file.close();
 }
