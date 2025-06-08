@@ -3,10 +3,7 @@
 
 #include <cctype>
 #include <cerrno>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
+#include <cstdio>
 
 #ifdef _WIN32
 #include <direct.h>
@@ -15,18 +12,20 @@
 #include <sys/types.h>
 #endif
 
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+
 static void EnsureParentDirectoryExists(const std::string& out_path) {
   std::size_t pos = out_path.find_last_of("/\\");
   if (pos == std::string::npos) return;
   std::string dir = out_path.substr(0, pos);
 #ifdef _WIN32
-  if (_mkdir(dir.c_str()) != 0 && errno != EEXIST) {
-    std::perror("mkdir");
-  }
+  if (_mkdir(dir.c_str()) != 0 && errno != EEXIST) std::perror("mkdir");
 #else
-  if (mkdir(dir.c_str(), 0755) != 0 && errno != EEXIST) {
-    std::perror("mkdir");
-  }
+  if (mkdir(dir.c_str(), 0755) != 0 && errno != EEXIST) std::perror("mkdir");
 #endif
 }
 
@@ -39,9 +38,7 @@ static void WriteFreqToFile(
     std::cerr << "Failed to open '" << out_path << "' for writing.\n";
     return;
   }
-  for (const auto& p : data) {
-    out << p.first << ": " << p.second << '\n';
-  }
+  for (const auto& p : data) out << p.first << ": " << p.second << '\n';
 }
 
 void makeTree(BST<std::string>& tree, const char* filename) {
@@ -66,9 +63,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
       word.clear();
     }
   }
-  if (!word.empty()) {
-    tree.insert(word);
-  }
+  if (!word.empty()) tree.insert(word);
 }
 
 void printFreq(BST<std::string>& tree) {
@@ -81,13 +76,11 @@ void printFreq(BST<std::string>& tree) {
 
   std::sort(words.begin(), words.end(),
             [](const auto& a, const auto& b) {
-              if (a.second != b.second) return a.second > b.second;
-              return a.first < b.first;
+              return a.second != b.second ? a.second > b.second
+                                          : a.first < b.first;
             });
 
-  for (const auto& p : words) {
-    std::cout << p.first << ": " << p.second << '\n';
-  }
+  for (const auto& p : words) std::cout << p.first << ": " << p.second << '\n';
 
   WriteFreqToFile(words, "result/freq.txt");
 }
