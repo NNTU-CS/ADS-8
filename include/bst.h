@@ -6,7 +6,7 @@
 #define INCLUDE_BST_H_
 template<typename T>
 class BST {
-public:
+ public:
   struct Node {
     T value;
     int count;
@@ -14,7 +14,7 @@ public:
     Node* right;
   };
 
-private:
+ private:
   Node* root;
   Node* addNode(Node*, T);
   void printTree(Node*);
@@ -24,7 +24,7 @@ private:
   Node* delNode(Node*, int);
   void collect(Node*, std::vector<Node*>&) const;
 
-public:
+ public:
   BST();
   ~BST();
   void add(T);
@@ -52,14 +52,11 @@ typename BST<T>::Node* BST<T>::addNode(Node* root, T value) {
     root->value = value;
     root->count = 1;
     root->left = root->right = nullptr;
-  }
-  else if (root->value > value) {
+  } else if (root->value > value) {
     root->left = addNode(root->left, value);
-  }
-  else if (root->value < value) {
+  } else if (root->value < value) {
     root->right = addNode(root->right, value);
-  }
-  else
+  } else
     root->count++;
   return root;
 }
@@ -124,8 +121,7 @@ typename BST<T>::Node* BST<T>::delNode(typename BST<T>::Node* root, int value) {
         root->count = v->right->count;
         p = v->right;
         v->right = v->right->left;
-      }
-      else {
+      } else {
         root->value = v->value;
         root->count = v->count;
         p = v;
