@@ -64,8 +64,7 @@ class BST {
     return search(root, value) != nullptr;
   }
   int depth() const {
-    int h = depth(root);
-    return h > 0 ? h - 1 : 0;
+    return depth(root);
   }
   std::vector<std::pair<T, int>> getAll() const {
     std::vector<std::pair<T, int>> result;
