@@ -48,19 +48,23 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     file.close();
 }
 
-void printFreq(const BST<std::string>& tree) {
-    std::vector<std::pair<std::string, int>> words = tree.getFrequencies();
-    std::sort(words.begin(), words.end(), [](const auto& a, const auto& b) {
-        return a.second > b.second;
-    });
-    std::ofstream file("result/freq.txt");
-    if (!file.is_open()) {
-        std::cerr << "Failed to create output file!" << std::endl;
-        return;
-    }
-    for (const auto& pair : words) {
-        std::cout << pair.first << " - " << pair.second << '\n';
-        file << pair.first << " - " << pair.second << '\n';
-    }
-    file.close();
+void printFreq(BST<std::string>& tree) {
+  std::vector<std::pair<std::string, int>> words;
+  tree.getFrequencies(words);
+  std::sort(words.begin(), words.end());
+  std::vector<std::pair<std::string, int>> sorted;
+  sorted.reserve(words.size());
+  for (auto& p : words) {
+    sorted.push_back(p);
+  }
+  std::sort(sorted.begin(), sorted.end(), [](const auto& a, const auto& b) {
+    if (a.second != b.second) return a.second > b.second;
+    return a.first < b.first;
+  });
+  std::ofstream fout("result/freq.txt");
+  for (const auto& pr : sorted) {
+    std::cout << pr.first << " " << pr.second << std::endl;
+    if (fout) fout << pr.first << " " << pr.second << std::endl;
+  }
+  if (fout) fout.close();
 }
