@@ -2,137 +2,64 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
-#include <iostream>
-#include <string>
-#include <vector>
 #include <algorithm>
+#include <vector>
+#include <string>
+#include <utility>
 
-template<typename T>
-struct Node {
-    T key;
-    size_t count;
-    Node *left;
-    Node *right;
-
-    explicit Node(const T &k) : key(k), count(1), left(nullptr), right(nullptr) {}
-};
-
-template<typename T>
+template <typename T>
 class BST {
  private:
-    Node<T> *root;
-
-    void clear(Node<T> *node);
-
-    size_t depthHelper(Node<T> *node) const;
-    void inorderHelper(std::vector<Node<T> *> &vec, Node<T> *node) const;
-
- public:
-    BST() : root(nullptr) {}
-    ~BST();
-    bool insert(const T &val);
-    bool search(const T &val);
-    size_t depth() const;
-    void inorder(std::vector<Node<T> *> &vec) const;
-    void printFrequency() const;
-};
-
-template<typename T>
-BST<T>::~BST() {
-    clear(root);
-}
-
-template<typename T>
-void BST<T>::clear(Node<T> *node) {
-    if (node != nullptr) {
+    struct Node {
+        T key;
+        int count;
+        Node* left;
+        Node* right;
+        explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+    };
+    Node* root;
+    void clear(Node* node) {
+        if (!node) return;
         clear(node->left);
         clear(node->right);
         delete node;
     }
-}
-
-template<typename T>
-bool BST<T>::insert(const T &val) {
-    if (root == nullptr) {
-        root = new Node<T>(val);
-        return true;
-    }
-
-    Node<T> *current = root;
-    while (true) {
-        if (val == current->key) {
-            ++current->count;
-            break;
-        }
-
-        if (val < current->key) {
-            if (current->left == nullptr) {
-                current->left = new Node<T>(val);
-                break;
-            } else {
-                current = current->left;
-            }
+    void insert(Node*& node, const T& key) {
+        if (!node) {
+            node = new Node(key);
+        } else if (key == node->key) {
+            node->count++;
         } else {
-            if (current->right == nullptr) {
-                current->right = new Node<T>(val);
-                break;
-            } else {
-                current = current->right;
-            }
+            key < node->key ? insert(node->left, key) : insert(node->right, key);
         }
     }
-    return true;
-}
-
-template<typename T>
-bool BST<T>::search(const T &val) {
-    Node<T> *current = root;
-    while (current != nullptr && current->key != val) {
-        if (val < current->key) {
-            current = current->left;
-        } else {
-            current = current->right;
-        }
+    int Search(Node* node, const T& key) const {
+        return !node ? 0 :
+               key == node->key ? node->count :
+               Search(key < node->key ? node->left : node->right, key);
     }
-    return current != nullptr;
-}
-
-template<typename T>
-size_t BST<T>::depthHelper(Node<T> *node) const {
-    if (node == nullptr) return 0;
-    return 1 + std::max(depthHelper(node->left), depthHelper(node->right));
-}
-
-template<typename T>
-void BST<T>::inorderHelper(std::vector<Node<T> *> &vec, Node<T> *node) const {
-    if (node != nullptr) {
-        inorderHelper(vec, node->left);
-        vec.push_back(node);
-        inorderHelper(vec, node->right);
+    int Depth(Node* node) const {
+        return !node ? -1 :
+               1 + std::max(Depth(node->left), Depth(node->right));
     }
-}
-
-template<typename T>
-size_t BST<T>::depth() const {
-    return depthHelper(root);
-}
-
-template<typename T>
-void BST<T>::inorder(std::vector<Node<T> *> &vec) const {
-    inorderHelper(vec, root);
-}
-
-template<typename T>
-void BST<T>::printFrequency() const {
-    std::vector<Node<T> *> nodes;
-    inorder(nodes);
-    std::sort(nodes.begin(), nodes.end(), [](const Node<T> *a, const Node<T> *b) {
-        return a->count > b->count || (a->count == b->count && a->key < b->key);
-    });
-
-    for (auto n : nodes) {
-        std::cout << n->key << ": " << n->count << "\n";
+    void inorder(Node* node, std::vector<std::pair<T, int>>& vec) const {
+        if (!node) return;
+        inorder(node->left, vec);
+        vec.push_back({node->key, node->count});
+        inorder(node->right, vec);
     }
-}
+
+ public:
+    BST() : root(nullptr) {}
+    ~BST() { clear(root); }
+    void insert(const T& key) { insert(root, key); }
+    int search(const T& key) const { return Search(root, key); }
+    int depth() const { return Depth(root); }
+    std::vector<std::pair<T, int>> getAll() const {
+        std::vector<std::pair<T, int>> vec;
+        inorder(root, vec);
+        return vec;
+    }
+};
 
 #endif  // INCLUDE_BST_H_
