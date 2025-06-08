@@ -17,17 +17,19 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   std::string word;
   char ch;
   while (file.get(ch)) {
-    if (ch >= 'A' && ch <= 'Z')
+    if (ch >= 'A' && ch <= 'Z') {
       ch += 'a'-'A';
-    if (ch >= 'a' && ch <= 'z')
+    }
+    if (ch >= 'a' && ch <= 'z') {
     word += ch;
-    else if (!word.empty()) {
+    } else if (!word.empty()) {
       tree.add(word);
       word.clear();
     }
   }
-  if (!word.empty())
+  if (!word.empty()) {
     tree.add(word);
+  }
   file.close();
 }
 
