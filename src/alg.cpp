@@ -1,10 +1,12 @@
-// Copyright 2021 NNTU-CS
+/ Copyright 2021 NNTU-CS
 #include <iostream>
 #include <fstream>
 #include <cctype>
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <sys/stat.h>
+#include <cerrno>
 #include "bst.h"
 
 namespace {
@@ -21,7 +23,6 @@ std::string to_lower(const std::string& str) {
 bool is_letter(char c) {
     return std::isalpha(static_cast<unsigned char>(c));
 }
-
 }  // namespace
 
 void makeTree(BST<std::string>& tree, const char* filename) {
@@ -30,7 +31,6 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         std::cerr << "File error! Could not open: " << filename << std::endl;
         return;
     }
-
     std::string word;
     char ch;
     while (file.get(ch)) {
@@ -54,11 +54,17 @@ void printFreq(BST<std::string>& tree) {
         if (a.second != b.second) return a.second > b.second;
         return a.first < b.first;
     });
-    mkdir("result", 0777);
+    if (mkdir("result", 0777) != 0 && errno != EEXIST) {
+        std::cerr << "Warning: Could not create result directory" << std::endl;
+    }
     std::ofstream fout("result/freq.txt");
+    if (!fout.is_open()) {
+        std::cerr << "Error: Could not open output file" << std::endl;
+        return;
+    }
     for (const auto& pr : words) {
         std::cout << pr.first << " " << pr.second << std::endl;
-        if (fout) fout << pr.first << " " << pr.second << std::endl;
+        fout << pr.first << " " << pr.second << std::endl;
     }
-    if (fout) fout.close();
+    fout.close();
 }
