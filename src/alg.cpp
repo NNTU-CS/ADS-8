@@ -20,8 +20,8 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
         for (; it != end; ++it) {
             std::string clean_word = it->str();
-            std::transform(clean_word.begin(), clean_word.end(), /
-              clean_word.begin(), ::tolower);
+            std::transform(clean_word.begin(), clean_word.end(), \
+                clean_word.begin(), ::tolower);
             tree.insert(clean_word);
         }
     }
