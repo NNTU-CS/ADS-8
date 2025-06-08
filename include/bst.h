@@ -60,7 +60,7 @@ template <typename T> class BST {
     printInOrderHelper(node->right, out);
   }
 
-public:
+ public:
   BST() : root(nullptr) {}
   ~BST() { free(root); }
   void add(const T &word) { add(root, word); }
