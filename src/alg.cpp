@@ -3,6 +3,9 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
+#include  <string>
+#include  <vector>
+#include  <algorithm>
 #include  "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
@@ -16,8 +19,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     while (fileStream.get(currentChar)) {
         if (isalpha(currentChar)) {
             wordBuffer += tolower(currentChar);
-        }
-        else if (!wordBuffer.empty()) {
+        } else if (!wordBuffer.empty()) {
             tree.insert(wordBuffer);
             wordBuffer.clear();
         }
