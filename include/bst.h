@@ -78,7 +78,7 @@ int BST<T>::depth(Node* node) const {
   }
   int leftDepth = depth(node->left);
   int rightDepth = depth(node->right);
-  return std::max(leftDepth, rightDepth) + 1;
+  return std::max(leftDepth, rightDepth);
 }
 
 template <typename T>
