@@ -3,8 +3,6 @@
 #include <vector>
 #include <algorithm>
 #include <string>
-void makeTree(BST<std::string>& tree, const char* filename);
-void printFreq(BST<std::string>& tree);
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 template<typename T>
@@ -188,4 +186,7 @@ std::vector<typename BST<T>::Node*> BST<T>::getAllNodes() const {
   collect(root, nodes);
   return nodes;
 }
+
+void makeTree(BST<std::string>& tree, const char* filename);
+void printFreq(BST<std::string>& tree);
 #endif  // INCLUDE_BST_H_
