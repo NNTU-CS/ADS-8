@@ -22,7 +22,7 @@ class BST {
         root = insertNode(root, value);
     }
     int depth() const {
-        return getDepth(root);
+        return getDepth(root) - 1;
     }
     int search(const T& value) const {
         return searchNode(root, value);
