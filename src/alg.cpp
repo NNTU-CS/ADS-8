@@ -32,7 +32,7 @@ void makeTree(BST<std::string>& bstInstance, const char* inputFile) {
 
 void printFreq(const BST<std::string>& bstInstance) {
   auto sortedWords = bstInstance.array_words();
-  
+
   std::sort(sortedWords.begin(), sortedWords.end(),
     [](const auto& first, const auto& second) {
       return first.second > second.second;
