@@ -60,11 +60,11 @@ private:
         return searchNode(node->right, value);
     }
 
-    void inOrder(Node* node, std::vector<std::pair<T, int>>& result) const {
+    void inOrderTraversal(Node* node, std::vector<std::pair<T, int>>& result) const {
         if (node != nullptr) {
-            inOrder(node->left, result);
+            inOrderTraversal(node->left, result);
             result.emplace_back(node->info, node->kol);
-            inOrder(node->right, result);
+            inOrderTraversal(node->right, result);
         }
     }
 
@@ -94,6 +94,12 @@ public:
     int search(T value) const {
         Node* node = searchNode(root, value);
         return node ? node->kol : 0;
+    }
+
+    std::vector<std::pair<T, int>> getWordsWithCounts() const {
+        std::vector<std::pair<T, int>> result;
+        inOrderTraversal(root, result);
+        return result;
     }
 };
 
