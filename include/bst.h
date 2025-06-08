@@ -43,11 +43,15 @@ private:
     }
 
     int depth(Node* node) const {
-        if (node == nullptr) {
+        if (node == nullptr || (node->left == nullptr && node->right == nullptr)) {
             return 0;
         }
-        return 1 + std::max(depth(node->left), depth(node->right));
-    }
+
+        int leftDepth = depth(node->left);
+        int rightDepth = depth(node->right);
+
+        return 1 + std::max(leftDepth, rightDepth);
+    } 
 
     Node* searchNode(Node* node, T value) const {
         if (node == nullptr || node->info == value) {
