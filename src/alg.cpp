@@ -7,8 +7,8 @@
 #include <algorithm>
 #include "bst.h"
 
-void makeTree(BST<std::string>& tree) {
-    std::ifstream file("src/war_peace.txt");
+void makeTree(BST<std::string>& tree, const char* filename) {
+    std::ifstream file(filename);
     if (!file) {
         std::cerr << "File error!" << std::endl;
         return;
