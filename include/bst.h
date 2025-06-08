@@ -144,7 +144,7 @@ void BST<T>::remove(int value) {
 template<typename T>
 int BST<T>::depthTree(Node* root) const {
   if (root == nullptr)
-    return 0;
+    return -1;
   int left = depthTree(root->left);
   int right = depthTree(root->right);
   return (left > right) ? left + 1 : right + 1;
