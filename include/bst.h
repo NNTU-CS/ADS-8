@@ -5,68 +5,71 @@
 #include <string>
 #include <vector>
 #include <utility>
-#include <algorithm>  // для std::max
+#include <algorithm>
 template <typename T>
 class BST {
  private:
   struct Node {
-    T key;
-    int count;
-    Node* left;
-    Node* right;
-    Node(T value) : key(value), count(1), left(nullptr), right(nullptr) {}
+    T keey;
+    int countW;
+    Node* leftt;
+    Node* rightt;
+    Node(T value) : keey(value), countW(1), leftt(nullptr), rightt(nullptr) {}
   };
-  Node* root;
-  void insert(Node*& node, const T& value) {
+  Node* rootT;
+  void insert(Node*& node, const T& value) const {
     if (!node) {
       node = new Node(value);
-    } else if (value < node->key) {
-      insert(node->left, value);
-    } else if (value > node->key) {
-      insert(node->right, value);
+    } else if (value < node->keey) {
+      insert(node->leftt, value);
+    } else if (value > node->keey) {
+      insert(node->rightt, value);
     } else {
-      node->count++;
+      node->countW++;
     }
   }
   Node* search(Node* node, const T& value) const {
-    if (!node || node->key == value) return node;
-    if (value < node->key)
-      return search(node->left, value);
+    if (!node || node->keey == value)
+      return node;
+    if (value < node->keey)
+      return search(node->leftt, value);
     else
-      return search(node->right, value);
+      return search(node->rightt, value);
   }
   int depth(Node* node) const {
     if (!node) return 0;
-    return std::max(depth(node->left), depth(node->right)) + 1;
+    int leftDepth = depth(node->leftt);
+    int rightDepth = depth(node->rightt);
+    return std::max(leftDepth, rightDepth) + 1;
   }
   void collect(Node* node, std::vector<std::pair<T, int>>& out) const {
     if (!node) return;
-    collect(node->left, out);
-    out.push_back({node->key, node->count});
-    collect(node->right, out);
+    collect(node->leftt, out);
+    out.push_back(std::make_pair(node->keey, node->countW));
+    collect(node->rightt, out);
   }
   void clear(Node* node) {
     if (!node) return;
-    clear(node->left);
-    clear(node->right);
+    clear(node->leftt);
+    clear(node->rightt);
     delete node;
   }
  public:
-  BST() : root(nullptr) {}
-  ~BST() { clear(root); }
+  BST() : rootT(nullptr) {}
+  ~BST() { clear(rootT); }
 
   void insert(const T& value) {
-    insert(root, value);
+    insert(rootT, value);
   }
   bool search(const T& value) {
-    return search(root, value) != nullptr;
+    return search(rootT, value) != nullptr;
   }
   int depth() const {
-    return depth(root);
+    return depth(rootT);
   }
   std::vector<std::pair<T, int>> getAll() const {
     std::vector<std::pair<T, int>> result;
-    collect(root, result);
+    collect(rootT, result);
     return result;
   }
 };
