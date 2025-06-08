@@ -1,52 +1,38 @@
 // Copyright 2021 NNTU-CS
-#include  <iostream>
-#include  <fstream>
-#include  <locale>
-#include  <cstdlib>
-#include <cctype>
+#include <iostream>
 #include <string>
-#include <vector>
+#include <fstream>
+#include <cctype>
 #include <algorithm>
 #include "bst.h"
 
-namespace Alg {
-
-void makeTree(BST<std::string> &tree, const char *filename) {
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        std::cerr << "Error opening the file!\n";
+void makeTree(BST<std::string>& tree, const char* filename) {
+    std::ifstream fin(filename);
+    if (!fin.is_open()) {
+        std::cerr << "Cannot open file: " << filename << "\n";
         return;
     }
-
     std::string word;
     char c;
-    while (file.get(c)) {
-        if (isalpha(c)) {
-            word += static_cast<char>(tolower(c));
-        } else if (!word.empty()) {
-            tree.insert(word);
+    while (fin.get(c)) {
+        if (isalpha(static_cast<unsigned char>(c))) {
             word.clear();
+            do {
+                word += std::tolower(static_cast<unsigned char>(c));
+            } while (fin.get(c) && isalpha(static_cast<unsigned char>(c)));
+            tree.insert(word);
         }
     }
-    file.close();
+    fin.close();
 }
 
-void printFreq(BST<std::string> &tree) {
-    std::ofstream output("result/freq.txt");
-    if (output.fail()) {
-        std::cerr << "Error writing to file!\n";
-        return;
+void printFreq(BST<std::string>& tree) {
+    auto words = tree.getAll();
+    std::sort(words.begin(), words.end(),
+        [](const auto& a, const auto& b) {
+            return a.second != b.second ? a.second > b.second : a.first < b.first;
+        });
+    for (const auto& p : words) {
+        std::cout << p.first << " " << p.second << "\n";
     }
-
-    std::vector<Node<std::string> *> nodes;
-    tree.inorder(nodes);
-    std::sort(nodes.begin(), nodes.end(), [](const Node<std::string> *a, const Node<std::string> *b) {
-        return a->count > b->count || (a->count == b->count && a->key < b->key);
-    });
-
-    for (auto n : nodes) {
-        output << n->key << ": " << n->count << '\n';
-    }
-    output.close();
 }
-}  // namespace Alg
