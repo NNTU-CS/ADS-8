@@ -23,7 +23,7 @@ private:
 
     Node* root;
 
-   Node* insert(Node* node, T value) {
+    Node* insert(Node* node, T value) {
         if (node == nullptr) {
             return new Node(value);
         }
@@ -32,16 +32,11 @@ private:
             node->kol++;
             return node;
         }
-        if (node->left == nullptr) {
+        
+        if (value < node->info) {
             node->left = insert(node->left, value);
-        } else if (node->right == nullptr) {
-            node->right = insert(node->right, value);
         } else {
-            if (depth(node->left) <= depth(node->right)) {
-                node->left = insert(node->left, value);
-            } else {
-                node->right = insert(node->right, value);
-            }
+            node->right = insert(node->right, value);
         }
         
         return node;
@@ -63,14 +58,6 @@ private:
             return searchNode(node->left, value);
         }
         return searchNode(node->right, value);
-    }
-
-    void inOrder(Node* node, std::vector<std::pair<T, int>>& result) const {
-        if (node != nullptr) {
-            inOrder(node->left, result);
-            result.emplace_back(node->info, node->kol);
-            inOrder(node->right, result);
-        }
     }
 
     void clear(Node* node) {
@@ -99,12 +86,6 @@ public:
     int search(T value) const {
         Node* node = searchNode(root, value);
         return node ? node->kol : 0;
-    }
-
-    std::vector<std::pair<T, int>> inOrder() const {
-        std::vector<std::pair<T, int>> result;
-        inOrder(root, result);
-        return result;
     }
 };
 
