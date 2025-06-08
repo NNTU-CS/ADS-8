@@ -8,7 +8,7 @@
 #include <utility>
 #include  "bst.h"
 
-void makeTree(BST<std::string>& tree, const char* filename) {
+void makeTree(BST<std::string>& Tree, const char* filename) {
   std::ifstream file(filename);
   if (!file) {
       std::cout << "File error!" << std::endl;
@@ -21,18 +21,18 @@ void makeTree(BST<std::string>& tree, const char* filename) {
           Word += tolower(ch);
       } else {
         if (!Word.empty()) {
-            tree.insert(Word);
+            Tree.insert(Word);
             Word.clear();
         }
       }
   }
   if (!Word.empty()) {
-      tree.insert(Word);
+      Tree.insert(Word);
   }
   file.close();
 }
-void printFreq(BST<std::string>& tree) {
-    auto words = tree.symBypass();
+void printFreq(BST<std::string>& Tree) {
+    auto words = Tree.symBypass();
     std::sort(words.begin(), words.end(),
         [](const auto& a, const auto& b) {
             return a.second > b.second;
