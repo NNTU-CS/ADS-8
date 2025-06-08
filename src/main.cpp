@@ -1,20 +1,15 @@
 // Copyright 2021 NNTU-CS
-#include <sys/stat.h>
-#include <sys/types.h>
-
-#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <locale>
 #include <string>
 #include <algorithm>
-
 #include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
   if (!file) {
-    std::cerr << "File error: cannot open " << filename << std::endl;
+    std::cerr << "File error!" << std::endl;
     return;
   }
   std::string word;
@@ -40,14 +35,11 @@ void printFreq(BST<std::string>& tree) {
               return a.second > b.second;
             });
   std::ofstream fout("result/freq.txt");
-  if (!fout) {
-    std::cerr << "Error opening file for writing: result/freq.txt" << std::endl;
-    return;
-  }
   for (const auto& pair : items) {
     std::cout << pair.first << " : " << pair.second << std::endl;
     fout << pair.first << " : " << pair.second << "\n";
   }
+  fout.close();
 }
 int main(int argc, char* argv[]) {
   if (argc < 2) {
