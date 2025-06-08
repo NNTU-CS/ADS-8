@@ -1,12 +1,13 @@
 // Copyright 2021 NNTU-CS
+#include <sys/stat.h>
+#include <sys/types.h>
+
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <locale>
 #include <string>
 #include <algorithm>
-#include <sys/stat.h>
-#include <sys/types.h>
 
 #include "bst.h"
 
@@ -34,6 +35,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 }
 void printFreq(BST<std::string>& tree) {
   struct stat info;
+  (void)system("mkdir -p result");
   if (stat("result", &info) != 0 || !(info.st_mode & S_IFDIR)) {
     system("mkdir -p result");
   }
