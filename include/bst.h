@@ -1,88 +1,78 @@
-// Copyright 2025 NNTU-CS
+// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
-
+#include <string>
 #include <vector>
 #include <algorithm>
 
 template <typename T>
 class BST {
  private:
-  struct Node {
-    T value;          // Stores the node's value
-    int count;        // Count of duplicate values
-    Node* left;       // Left child pointer
-    Node* right;      // Right child pointer
-
-    explicit Node(const T& val) : value(val), count(1), left(nullptr), right(nullptr) {}
+  struct node {
+    T key;
+    int count;
+    node* right, * left;
+    explicit node(const T& value) : key(value), count(1), right(nullptr), left(nullptr) {}
   };
-
-  Node* root;
-
-  // Recursively inserts a value into the BST
-  void insert(Node*& node, const T& value) {
-    if (!node) {
-      node = new Node(value);
-    } else if (value < node->value) {
-      insert(node->left, value);
-    } else if (value > node->value) {
-      insert(node->right, value);
-    } else {
-      node->count++;
+  node* root;
+  node* addNode(node* root, const T& value) {
+    if (root == nullptr) {
+      return new node(value);
     }
+    if (root->key == value) {
+      ++root->count;
+      return root;
+    }
+    if (root->key > value) {
+      root->left = addNode(root->left, value);
+    } else {
+      root->right = addNode(root->right, value);
+    }
+    return root;
   }
-
-  // Finds a node with the specified value
-  Node* find(Node* node, const T& value) const {
-    if (!node || node->value == value) return node;
-    return find(value < node->value ? node->left : node->right, value);
+  int get_depth(node* root) {
+    if (root == nullptr) return 0;
+    int left_depth = get_depth(root->left);
+    int right_depth = get_depth(root->right);
+    return (left_depth >= right_depth ? left_depth : right_depth) + 1;
   }
-
-  // Calculates tree depth using ternary operator
-  int depth(Node* node) const {
-    return !node ? -1 : 1 + (depth(node->left) > depth(node->right) ?
-                             depth(node->left) : depth(node->right));
+  int search_node(node* root, const T& value) {
+    if (root == nullptr) return 0;
+    if (value == root->key) return root->count;
+    if (value < root->key) return search_node(root->left, value);
+    else return search_node(root->right, value);
+    }
+  void clear(node* root) {
+    if (root == nullptr) return;
+    clear(root->left);
+    clear(root->right);
+    delete root;
   }
-
-  // In-order traversal that populates an output vector
-  void inOrder(Node* node, std::vector<std::pair<T, int>>& out) const {
-    if (!node) return;
-    inOrder(node->left, out);
-    out.emplace_back(node->value, node->count);
-    inOrder(node->right, out);
-  }
-
-  // Recursively clears all nodes
-  void clear(Node* node) {
-    if (!node) return;
-    clear(node->left);
-    clear(node->right);
-    delete node;
+  void Order(node* root, std::vector<std::pair<T, int>>& res) const {
+    if (root == nullptr) return;
+    Order(root->left, res);
+    res.push_back({ root->key, root->count });
+    Order(root->right, res);
   }
 
  public:
-  BST() : root(nullptr) {}
-  ~BST() { clear(root); }
-
-  void insert(const T& value) {
-    insert(root, value);
+  BST(): root(nullptr) {}
+  ~BST() {
+    clear(root);
   }
-
-  int findCount(const T& value) const {
-    Node* found = find(root, value);
-    return found ? found->count : 0;
+  void add(const T& value) {
+    root = addNode(root, value);
   }
-
-  int search(const T& value) const {
-    return findCount(value);  // search simply calls findCount
+  int search(const T& value) {
+    return search_node(root, value);
   }
-
-  int depth() const {
-    return depth(root);
+  int depth() {
+    return get_depth(root)-1;
   }
-
-  void getAll(std::vector<std::pair<T, int>>& result) const {
-    inOrder(root, result);  // Uses output parameter
+  std::vector<std::pair<T, int>> array_words() const {
+    std::vector<std::pair<T, int>> result;
+    Order(root, result);
+    return result;
   }
 };
 
