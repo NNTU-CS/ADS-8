@@ -1,5 +1,6 @@
 // Copyright 2021 NNTU-CS
 #include  "bst.h"
+#include <vector>
 #include <cctype>
 #include  <fstream>
 #include  <iostream>
@@ -8,7 +9,7 @@
 #include  <cstdlib>
 #include <regex>
 #include <algorithm>
-#include <vector>
+
 
 
 void makeTree(BST<std::string>& tree, const char* filename) {
