@@ -62,19 +62,19 @@ class BST {
  public:
   BST() : head(nullptr) {}
   ~BST() { eraseTree(head); }
-  
+
   void add(const T& value) {
     head = insert(head, value);
   }
-  
+
   int search(const T& value) const {
     return findQuantity(head, value);
   }
-  
+
   int depth() const {
     return findHeight(head) - 1;
   }
-  
+
   std::vector<std::pair<T, int>> array_words() const {
     std::vector<std::pair<T, int>> output;
     traverse(head, output);
