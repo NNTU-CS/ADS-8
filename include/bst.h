@@ -30,6 +30,7 @@ class BST {
         std::vector<std::pair<T, int>>& frequencies) const;
     void makeTree(BST<std::string>& tree, const char* filename);
     void printFreq(const BST<std::string>& tree);
+
  public:
     BST() : root(nullptr) {}
     ~BST();
