@@ -14,7 +14,7 @@ class BST {
         int count;
         Node* left;
         Node* right;
-        Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+        explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
     };
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
@@ -30,6 +30,7 @@ class BST {
     Node* getRoot() const {
         return root;
     }
+
  private:
     Node* root;
     Node* insertNode(Node* node, const T& value) {
@@ -38,11 +39,9 @@ class BST {
         }
         if (value < node->key) {
             node->left = insertNode(node->left, value);
-        }
-        else if (value > node->key) {
+        } else if (value > node->key) {
             node->right = insertNode(node->right, value);
-        }
-        else {
+        } else {
             node->count++;
         }
         return node;
