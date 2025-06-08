@@ -1,10 +1,9 @@
 // Copyright 2021 NNTU-CS
-#ifndef BST_H
-#define BST_H
+#ifndef INCLUDE_BST_H_
+#define INCLUDE_BST_H_
 
 #include <algorithm>
 #include <functional>
-#include <iostream>
 #include <string>
 
 template <typename T>
@@ -33,7 +32,7 @@ class BST {
 
   void insert(T value) { root = insert(root, value); }
   int search(T value) const;
-  int depth() const { return depth(root); }
+  int depth() const { return root ? depth(root) : 0; }
   void inOrder(const std::function<void(const T&, int)>& visit) const {
     inOrder(root, visit);
   }
@@ -58,8 +57,8 @@ typename BST<T>::Node* BST<T>::insert(Node* node, T value) {
 template <typename T>
 typename BST<T>::Node* BST<T>::search(Node* node, T value) {
   if (node == nullptr || node->key == value) return node;
-  return (value < node->key) ? search(node->left, value)
-                             : search(node->right, value);
+  return value < node->key ? search(node->left, value)
+                           : search(node->right, value);
 }
 
 template <typename T>
@@ -70,7 +69,7 @@ int BST<T>::search(T value) const {
 
 template <typename T>
 int BST<T>::depth(Node* node) {
-  return node ? std::max(depth(node->left), depth(node->right)) + 1 : 0;
+  return node ? std::max(depth(node->left), depth(node->right)) + 1 : -1;
 }
 
 template <typename T>
@@ -90,4 +89,4 @@ void BST<T>::clear(Node* node) {
   delete node;
 }
 
-#endif
+#endif  // INCLUDE_BST_H_
