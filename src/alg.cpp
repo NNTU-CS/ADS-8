@@ -20,7 +20,6 @@ void makeTree(BST<std::string>& bstInstance, const char* inputFile) {
   while (inputStream) {
     char character = inputStream.get();
     if (isupper(character)) character = tolower(character);
-    
     if (islower(character)) {
       currentWord += character;
     } else if (!currentWord.empty()) {
