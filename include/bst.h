@@ -49,16 +49,15 @@ private:
         return 1 + std::max(depth(node->left), depth(node->right));
     }
 
-    Node* search(Node* node, T value) const {
+    Node* searchNode(Node* node, T value) const {
         if (node == nullptr || node->info == value) {
             return node;
         }
         
         if (value < node->info) {
-            return search(node->left, value);
-        } else {
-            return search(node->right, value);
+            return searchNode(node->left, value);
         }
+        return searchNode(node->right, value);
     }
 
     void inOrder(Node* node, std::vector<std::pair<T, int>>& result) const {
@@ -92,8 +91,9 @@ public:
         return depth(root);
     }
 
-    bool search(T value) const {
-        return search(root, value) != nullptr;
+    int search(T value) const {
+        Node* node = searchNode(root, value);
+        return node ? node->kol : 0;
     }
 
     std::vector<std::pair<T, int>> inOrder() const {
