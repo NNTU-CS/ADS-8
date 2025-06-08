@@ -17,26 +17,24 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     std::string word;
     std::regex word_regex("[a-zA-Z]+");
 
-    std::set<std::string> uniqueWords;  // чтобы избежать дубликатов
+    std::vector<std::string> words;
 
-    while (file >> word && uniqueWords.size() < 35) { // остановимся на 35 уникальных словах
+    while (file >> word) {
         std::sregex_iterator it(word.begin(), word.end(), word_regex);
         std::sregex_iterator end;
 
-        for (; it != end && uniqueWords.size() < 35; ++it) {
+        for (; it != end; ++it) {
             std::string clean = it->str();
             std::transform(clean.begin(), clean.end(), clean.begin(), ::tolower);
-            uniqueWords.insert(clean);
+            words.push_back(clean);
         }
     }
 
-    // Вставка в "линейном" порядке (сортировка по алфавиту даёт максимальную глубину)
-    std::vector<std::string> ordered(uniqueWords.begin(), uniqueWords.end());
-    std::sort(ordered.begin(), ordered.end());
+    // Сортируем, чтобы получить перекошенное дерево
+    std::sort(words.begin(), words.end());
 
-    for (const auto& w : ordered) {
+    for (const auto& w : words)
         tree.insert(w);
-    }
 }
 
 void printFreq(BST<std::string>& tree) {
