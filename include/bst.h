@@ -28,7 +28,8 @@ class BST {
     const Node* findNode(const Node* node, const T& value) const;
     void inOrderTraversal(const Node* node,
         std::vector<std::pair<T, int>>& frequencies) const;
-
+    void makeTree(BST<std::string>& tree, const char* filename);
+    void printFreq(const BST<std::string>& tree);
  public:
     BST() : root(nullptr) {}
     ~BST();
