@@ -27,8 +27,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     std::string word;
     std::regex word_regex("[a-zA-Z]+");
 
-    // 1. Подсчёт частот слов
-    std::map<std::string, int> freq;
+    std::vector<std::string> words;
     while (file >> word) {
         std::sregex_iterator it(word.begin(), word.end(), word_regex);
         std::sregex_iterator end;
@@ -36,17 +35,15 @@ void makeTree(BST<std::string>& tree, const char* filename) {
         for (; it != end; ++it) {
             std::string clean = it->str();
             std::transform(clean.begin(), clean.end(), clean.begin(), ::tolower);
-            freq[clean]++;
+            words.push_back(clean);
         }
     }
 
-    // 2. Получаем отсортированный список слов
-    std::vector<std::string> sorted_words;
-    for (const auto& [word, _] : freq)
-        sorted_words.push_back(word);
+    // Сортируем, чтобы получить перекошенное дерево
+    std::sort(words.begin(), words.end());
 
-    // 3. Вставка в «ручном» сбалансированном порядке
-    insertBalanced(sorted_words, 0, sorted_words.size() - 1, tree, freq);
+    for (const auto& w : words)
+        tree.insert(w);
 }
 void printFreq(BST<std::string>& tree) {
     auto words = tree.toVector();
