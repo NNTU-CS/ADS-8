@@ -22,41 +22,47 @@ class BST {
 
   void Insert(const T& value) { InsertImpl(root_, value); }
 
-  Node* search(const T& value) const { return SearchImpl(root_, value); }
+  int search(const T& value) const {
+    Node* node = root_;
+    while (node) {
+      if (value < node->key) {
+        node = node->left;
+      } else if (node->key < value) {
+        node = node->right;
+      } else {
+        return node->count;
+      }
+    }
+    return 0;
+  }
 
   std::size_t depth() const { return DepthImpl(root_); }
 
   template <typename F>
-  void InOrder(F&& f) const { InOrderImpl(root_, f); }
+  void InOrder(F&& f) const { InOrderImpl(root_, std::forward<F>(f)); }
 
  private:
   Node* root_ = nullptr;
 
   static void InsertImpl(Node*& node, const T& value) {
-    if (node == nullptr) {
+    if (!node) {
       node = new Node{value};
       return;
     }
-    if (value == node->key) {
-      ++node->count;
-    } else if (value < node->key) {
+    if (value < node->key) {
       InsertImpl(node->left, value);
-    } else {
+    } else if (node->key < value) {
       InsertImpl(node->right, value);
+    } else {
+      ++node->count;
     }
-  }
-
-  static Node* SearchImpl(Node* node, const T& value) {
-    if (node == nullptr || node->key == value) return node;
-    return value < node->key ? SearchImpl(node->left, value)
-                             : SearchImpl(node->right, value);
   }
 
   static std::size_t DepthImpl(Node* node) {
     if (!node) return 0;
     std::size_t l = DepthImpl(node->left);
     std::size_t r = DepthImpl(node->right);
-    return 1 + (l > r ? l : r);
+    return (l > r ? l : r) + 1;
   }
 
   template <typename F>
