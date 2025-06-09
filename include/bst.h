@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <vector>
 
 template <typename T> class BST {
   struct Node {
@@ -52,12 +53,12 @@ template <typename T> class BST {
     free(node->right);
     delete node;
   }
-  void printInOrderHelper(Node *node, std::ostream &out) const {
+  void collectWords(Node *node, std::vector<std::pair<T, int>> &words) const {
     if (!node)
       return;
-    printInOrderHelper(node->left, out);
-    out << node->word << " " << node->count << '\n';
-    printInOrderHelper(node->right, out);
+    collectWords(node->left, words);
+    words.emplace_back(node->word, node->count);
+    collectWords(node->right, words);
   }
 
  public:
@@ -66,7 +67,11 @@ template <typename T> class BST {
   void add(const T &word) { add(root, word); }
   int depth() const { return treeHeight(root) - 1; }
   int search(const T &word) const { return search(root, word); }
-  void printInOrder(std::ostream &out) const { printInOrderHelper(root, out); }
+  std::vector<std::pair<T, int>> getAllWords() const {
+    std::vector<std::pair<T, int>> words;
+    collectWords(root, words);
+    return words;
+  }
 };
 
 #endif // INCLUDE_BST_H_
