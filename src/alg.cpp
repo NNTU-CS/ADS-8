@@ -10,42 +10,41 @@
 #include "bst.h"
 
 static bool IsAsciiLetter(char ch) {
-    return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
+  return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
 }
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-    std::ifstream file(filename);
-    if (!file) {
-        std::cerr << "File error!\n";
-        return;
+  std::ifstream file(filename);
+  if (!file) {
+    std::cerr << "File error!\n";
+    return;
+  }
+  std::string word;
+  char ch;
+  while (file.get(ch)) {
+    if (IsAsciiLetter(ch)) {
+      word.push_back(static_cast<char>(
+          std::tolower(static_cast<unsigned char>(ch))));
+    } else if (!word.empty()) {
+      tree.Insert(word);
+      word.clear();
     }
-    std::string word;
-    char ch;
-    while (file.get(ch)) {
-        if (IsAsciiLetter(ch)) {
-            word.push_back(static_cast<char>(
-                std::tolower(static_cast<unsigned char>(ch))));
-        }
-        else if (!word.empty()) {
-            tree.Insert(word);
-            word.clear();
-        }
-    }
-    if (!word.empty()) tree.Insert(word);
+  }
+  if (!word.empty()) tree.Insert(word);
 }
 
 void printFreq(BST<std::string>& tree) {
-    std::vector<std::pair<std::string, int>> data;
-    tree.InOrder([&](typename BST<std::string>::Node* node) {
-        data.emplace_back(node->key, node->count);
-        });
-    std::sort(data.begin(), data.end(), [](const auto& a, const auto& b) {
-        if (a.second != b.second) return a.second > b.second;
-        return a.first < b.first;
-        });
-    std::ofstream out_file("freq.txt");
-    for (const auto& p : data) {
-        std::cout << p.first << ' ' << p.second << '\n';
-        if (out_file) out_file << p.first << ' ' << p.second << '\n';
-    }
+  std::vector<std::pair<std::string, int>> data;
+  tree.InOrder([&](typename BST<std::string>::Node* node) {
+    data.emplace_back(node->key, node->count);
+  });
+  std::sort(data.begin(), data.end(), [](const auto& a, const auto& b) {
+    if (a.second != b.second) return a.second > b.second;
+    return a.first < b.first;
+  });
+  std::ofstream out_file("result/freq.txt");
+  for (const auto& p : data) {
+    std::cout << p.first << ' ' << p.second << '\n';
+    if (out_file) out_file << p.first << ' ' << p.second << '\n';
+  }
 }
