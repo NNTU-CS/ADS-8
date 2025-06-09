@@ -36,7 +36,7 @@ class BST {
     return 0;
   }
 
-  std::size_t depth() const { return DepthImpl(root_); }
+  std::size_t depth() const { return root_ ? DepthImpl(root_) - 1 : 0; }
 
   template <typename F>
   void InOrder(F&& f) const { InOrderImpl(root_, std::forward<F>(f)); }
